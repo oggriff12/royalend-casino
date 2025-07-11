@@ -59,6 +59,34 @@ document.getElementById("claimBonus").addEventListener("click", () => {
   document.getElementById("balance").innerText = "$" + current.toFixed(2);
 });
 </script>
+  <script>
+  function updateWalletDisplay() {
+    const current = parseFloat(localStorage.getItem("wallet") || "0");
+    document.getElementById("balanceDisplay").innerText = "$" + current.toFixed(2);
+    document.getElementById("balance").innerText = "$" + current.toFixed(2);
+  }
+
+  function claimDailyBonus() {
+    const lastClaim = localStorage.getItem("lastBonusClaim");
+    const now = Date.now();
+    const oneDay = 24 * 60 * 60 * 1000;
+
+    if (!lastClaim || now - parseInt(lastClaim) > oneDay) {
+      let current = parseFloat(localStorage.getItem("wallet") || "0");
+      current += 1;
+      localStorage.setItem("wallet", current.toFixed(2));
+      localStorage.setItem("lastBonusClaim", now.toString());
+      updateWalletDisplay();
+      alert("✅ You received your $1 daily bonus!");
+    } else {
+      const hoursLeft = Math.ceil((oneDay - (now - parseInt(lastClaim))) / (1000 * 60 * 60));
+      alert("❌ Bonus already claimed. Come back in " + hoursLeft + " hour(s).");
+    }
+  }
+
+  document.getElementById("claimBonus").addEventListener("click", claimDailyBonus);
+  updateWalletDisplay();
+</script>
 </body>
 </html>
 </body>
