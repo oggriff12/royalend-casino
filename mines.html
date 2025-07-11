@@ -1,132 +1,21 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>RoyalEnd | Mines</title>
-  <style>
-    body {
-      background-color: #0e0e1e;
-      color: white;
-      font-family: 'Segoe UI', sans-serif;
-      text-align: center;
-      padding: 20px;
-    }
-    .wallet {
-      text-align: right;
-      margin-bottom: 20px;
-      font-size: 18px;
-      color: #00ffcc;
-    }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(5, 60px);
-      gap: 10px;
-      justify-content: center;
-    }
-    .cell {
-      width: 60px;
-      height: 60px;
-      background-color: #1a1a3a;
-      border: 2px solid #333;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      font-size: 20px;
-      border-radius: 8px;
-    }
-    .cell.clicked {
-      background-color: #00ff99;
-    }
-    .cell.bomb {
-      background-color: red;
-    }
-    .controls {
-      margin: 20px 0;
-    }
-    button {
-      padding: 10px 20px;
-      font-weight: bold;
-      background: #00ffcc;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>RoyalEnd Mines Game</title>
+  <link rel="stylesheet" href="mines.css" />
 </head>
 <body>
-
-<div class="wallet">Balance: $<span id="balance">1.00</span></div>
-
-<h2>💣 RoyalEnd Mines</h2>
-
-<div class="controls">
-  <button onclick="startGame()">Start Game</button>
-  <button onclick="cashOut()">Cash Out</button>
-</div>
-
-<div class="grid" id="grid"></div>
-
-<script>
-  let balance = 1.00;
-  let wager = 0.10;
-  let bombs = 3;
-  let active = false;
-  let multiplier = 1;
-  let revealed = 0;
-
-  const balanceEl = document.getElementById('balance');
-  const gridEl = document.getElementById('grid');
-
-  function updateBalance() {
-    balanceEl.textContent = balance.toFixed(2);
-  }
-
-  function startGame() {
-    if (balance < wager) return alert("Not enough balance!");
-    balance -= wager;
-    updateBalance();
-    gridEl.innerHTML = '';
-    active = true;
-    revealed = 0;
-    multiplier = 1;
-
-    const bombIndexes = new Set();
-    while (bombIndexes.size < bombs) {
-      bombIndexes.add(Math.floor(Math.random() * 25));
-    }
-
-    for (let i = 0; i < 25; i++) {
-      const cell = document.createElement('div');
-      cell.className = 'cell';
-      cell.onclick = () => {
-        if (!active || cell.classList.contains('clicked')) return;
-        if (bombIndexes.has(i)) {
-          cell.classList.add('bomb');
-          active = false;
-          alert('💥 You hit a bomb!');
-        } else {
-          cell.classList.add('clicked');
-          revealed++;
-          multiplier += 0.2;
-        }
-      };
-      gridEl.appendChild(cell);
-    }
-  }
-
-  function cashOut() {
-    if (!active || revealed === 0) return;
-    let winnings = wager * multiplier;
-    balance += winnings;
-    updateBalance();
-    alert(`You cashed out: $${winnings.toFixed(2)}`);
-    active = false;
-  }
-
-  updateBalance();
-</script>
-
+  <div class="wallet">Balance: $<span id="balance">1.00</span></div>
+  <div class="controls">
+    <input id="bet" type="number" min="0.1" step="0.1" value="0.1" />
+    <input id="bombs" type="number" min="1" max="20" value="3" />
+    <button onclick="startGame()">Start Game</button>
+    <button onclick="cashOut()" id="cashoutBtn" disabled>Cash Out</button>
+  </div>
+  <div class="stats" id="statsPanel"></div>
+  <div class="grid" id="grid"></div>
+  <script src="mines.js"></script>
 </body>
 </html>
