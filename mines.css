@@ -1,0 +1,37 @@
+body {
+  background: black url('https://www.transparenttextures.com/patterns/black-felt.png');
+  font-family: Arial, sans-serif;
+  color: white;
+  text-align: center;
+}
+.wallet {
+  font-size: 1.2em;
+  margin: 10px;
+}
+.controls {
+  margin: 10px;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(5, 60px);
+  grid-gap: 8px;
+  justify-content: center;
+  margin-top: 20px;
+}
+.tile {
+  width: 60px;
+  height: 60px;
+  background: #333;
+  border: 2px solid red;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+.tile.safe {
+  background: #4caf50;
+}
+.tile.bomb {
+  background: #e53935;
+}
+.tile.clicked {
+  pointer-events: none;
+}
