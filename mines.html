@@ -113,4 +113,18 @@ document.getElementById("claimBonus").addEventListener("click", () => {
   particlesJS.load("particles-js", "particles.json", function () {
     console.log("🎉 Particles loaded on Mines page!");
   });
-</script>
+</script>const auth = firebase.auth();
+
+document.getElementById("googleLogin").addEventListener("click", () => {
+  const provider = new firebase.auth.GoogleAuthProvider();
+  auth.signInWithPopup(provider)
+    .then(result => {
+      const user = result.user;
+      alert("✅ Welcome, " + user.displayName + "!");
+      localStorage.setItem("uid", user.uid); // optional for later
+    })
+    .catch(error => {
+      console.error(error);
+      alert("❌ Login failed: " + error.message);
+    });
+
