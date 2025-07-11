@@ -95,7 +95,38 @@
   <button id="claimBonus" class="button">💰 Claim Daily $1 Bonus</button>
   <p id="bonusStatus" style="margin-top: 10px; font-size: 14px; opacity: 0.7;"></p>
 </div>
+<!-- Live Stats / Top Wins -->
+<div id="topWinners" style="margin-top: 40px; font-size: 15px; opacity: 0.8; text-align: center;">
+  <p>🎉 Top Wins:</p>
+  <ul id="winnersList" style="list-style: none; padding: 0;"></ul>
+</div>
 
+<script>
+  const winners = [
+    { name: '💎 Alice', amount: '$250' },
+    { name: '🔥 Bob', amount: '$180' },
+    { name: '👑 Cleo', amount: '$120' },
+    { name: '🚀 Drake', amount: '$340' },
+    { name: '🎯 Ellie', amount: '$99' },
+  ];
+
+  let currentIndex = 0;
+
+  function renderWinners() {
+    const list = document.getElementById('winnersList');
+    list.innerHTML = '';
+    
+    const item = document.createElement('li');
+    const winner = winners[currentIndex];
+    item.textContent = `${winner.name} won ${winner.amount}`;
+    list.appendChild(item);
+
+    currentIndex = (currentIndex + 1) % winners.length;
+  }
+
+  setInterval(renderWinners, 2000); // updates every 2 seconds
+  renderWinners();
+</script>
 <script>
   const bonusBtn = document.getElementById('claimBonus');
   const bonusStatus = document.getElementById('bonusStatus');
