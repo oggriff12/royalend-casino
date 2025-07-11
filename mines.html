@@ -1,6 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <!-- Firebase SDKs -->
+  <script>
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+
+  // 🚫 Redirect if not logged in
+  auth.onAuthStateChanged(user => {
+    if (!user) {
+      alert("⚠️ You must log in to access the Mines game.");
+      window.location.href = "index.html";
+    }
+  });
+</script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js"></script>
 
