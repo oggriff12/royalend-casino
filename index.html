@@ -78,7 +78,9 @@
 <body>
 
   <header>🎰 RoyalEnd Casino – Created by Nyeem Stewart</header>
-
+<div id="wallet" style="margin: 15px auto; font-size: 18px; color: #00ffff; text-align: center;">
+  💰 Wallet Balance: <span id="walletAmount">$1000</span>
+</div>
   <div class="intro">
     Welcome to RoyalEnd! Play legendary games like Blackjack, Roulette, Mines, and Crash. 
     Earn rewards, claim bonuses, and win big — all in one place.
@@ -192,4 +194,22 @@
   }
 </style>
 </body>
+  <script>
+// Wallet Balance Logic
+let wallet = parseFloat(localStorage.getItem('wallet')) || 1000;
+const walletAmount = document.getElementById('walletAmount');
+walletAmount.textContent = `$${wallet}`;
+
+const bonusBtn = document.getElementById('claimBonus');
+const bonusStatus = document.getElementById('bonusStatus');
+
+bonusBtn.addEventListener('click', () => {
+  if (!localStorage.getItem('bonusClaimed')) {
+    wallet += 1;
+    localStorage.setItem('wallet', wallet);
+    walletAmount.textContent = `$${wallet}`;
+  }
+});
+</script>
 </html>
+
