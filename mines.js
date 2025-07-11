@@ -1,4 +1,4 @@
-let balance = 1.0;
+let balance = parseFloat(localStorage.getItem("walletBalance")) || 1.0;
 let gameStarted = false;
 let winCount = 0;
 let lossCount = 0;
