@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>RoyalEnd Mines</title>
+  <link rel="stylesheet" href="mines.css" />
+</head>
+<body>
+  <div style="text-align: right; padding: 10px; font-weight: bold; font-size: 16px;">
+    Balance: <span id="balanceDisplay">$0.00</span>
+  </div>
+
+  <div class="wallet">
+    Balance: <span id="balance">$1.00</span>
+    <button id="claimBonus">Claim $1 Bonus</button>
+  </div>
+
+  <div class="mines-game">
+    <div class="stats-panel">
+      <p>Wins: <span id="winCount">0</span></p>
+      <p>Losses: <span id="lossCount">0</span></p>
+      <p>Profit: $<span id="profit">0.00</span></p>
+    </div>
+
+    <div class="controls">
+      <label>Grid Size:</label>
+      <select id="gridSize">
+        <option value="5">5x5</option>
+        <option value="6">6x6</option>
+        <option value="8">8x8</option>
+      </select>
+
+      <label>Mines:</label>
+      <input type="number" id="mineCount" min="1" max="60" value="5" />
+
+      <label>Bet Amount:</label>
+      <input type="number" id="betAmount" min="0.01" step="0.01" value="0.10" />
+
+      <button id="startGame">Start Game</button>
+      <button id="cashOut">Cash Out</button>
+    </div>
+
+    <div id="gridContainer" class="grid"></div>
+  </div>
+
+  <script src="mines.js"></script>
+</body>
+</html>
