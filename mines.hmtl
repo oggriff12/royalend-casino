@@ -7,6 +7,9 @@
   <link rel="stylesheet" href="mines.css">
 </head>
 <body>
+<div style="text-align: right; padding: 10px; font-weight: bold; font-size: 16px;">
+  Balance: <span id="balanceDisplay">$0.00</span>
+</div>
   <div class="wallet">
     Balance: $<span id="balance">1.00</span>
     <button id="claimBonus">Claim $1 Bonus</button>
@@ -37,5 +40,17 @@
     <div id="gameBoard" class="game-board"></div>
   </div>
   <script src="mines.js"></script>
+<script>
+  // Load balance from localStorage
+  function updateBalanceDisplay() {
+    const balance = localStorage.getItem("walletBalance") || "0.00";
+    document.getElementById("balanceDisplay").textContent = `$${balance}`;
+  }
+
+  // Call this when the page loads
+  window.onload = function () {
+    updateBalanceDisplay();
+  };
+</script>
 </body>
 </html>
