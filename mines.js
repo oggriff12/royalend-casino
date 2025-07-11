@@ -9,10 +9,11 @@ document.getElementById('claimBonus').addEventListener('click', () => {
   balance += 1;
   updateWallet();
 });
-
 function updateWallet() {
+  localStorage.setItem("walletBalance", balance.toFixed(2));
   document.getElementById('balance').textContent = balance.toFixed(2);
   document.getElementById('profit').textContent = profit.toFixed(2);
+}
 }
 
 document.getElementById('startGame').addEventListener('click', () => {
