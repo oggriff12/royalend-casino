@@ -1,0 +1,128 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>RoyalEnd Casino</title>
+  <style>
+    body {
+      background-color: #0b0b1a;
+      color: white;
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background: linear-gradient(to right, #a400ff, #ff007f);
+      padding: 20px;
+      text-align: center;
+      font-size: 28px;
+      font-weight: bold;
+    }
+    nav {
+      text-align: center;
+      padding: 10px;
+      background: #1f1f3d;
+    }
+    nav a {
+      margin: 0 15px;
+      color: #00f7ff;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .wallet {
+      text-align: right;
+      padding: 10px 20px;
+      background: #12122a;
+      font-size: 16px;
+      color: #00ff88;
+    }
+    .main-content {
+      text-align: center;
+      padding: 40px 20px;
+    }
+    .game-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      padding: 20px;
+      max-width: 1000px;
+      margin: auto;
+    }
+    .game-card {
+      background: #1a1a3a;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 0 10px rgba(255, 0, 255, 0.2);
+    }
+    .game-card img {
+      width: 100%;
+      height: 140px;
+      object-fit: cover;
+    }
+    .game-card h3 {
+      margin: 10px 0;
+    }
+    .rewards {
+      background: #22224c;
+      margin: 20px auto;
+      max-width: 600px;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0, 255, 255, 0.2);
+    }
+    .rewards button {
+      background: #00ff99;
+      color: black;
+      padding: 10px 20px;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<header>👑 RoyalEnd Casino – Created by Nyeem Stewart</header>
+<nav>
+  <a href="#">Home</a>
+  <a href="#">Games</a>
+  <a href="#">Bonus Codes</a>
+  <a href="#">Rewards</a>
+  <a href="#">Live Sports</a>
+</nav>
+
+<div class="wallet">💰 Balance: $1.00</div>
+
+<div class="main-content">
+  <h2>🎮 Featured Games</h2>
+  <div class="game-grid">
+    <div class="game-card">
+      <img src="https://images.unsplash.com/photo-1611711447540-5e99f1c43e0b?auto=format&fit=crop&w=800&q=80" alt="Mines" />
+      <h3>Mines</h3>
+    </div>
+    <div class="game-card">
+      <img src="https://images.unsplash.com/photo-1623387641163-c5f7c6f5e4d0?auto=format&fit=crop&w=800&q=80" alt="Crash" />
+      <h3>Crash</h3>
+    </div>
+    <div class="game-card">
+      <img src="https://images.unsplash.com/photo-1606312611504-cb9e407cc527?auto=format&fit=crop&w=800&q=80" alt="Blackjack" />
+      <h3>Blackjack</h3>
+    </div>
+    <div class="game-card">
+      <img src="https://images.unsplash.com/photo-1614281403646-b1c4b46b0e88?auto=format&fit=crop&w=800&q=80" alt="Roulette" />
+      <h3>Roulette</h3>
+    </div>
+  </div>
+
+  <div class="rewards">
+    <h3>🎁 Claim Your Daily Bonus</h3>
+    <p>Get $1 every 24 hours just for playing!</p>
+    <button>Claim $1 Daily Bonus</button>
+  </div>
+</div>
+
+</body>
+</html>
