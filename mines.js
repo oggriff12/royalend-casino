@@ -61,3 +61,15 @@ function cashOut() {
   alert('You cashed out!');
   gameInProgress = false;
 }
+function updateWallet(amount) {
+  let current = parseFloat(localStorage.getItem("wallet") || "0");
+  current += amount;
+  current = Math.max(current, 0); // Prevent going below $0
+  localStorage.setItem("wallet", current.toFixed(2));
+
+  // Update display if elements exist
+  const balanceDisplay = document.getElementById("balanceDisplay");
+  const balance = document.getElementById("balance");
+  if (balanceDisplay) balanceDisplay.innerText = "$" + current.toFixed(2);
+  if (balance) balance.innerText = "$" + current.toFixed(2);
+}
