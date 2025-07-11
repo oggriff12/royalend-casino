@@ -45,5 +45,21 @@
   </div>
 
   <script src="mines.js"></script>
+  <script>
+// Load wallet from localStorage
+document.getElementById("balanceDisplay").innerText = "$" + (localStorage.getItem("wallet") || "10.00");
+document.getElementById("balance").innerText = "$" + (localStorage.getItem("wallet") || "10.00");
+
+// Claim Bonus button logic
+document.getElementById("claimBonus").addEventListener("click", () => {
+  let current = parseFloat(localStorage.getItem("wallet") || "0");
+  current += 1;
+  localStorage.setItem("wallet", current.toFixed(2));
+  document.getElementById("balanceDisplay").innerText = "$" + current.toFixed(2);
+  document.getElementById("balance").innerText = "$" + current.toFixed(2);
+});
+</script>
+</body>
+</html>
 </body>
 </html>
