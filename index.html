@@ -2,76 +2,99 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>RoyalEnd Casino</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet" />
   <style>
     body {
       margin: 0;
-      padding: 0;
-      background-color: #0f0f1a;
-      color: white;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      text-align: center;
+      font-family: 'Orbitron', sans-serif;
+      background-color: #0f0f1b;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      justify-content: center;
+      animation: fadeIn 1s ease-in;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
 
     header {
-      padding: 30px 0;
-      font-size: 28px;
+      font-size: 26px;
+      font-weight: bold;
+      margin-bottom: 20px;
+      text-shadow: 0 0 10px #00ffff;
     }
 
     .intro {
-      font-size: 18px;
-      margin-bottom: 40px;
+      font-size: 16px;
+      margin-bottom: 30px;
+      text-align: center;
+      max-width: 600px;
+      opacity: 0.85;
     }
 
     .game-buttons {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
       gap: 15px;
-      margin-bottom: 50px;
+      width: 100%;
+      max-width: 500px;
+      padding: 0 20px;
     }
 
     .button {
-      background: #1e1e2f;
-      color: #00ffd5;
-      border: 2px solid #00ffd5;
-      padding: 12px 24px;
-      font-size: 18px;
+      background-color: #1f1f2f;
+      color: #00ffff;
+      border: 2px solid #00ffff;
+      padding: 14px;
       border-radius: 12px;
+      text-align: center;
+      font-size: 18px;
       text-decoration: none;
-      transition: 0.3s ease;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 10px transparent;
     }
 
     .button:hover {
-      background: #00ffd5;
-      color: #0f0f1a;
-      transform: scale(1.05);
+      background-color: #00ffff;
+      color: #1f1f2f;
+      transform: scale(1.07);
+      box-shadow: 0 0 20px #00ffffaa;
     }
 
     .footer {
-      margin-top: 60px;
-      font-size: 14px;
-      opacity: 0.6;
+      margin-top: 40px;
+      font-size: 12px;
+      opacity: 0.5;
     }
   </style>
 </head>
 <body>
-  <header>🎰 RoyalEnd Casino — Created by Nyeem Stewart</header>
-  
+
+  <header>🎰 RoyalEnd Casino – Created by Nyeem Stewart</header>
+
   <div class="intro">
-    Welcome to RoyalEnd! Play legendary games like Blackjack, Roulette, Mines, and Crash. Earn rewards, claim bonuses, and win big — all in one place.
+    Welcome to RoyalEnd! Play legendary games like Blackjack, Roulette, Mines, and Crash. 
+    Earn rewards, claim bonuses, and win big — all in one place.
   </div>
 
   <div class="game-buttons">
     <a href="mines.html" class="button">💣 Play Mines</a>
-    <a href="crash.html" class="button">📉 Play Crash</a>
+    <a href="crash.html" class="button">🚀 Play Crash</a>
     <a href="blackjack.html" class="button">🂡 Play Blackjack</a>
     <a href="roulette.html" class="button">🎡 Play Roulette</a>
-    <!-- Optional future page -->
     <a href="store.html" class="button">🛍️ Bonus Store</a>
   </div>
 
-  <div class="footer">© 2025 RoyalEnd Casino. All rights reserved.</div>
+  <div class="footer">
+    © 2025 RoyalEnd. All rights reserved.
+  </div>
+
 </body>
 </html>
