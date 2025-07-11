@@ -1,0 +1,174 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>RoyalEnd | Blackjack</title>
+  <style>
+    body {
+      background-color: #0e0e1e;
+      color: white;
+      font-family: 'Segoe UI', sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+    .wallet {
+      text-align: right;
+      margin-bottom: 20px;
+      font-size: 18px;
+      color: #00ffcc;
+    }
+    .card-container {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin: 10px;
+    }
+    .card {
+      background: white;
+      color: black;
+      border-radius: 6px;
+      padding: 10px;
+      width: 50px;
+      text-align: center;
+      font-weight: bold;
+      font-size: 20px;
+    }
+    button {
+      margin: 10px;
+      padding: 10px 20px;
+      font-weight: bold;
+      background: #00ffcc;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<div class="wallet">Balance: $<span id="balance">1.00</span></div>
+
+<h2>🃏 RoyalEnd Blackjack</h2>
+
+<h3>Your Hand (<span id="player-total">0</span>)</h3>
+<div class="card-container" id="player-cards"></div>
+
+<h3>Dealer's Hand (<span id="dealer-total">0</span>)</h3>
+<div class="card-container" id="dealer-cards"></div>
+
+<div>
+  <button onclick="startGame()">Start Game</button>
+  <button onclick="hit()">Hit</button>
+  <button onclick="stand()">Stand</button>
+</div>
+
+<script>
+  let balance = 1.00;
+  let wager = 0.10;
+  let deck = [];
+  let playerCards = [];
+  let dealerCards = [];
+  let inGame = false;
+
+  const balanceEl = document.getElementById("balance");
+  const playerTotalEl = document.getElementById("player-total");
+  const dealerTotalEl = document.getElementById("dealer-total");
+  const playerCardsEl = document.getElementById("player-cards");
+  const dealerCardsEl = document.getElementById("dealer-cards");
+
+  function updateBalance() {
+    balanceEl.textContent = balance.toFixed(2);
+  }
+
+  function createDeck() {
+    const suits = ['♠', '♥', '♦', '♣'];
+    const ranks = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
+    let newDeck = [];
+    for (let suit of suits) {
+      for (let rank of ranks) {
+        newDeck.push({ suit, rank });
+      }
+    }
+    return newDeck.sort(() => Math.random() - 0.5);
+  }
+
+  function cardValue(card) {
+    if (['J', 'Q', 'K'].includes(card.rank)) return 10;
+    if (card.rank === 'A') return 11;
+    return parseInt(card.rank);
+  }
+
+  function calculateTotal(cards) {
+    let total = cards.reduce((sum, c) => sum + cardValue(c), 0);
+    let aces = cards.filter(c => c.rank === 'A').length;
+    while (total > 21 && aces--) total -= 10;
+    return total;
+  }
+
+  function renderCards(container, cards) {
+    container.innerHTML = '';
+    for (let card of cards) {
+      let el = document.createElement("div");
+      el.className = "card";
+      el.textContent = `${card.rank}${card.suit}`;
+      container.appendChild(el);
+    }
+  }
+
+  function startGame() {
+    if (balance < wager) return alert("Not enough balance!");
+    inGame = true;
+    balance -= wager;
+    updateBalance();
+    deck = createDeck();
+    playerCards = [deck.pop(), deck.pop()];
+    dealerCards = [deck.pop(), deck.pop()];
+    renderCards(playerCardsEl, playerCards);
+    renderCards(dealerCardsEl, dealerCards);
+    updateTotals();
+  }
+
+  function hit() {
+    if (!inGame) return;
+    playerCards.push(deck.pop());
+    renderCards(playerCardsEl, playerCards);
+    updateTotals();
+    if (calculateTotal(playerCards) > 21) {
+      alert("You busted!");
+      inGame = false;
+    }
+  }
+
+  function stand() {
+    if (!inGame) return;
+    while (calculateTotal(dealerCards) < 17) {
+      dealerCards.push(deck.pop());
+    }
+    renderCards(dealerCardsEl, dealerCards);
+    updateTotals();
+    let playerTotal = calculateTotal(playerCards);
+    let dealerTotal = calculateTotal(dealerCards);
+    if (dealerTotal > 21 || playerTotal > dealerTotal) {
+      alert("You win!");
+      balance += wager * 2;
+    } else if (playerTotal === dealerTotal) {
+      alert("Push!");
+      balance += wager;
+    } else {
+      alert("Dealer wins!");
+    }
+    updateBalance();
+    inGame = false;
+  }
+
+  function updateTotals() {
+    playerTotalEl.textContent = calculateTotal(playerCards);
+    dealerTotalEl.textContent = calculateTotal(dealerCards);
+  }
+
+  updateBalance();
+</script>
+
+</body>
+</html>
