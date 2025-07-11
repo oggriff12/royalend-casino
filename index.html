@@ -91,7 +91,36 @@
     <a href="roulette.html" class="button">🎡 Play Roulette</a>
     <a href="store.html" class="button">🛍️ Bonus Store</a>
   </div>
+<div style="margin-top: 30px;">
+  <button id="claimBonus" class="button">💰 Claim Daily $1 Bonus</button>
+  <p id="bonusStatus" style="margin-top: 10px; font-size: 14px; opacity: 0.7;"></p>
+</div>
 
+<script>
+  const bonusBtn = document.getElementById('claimBonus');
+  const bonusStatus = document.getElementById('bonusStatus');
+
+  const lastClaim = localStorage.getItem('lastBonusTime');
+  const now = Date.now();
+  const oneDay = 24 * 60 * 60 * 1000;
+
+  if (lastClaim && now - parseInt(lastClaim) < oneDay) {
+    bonusBtn.disabled = true;
+    bonusStatus.textContent = "✅ You've already claimed your daily bonus.";
+  }
+
+  bonusBtn.onclick = () => {
+    const claimedTime = localStorage.getItem('lastBonusTime');
+    if (!claimedTime || now - parseInt(claimedTime) >= oneDay) {
+      localStorage.setItem('lastBonusTime', Date.now().toString());
+      let currentBalance = parseFloat(localStorage.getItem('wallet') || '0');
+      currentBalance += 1.00;
+      localStorage.setItem('wallet', currentBalance.toFixed(2));
+      bonusStatus.textContent = "🎉 $1 bonus claimed! Check your wallet.";
+      bonusBtn.disabled = true;
+    }
+  };
+</script>
   <div class="footer">
     © 2025 RoyalEnd. All rights reserved.
   </div>
