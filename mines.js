@@ -90,6 +90,18 @@ function revealCell(cell) {
   } else {
     cell.classList.add("revealed", "safe");
     revealedSafeCells++;
+    // Show floating multiplier effect
+const multiplierDisplay = document.createElement("div");
+multiplierDisplay.className = "floating-multiplier";
+multiplierDisplay.textContent = `${currentMultiplier.toFixed(2)}x`;
+multiplierDisplay.style.left = `${cell.offsetLeft + cell.offsetWidth / 2}px`;
+multiplierDisplay.style.top = `${cell.offsetTop}px`;
+document.querySelector(".mines-wrapper").appendChild(multiplierDisplay);
+
+setTimeout(() => {
+  multiplierDisplay.remove();
+}, 1000);
+    
 
     // Update multiplier using Stake-style logic
     const multiplier = getMultiplier(bombs.length, revealedSafeCells);
