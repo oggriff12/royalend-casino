@@ -170,3 +170,13 @@ header {
   }
 }
 }
+#multiplierDisplay {
+  font-size: 1.2rem;
+  color: #00ff99;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+#multiplierDisplay.pulse {
+  transform: scale(1.2);
+  box-shadow: 0 0 10px #00ff99;
+}
