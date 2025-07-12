@@ -43,6 +43,7 @@ function startGame() {
   crashInterval = setInterval(() => {
     multiplier += 0.01;
     multiplierDisplay.textContent = `${multiplier.toFixed(2)}x`;
+    drawGraph(multiplier);
     leftPos += 2;
     car.style.left = `${leftPos}px`;
 
