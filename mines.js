@@ -27,6 +27,28 @@ function startGame() {
 
   walletBalance -= betAmount;
   updateWalletUI();
+  const gridContainer = document.querySelector('.grid');
+gridContainer.innerHTML = '';
+minePositions = [];
+revealedCells = 0;
+gameInProgress = true;
+
+// Generate mine positions
+while (minePositions.length < mineCount) {
+  let rand = Math.floor(Math.random() * (gridSize * gridSize));
+  if (!minePositions.includes(rand)) {
+    minePositions.push(rand);
+  }
+}
+
+// Generate the grid
+for (let i = 0; i < gridSize * gridSize; i++) {
+  const cell = document.createElement('div');
+  cell.classList.add('cell');
+  cell.dataset.index = i;
+  cell.addEventListener('click', handleCellClick);
+  gridContainer.appendChild(cell);
+}
 
   gameInProgress = true;
   minePositions = [];
