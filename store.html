@@ -35,6 +35,40 @@
   </style>
 </head>
 <body>
+  <body>
+  <h1>💰 Buy Chips</h1>
+
+  <div class="store-container">
+    <div class="promo-section">
+      <input type="text" id="promoCode" placeholder="Enter promo code" />
+      <button id="applyPromo">Apply</button>
+      <p id="promoMessage"></p>
+    </div>
+
+    <div class="packages">
+      <div class="package pay-button" data-amount="500">
+        <h2>500 Chips - $5</h2>
+      </div>
+      <div class="package pay-button" data-amount="1000">
+        <h2>1100 Chips - $10</h2>
+      </div>
+      <div class="package pay-button" data-amount="2000">
+        <h2>2300 Chips - $20</h2>
+      </div>
+      <div class="package pay-button" data-amount="5000">
+        <h2>6000 Chips - $50</h2>
+      </div>
+    </div>
+
+    <div class="trust-badges">
+      <img src="https://i.imgur.com/dGx8U4G.png" alt="Secure Payment" />
+      <img src="https://i.imgur.com/0QksbGO.png" alt="SSL Encrypted" />
+      <img src="https://i.imgur.com/NzjVMgY.png" alt="Powered by Stripe" />
+    </div>
+  </div>
+
+  <script src="store.js"></script>
+</body>
   <h1>🪙 Buy Chips</h1>
 
   <div class="package" onclick="startCheckout(500)">Buy 500 Chips - $5</div>
