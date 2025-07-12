@@ -1,14 +1,37 @@
 body {
-  background-color: #000;
+  background: #000;
   color: #0f0;
-  font-family: monospace;
+  font-family: 'Courier New', monospace;
   text-align: center;
-  padding-top: 60px;
+  padding-top: 40px;
+}
+
+#wallet {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+input {
+  width: 80px;
+  font-size: 16px;
+  padding: 4px;
+  margin: 10px;
 }
 
 #multiplier {
   font-size: 48px;
   margin: 20px 0;
+  transition: all 0.2s ease;
+}
+
+#car {
+  font-size: 48px;
+  animation: moveCar 5s linear infinite;
+}
+
+@keyframes moveCar {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(200px); }
 }
 
 button {
@@ -22,10 +45,10 @@ button {
 }
 
 button:disabled {
-  background: #555;
+  background: #444;
 }
 
 #status {
-  margin-top: 20px;
+  margin-top: 15px;
   font-size: 20px;
 }
