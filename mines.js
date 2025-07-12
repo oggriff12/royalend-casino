@@ -1,158 +1,160 @@
-let gridSize = 5;
-let mineCount = 5;
-let gameInProgress = false;
-let minePositions = [];
-let revealedCells = 0;
+const gridElement = document.getElementById("grid");
+const balanceValue = document.getElementById("balanceValue");
+const betAmountInput = document.getElementById("betAmount");
+const bombCountInput = document.getElementById("bombCount");
+const startGameButton = document.getElementById("startGame");
+const cashOutButton = document.getElementById("cashOut");
+const messageElement = document.getElementById("gameMessage");
+const oddsList = document.getElementById("oddsList");
+
+const totalCells = 25;
+let bombs = [];
+let revealedSafeCells = 0;
+let currentMultiplier = 1;
 let betAmount = 0;
-let walletBalance = parseFloat(localStorage.getItem('walletBalance')) || 100;
-updateWalletUI();
+let gameActive = false;
 
-document.getElementById('startGame').addEventListener('click', startGame);
-document.getElementById('cashOut').addEventListener('click', cashOut);
+// Load balance from local storage
+let balance = parseFloat(localStorage.getItem("balance")) || 10;
+updateBalanceDisplay();
 
-function updateWalletUI() {
-  document.getElementById('walletDisplay').innerText = `$${walletBalance.toFixed(2)}`;
-  localStorage.setItem('walletBalance', walletBalance);
-}
+// Start game
+startGameButton.addEventListener("click", startGame);
+cashOutButton.addEventListener("click", cashOut);
 
 function startGame() {
-  gridSize = 5;
-  mineCount = parseInt(document.getElementById('mineCount').value);
-  betAmount = parseFloat(document.getElementById('betAmount').value);
+  if (gameActive) return;
 
-  if (isNaN(betAmount) || betAmount <= 0 || walletBalance < betAmount) {
-    alert("Invalid bet or insufficient balance.");
+  const bet = parseFloat(betAmountInput.value);
+  const bombCount = parseInt(bombCountInput.value);
+
+  if (isNaN(bet) || bet <= 0 || bet > balance) {
+    showMessage("Invalid bet amount.");
+    return;
+  }
+  if (isNaN(bombCount) || bombCount < 1 || bombCount >= totalCells) {
+    showMessage("Invalid bomb count.");
     return;
   }
 
-  walletBalance -= betAmount;
-  updateWalletUI();
-  const gridContainer = document.querySelector('.grid');
-gridContainer.innerHTML = '';
-minePositions = [];
-revealedCells = 0;
-gameInProgress = true;
+  // Deduct balance
+  balance -= bet;
+  updateBalanceDisplay();
+  localStorage.setItem("balance", balance.toFixed(2));
 
-// Generate mine positions
-while (minePositions.length < mineCount) {
-  let rand = Math.floor(Math.random() * (gridSize * gridSize));
-  if (!minePositions.includes(rand)) {
-    minePositions.push(rand);
-  }
-}
+  betAmount = bet;
+  revealedSafeCells = 0;
+  currentMultiplier = 1;
+  gameActive = true;
 
-// Generate the grid
-for (let i = 0; i < gridSize * gridSize; i++) {
-  const cell = document.createElement('div');
-  cell.classList.add('cell');
-  cell.dataset.index = i;
-  cell.addEventListener('click', handleCellClick);
-  gridContainer.appendChild(cell);
-}
-
-  gameInProgress = true;
-  minePositions = [];
-  revealedCells = 0;
-  generateMines();
+  bombs = generateBombs(bombCount);
   renderGrid();
-  updateMultiplierDisplay();
+  displayOdds(bombCount);
+
+  cashOutButton.disabled = false;
+  showMessage("Game started. Click a tile!");
 }
 
-function generateMines() {
-  const totalCells = gridSize * gridSize;
-  while (minePositions.length < mineCount) {
-    const pos = Math.floor(Math.random() * totalCells);
-    if (!minePositions.includes(pos)) minePositions.push(pos);
+function generateBombs(bombCount) {
+  const positions = [];
+  while (positions.length < bombCount) {
+    const index = Math.floor(Math.random() * totalCells);
+    if (!positions.includes(index)) {
+      positions.push(index);
+    }
   }
+  return positions;
 }
 
 function renderGrid() {
-  const grid = document.getElementById('grid');
-  grid.innerHTML = '';
-  for (let i = 0; i < gridSize * gridSize; i++) {
-    const cell = document.createElement('div');
-    cell.classList.add('cell');
+  gridElement.innerHTML = "";
+
+  for (let i = 0; i < totalCells; i++) {
+    const cell = document.createElement("div");
+    cell.classList.add("cell");
     cell.dataset.index = i;
-    cell.addEventListener('click', () => revealCell(cell, i));
-    grid.appendChild(cell);
+    cell.addEventListener("click", () => revealCell(cell));
+    gridElement.appendChild(cell);
   }
 }
 
-function revealCell(cell, index) {
-  if (!gameInProgress || cell.classList.contains('revealed')) return;
+function revealCell(cell) {
+  if (!gameActive || cell.classList.contains("revealed")) return;
 
-  if (minePositions.includes(index)) {
-    cell.classList.add('bomb');
-    gameOver();
+  const index = parseInt(cell.dataset.index);
+  if (bombs.includes(index)) {
+    cell.classList.add("revealed", "bomb");
+    showMessage("💣 You hit a bomb! You lost.");
+    gameOver(false);
   } else {
-    cell.classList.add('safe', 'revealed');
-    revealedCells++;
-    updateMultiplierDisplay();
+    cell.classList.add("revealed", "safe");
+    revealedSafeCells++;
 
-    if (revealedCells === (gridSize * gridSize - mineCount)) {
-      winGame(); // user cleared the board
-    }
+    // Update multiplier using Stake-style logic
+    const multiplier = getMultiplier(bombs.length, revealedSafeCells);
+    currentMultiplier = multiplier;
+    showMessage(`✅ Safe! Multiplier: x${currentMultiplier.toFixed(2)}`);
   }
 }
 
-function updateMultiplierDisplay() {
-  const table = stakeOdds[mineCount];
-  const current = table?.[revealedCells] || { multiplier: 1, odds: 100 };
+function getMultiplier(bombCount, safeRevealed) {
+  // Stake-style multiplier odds reference approximation
+  const oddsTable = {
+    1: [1.03, 1.06, 1.09, 1.13, 1.17, 1.21, 1.26, 1.31, 1.36, 1.42, 1.48, 1.54, 1.61, 1.68, 1.75, 1.83, 1.91, 2.00, 2.09, 2.18, 2.28, 2.39, 2.50, 2.61],
+    2: [1.06, 1.12, 1.19, 1.26, 1.34, 1.42, 1.50, 1.59, 1.68, 1.77, 1.87, 1.97, 2.07, 2.18, 2.29, 2.40, 2.52, 2.64, 2.77, 2.90, 3.03, 3.17, 3.31, 3.46],
+    3: [1.10, 1.18, 1.27, 1.36, 1.45, 1.55, 1.65, 1.75, 1.86, 1.97, 2.08, 2.20, 2.32, 2.44, 2.57, 2.70, 2.84, 2.98, 3.12, 3.27, 3.42, 3.57, 3.73, 3.89],
+    // Add more as needed
+  };
 
-  document.getElementById('multiplier').innerText = `${current.multiplier.toFixed(2)}x`;
-  document.getElementById('odds').innerText = `${current.odds.toFixed(2)}%`;
+  const odds = oddsTable[bombCount];
+  if (odds && safeRevealed > 0 && safeRevealed <= odds.length) {
+    return odds[safeRevealed - 1];
+  }
+  return 1;
 }
 
 function cashOut() {
-  if (!gameInProgress || revealedCells === 0) return;
-  const payout = stakeOdds[mineCount]?.[revealedCells]?.multiplier || 1;
-  const winnings = betAmount * payout;
-  walletBalance += winnings;
-  updateWalletUI();
-  alert(`You cashed out $${winnings.toFixed(2)}!`);
-  gameInProgress = false;
+  if (!gameActive || revealedSafeCells === 0) return;
+
+  const winnings = betAmount * currentMultiplier;
+  balance += winnings;
+  updateBalanceDisplay();
+  localStorage.setItem("balance", balance.toFixed(2));
+
+  showMessage(`💰 You cashed out: $${winnings.toFixed(2)}`);
+  gameOver(true);
 }
 
-function gameOver() {
-  alert("💥 You hit a bomb! Game over.");
-  gameInProgress = false;
+function updateBalanceDisplay() {
+  balanceValue.textContent = `$${balance.toFixed(2)}`;
 }
 
-function winGame() {
-  const payout = stakeOdds[mineCount]?.[revealedCells]?.multiplier || 2;
-  const winnings = betAmount * payout;
-  walletBalance += winnings;
-  updateWalletUI();
-  alert(`🎉 Perfect game! You win $${winnings.toFixed(2)}!`);
-  gameInProgress = false;
+function showMessage(msg) {
+  messageElement.textContent = msg;
 }
 
-// Stake.us-style multiplier and odds chart for 1 diamond
-const stakeOdds = {
-  1: {
-    1: { multiplier: 1.03, odds: 96.11 },
-    2: { multiplier: 1.08, odds: 91.66 },
-    3: { multiplier: 1.12, odds: 88.39 },
-    4: { multiplier: 1.18, odds: 83.89 },
-    5: { multiplier: 1.24, odds: 79.83 },
-    6: { multiplier: 1.30, odds: 76.15 },
-    7: { multiplier: 1.37, odds: 72.26 },
-    8: { multiplier: 1.46, odds: 67.80 },
-    9: { multiplier: 1.55, odds: 63.87 },
-    10: { multiplier: 1.65, odds: 60 },
-    11: { multiplier: 1.77, odds: 55.93 },
-    12: { multiplier: 1.90, odds: 52.10 },
-    13: { multiplier: 2.06, odds: 48.05 },
-    14: { multiplier: 2.25, odds: 44 },
-    15: { multiplier: 2.47, odds: 40.08 },
-    16: { multiplier: 2.75, odds: 36 },
-    17: { multiplier: 3.09, odds: 32.03 },
-    18: { multiplier: 3.54, odds: 27.96 },
-    19: { multiplier: 4.12, odds: 24.02 },
-    20: { multiplier: 4.95, odds: 20 },
-    21: { multiplier: 6.19, odds: 15.99 },
-    22: { multiplier: 8.25, odds: 12 },
-    23: { multiplier: 12.37, odds: 8 },
-    24: { multiplier: 24.75, odds: 4 },
-  },
-};
+function gameOver(success) {
+  gameActive = false;
+  cashOutButton.disabled = true;
+
+  if (!success) {
+    // reveal bombs
+    document.querySelectorAll(".cell").forEach((cell) => {
+      const index = parseInt(cell.dataset.index);
+      if (bombs.includes(index)) {
+        cell.classList.add("revealed", "bomb");
+      }
+    });
+  }
+}
+
+// === Multiplier Odds Side Panel ===
+function displayOdds(bombCount) {
+  oddsList.innerHTML = "";
+  for (let i = 1; i <= totalCells - bombCount; i++) {
+    const multiplier = getMultiplier(bombCount, i);
+    const li = document.createElement("li");
+    li.textContent = `${i} safe ➜ x${multiplier.toFixed(2)}`;
+    oddsList.appendChild(li);
+  }
+}
