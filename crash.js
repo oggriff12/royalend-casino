@@ -61,7 +61,33 @@ function endGame(cashedOut) {
   const winnings = parseFloat(betInput.value) * multiplier;
   balance += winnings;
   updateBalanceDisplay();
+function endGame(cashedOut) {
+  clearInterval(crashInterval);
+  gameInProgress = false;
+  crashed = !cashedOut;
+  if (cashedOut) {
+    const winnings = parseFloat(betInput.value) * multiplier;
+    balance += winnings;
+    updateBalanceDisplay();
 
+    // Add pulse animation for win
+    multiplierDisplay.classList.add('win-pulse');
+    setTimeout(() => {
+      multiplierDisplay.classList.remove('win-pulse');
+    }, 400);
+  } else {
+    // Add crash animation for loss
+    multiplierDisplay.classList.add('crash-pulse');
+    setTimeout(() => {
+      multiplierDisplay.classList.remove('crash-pulse');
+    }, 400);
+  }
+
+  addToHistory(multiplier);
+  startButton.disabled = false;
+  cashoutButton.disabled = true;
+  car.style.left = '0px';
+}
   // Add pulse animation
   multiplierDisplay.classList.add('win-pulse');
   setTimeout(() => {
