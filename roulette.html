@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>RoyalEnd Roulette</title>
+  <link rel="stylesheet" href="roulette.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>RoyalEnd Roulette</h1>
+    <div class="roulette">
+      <div class="wheel" id="wheel">
+        <!-- 12 slots for simplicity -->
+        <div class="number" style="--i:1;--color:red;">1</div>
+        <div class="number" style="--i:2;--color:black;">2</div>
+        <div class="number" style="--i:3;--color:red;">3</div>
+        <div class="number" style="--i:4;--color:black;">4</div>
+        <div class="number" style="--i:5;--color:red;">5</div>
+        <div class="number" style="--i:6;--color:black;">6</div>
+        <div class="number" style="--i:7;--color:red;">7</div>
+        <div class="number" style="--i:8;--color:black;">8</div>
+        <div class="number" style="--i:9;--color:red;">9</div>
+        <div class="number" style="--i:10;--color:black;">10</div>
+        <div class="number" style="--i:11;--color:red;">11</div>
+        <div class="number" style="--i:12;--color:black;">12</div>
+      </div>
+      <div class="pointer" id="pointer"></div>
+    </div>
+    <button id="spinButton">Spin</button>
+    <button id="resetButton">Reset</button>
+    <div class="result" id="result"></div>
+  </div>
+  <script src="roulette.js"></script>
+</body>
+</html>
