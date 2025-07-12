@@ -12,8 +12,13 @@ let betInput = document.getElementById('betAmount');
 let historyList = document.getElementById('historyList');
 const crashSound = document.getElementById("crashSound");
 const cashoutSound = document.getElementById("cashoutSound");
-function updateBalanceDisplay() {
-  balanceDisplay.textContent = balance.toFixed(2);
+function updateWalletDisplay() {
+  const balanceDisplay = document.getElementById("walletBalance");
+  if (balanceDisplay) {
+    const balance = localStorage.getItem("walletBalance") || "0";
+    balanceDisplay.textContent = `$${parseFloat(balance).toFixed(2)}`;
+  }
+}
 }
 
 function addToHistory(value) {
