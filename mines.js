@@ -151,10 +151,19 @@ function gameOver(success) {
 // === Multiplier Odds Side Panel ===
 function displayOdds(bombCount) {
   oddsList.innerHTML = "";
+
+  let multiplier = 1;
+  let remainingTiles = totalCells;
+
   for (let i = 1; i <= totalCells - bombCount; i++) {
-    const multiplier = getMultiplier(bombCount, i);
+    const safeTiles = remainingTiles - bombCount;
+    const chance = safeTiles / remainingTiles;
+    multiplier *= 1 / chance;
+
     const li = document.createElement("li");
-    li.textContent = `${i} safe ➜ x${multiplier.toFixed(2)}`;
+    li.textContent = `${i} safe ➜ x${(multiplier * 0.97).toFixed(2)}`; // 3% house edge
     oddsList.appendChild(li);
+
+    remainingTiles--;
   }
 }
