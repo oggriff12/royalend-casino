@@ -1,4 +1,4 @@
-let balance = 10.00;
+let balance = parseFloat(localStorage.getItem('balance')) || 10.00;
 let multiplier = 1.00;
 let crashInterval;
 let gameInProgress = false;
