@@ -229,3 +229,23 @@ header {
   background-color: #ff4444 !important;
   color: #fff;
 }
+.floating-multiplier {
+  position: absolute;
+  font-size: 1rem;
+  color: #00ffcc;
+  font-weight: bold;
+  animation: floatUp 1s ease-out forwards;
+  pointer-events: none;
+  z-index: 999;
+}
+
+@keyframes floatUp {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-40px);
+  }
+}
