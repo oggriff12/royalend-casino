@@ -35,6 +35,7 @@ function startGame() {
   balance -= bet;
   updateBalanceDisplay();
   multiplierDisplay.textContent = `${multiplier.toFixed(2)}x`;
+  drawGraph(multiplier);
   cashoutButton.disabled = false;
   startButton.disabled = true;
 
