@@ -1,68 +1,94 @@
 let multiplier = 1.00;
+let isRunning = false;
+let crashPoint;
 let interval;
-let playing = false;
-let balance = 10.00;
+let balance = 10.00; // Starting fake balance
+let betAmount = 0.10;
+let history = [];
 
-const multiplierDisplay = document.getElementById("multiplier");
-const betBtn = document.getElementById("betBtn");
-const cashoutBtn = document.getElementById("cashoutBtn");
-const status = document.getElementById("status");
-const wagerInput = document.getElementById("wager");
-const balanceDisplay = document.getElementById("balance");
+const multiplierDisplay = document.getElementById('multiplier');
+const car = document.getElementById('car');
+const startBtn = document.getElementById('start');
+const cashoutBtn = document.getElementById('cashout');
+const betInput = document.getElementById('betAmount');
+const balanceDisplay = document.getElementById('balance');
+const historyList = document.getElementById('historyList');
+const crashSound = new Audio("https://cdn.pixabay.com/audio/2022/03/15/audio_d44b5c2284.mp3");
+const winSound = new Audio("https://cdn.pixabay.com/audio/2022/03/15/audio_7ad78fe6b2.mp3");
 
-function updateBalanceDisplay() {
+updateBalance();
+
+function getRandomCrashPoint() {
+  const r = Math.random();
+  return Math.max(1.01, parseFloat((1 / (1 - r)).toFixed(2)));
+}
+
+function updateBalance() {
   balanceDisplay.textContent = balance.toFixed(2);
 }
 
-updateBalanceDisplay();
+function updateMultiplier() {
+  multiplier += 0.01;
+  multiplierDisplay.textContent = multiplier.toFixed(2) + 'x';
+  car.style.left = `${(multiplier * 15)}px`;
 
-betBtn.addEventListener("click", () => {
-  const wager = parseFloat(wagerInput.value);
-
-  if (playing || wager > balance || wager < 0.1) {
-    alert("Invalid bet");
-    return;
+  if (multiplier >= crashPoint) {
+    crash();
   }
-
-  balance -= wager;
-  updateBalanceDisplay();
-
-  multiplier = 1.00;
-  playing = true;
-  status.textContent = "";
-  cashoutBtn.disabled = false;
-  betBtn.disabled = true;
-
-  interval = setInterval(() => {
-    multiplier += 0.02 + multiplier * 0.02;
-    multiplierDisplay.textContent = multiplier.toFixed(2) + "x";
-
-    if (Math.random() < 0.01 + multiplier / 75) {
-      crash();
-    }
-  }, 100);
-});
-
-cashoutBtn.addEventListener("click", () => {
-  if (!playing) return;
-  clearInterval(interval);
-  const wager = parseFloat(wagerInput.value);
-  const payout = wager * multiplier;
-  balance += payout;
-  status.textContent = `✅ Cashed out at ${multiplier.toFixed(2)}x! Won $${payout.toFixed(2)}`;
-  reset();
-});
+}
 
 function crash() {
   clearInterval(interval);
-  multiplierDisplay.textContent = "💥 CRASHED!";
-  status.textContent = `❌ Crashed at ${multiplier.toFixed(2)}x. You lost.`;
-  reset();
+  isRunning = false;
+  multiplierDisplay.textContent = "💥 CRASHED at " + multiplier.toFixed(2) + "x!";
+  crashSound.play();
+  addToHistory(multiplier.toFixed(2), false);
+  cashoutBtn.disabled = true;
+  startBtn.disabled = false;
 }
 
-function reset() {
-  playing = false;
-  betBtn.disabled = false;
-  cashoutBtn.disabled = true;
-  updateBalanceDisplay();
+function addToHistory(multiplier, won) {
+  const li = document.createElement("li");
+  li.textContent = `${multiplier}x - ${won ? "WIN" : "LOSS"}`;
+  li.style.color = won ? "lime" : "red";
+  history.unshift(li);
+  if (history.length > 10) history.pop();
+  historyList.innerHTML = '';
+  history.forEach(item => historyList.appendChild(item));
 }
+
+startBtn.addEventListener('click', () => {
+  if (isRunning) return;
+
+  betAmount = parseFloat(betInput.value);
+  if (isNaN(betAmount) || betAmount < 0.1 || betAmount > balance) {
+    alert("Invalid bet amount.");
+    return;
+  }
+
+  balance -= betAmount;
+  updateBalance();
+
+  multiplier = 1.00;
+  crashPoint = getRandomCrashPoint();
+  isRunning = true;
+  startBtn.disabled = true;
+  cashoutBtn.disabled = false;
+  multiplierDisplay.textContent = multiplier.toFixed(2) + 'x';
+
+  interval = setInterval(updateMultiplier, 100);
+});
+
+cashoutBtn.addEventListener('click', () => {
+  if (!isRunning) return;
+  clearInterval(interval);
+  isRunning = false;
+  let profit = betAmount * multiplier;
+  balance += profit;
+  updateBalance();
+  winSound.play();
+  multiplierDisplay.textContent = "✅ Cashed out at " + multiplier.toFixed(2) + "x!";
+  addToHistory(multiplier.toFixed(2), true);
+  cashoutBtn.disabled = true;
+  startBtn.disabled = false;
+});
