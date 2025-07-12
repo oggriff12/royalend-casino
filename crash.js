@@ -74,3 +74,34 @@ cashoutButton.onclick = () => {
 };
 
 updateBalanceDisplay();
+// --- Realtime Crash Graph ---
+const canvas = document.getElementById('graphCanvas');
+const ctx = canvas.getContext('2d');
+let graphPoints = [];
+
+function drawGraph(multiplier) {
+  graphPoints.push(multiplier);
+
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.strokeStyle = '#00ff99';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+
+  for (let i = 0; i < graphPoints.length; i++) {
+    const x = (i / graphPoints.length) * canvas.width;
+    const y = canvas.height - (Math.log(graphPoints[i]) / Math.log(10)) * canvas.height * 0.8;
+
+    if (i === 0) {
+      ctx.moveTo(x, y);
+    } else {
+      ctx.lineTo(x, y);
+    }
+  }
+
+  ctx.stroke();
+}
+
+function resetGraph() {
+  graphPoints = [];
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
