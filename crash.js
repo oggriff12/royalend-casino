@@ -10,7 +10,8 @@ let cashoutButton = document.getElementById('cashout');
 let balanceDisplay = document.getElementById('balance');
 let betInput = document.getElementById('betAmount');
 let historyList = document.getElementById('historyList');
-
+const crashSound = document.getElementById("crashSound");
+const cashoutSound = document.getElementById("cashoutSound");
 function updateBalanceDisplay() {
   balanceDisplay.textContent = balance.toFixed(2);
 }
