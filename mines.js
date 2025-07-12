@@ -6,6 +6,7 @@ const startGameButton = document.getElementById("startGame");
 const cashOutButton = document.getElementById("cashOut");
 const messageElement = document.getElementById("gameMessage");
 const oddsList = document.getElementById("oddsList");
+const multiplierDisplay = document.getElementById("multiplierDisplay");
 
 const totalCells = 25;
 let bombs = [];
