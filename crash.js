@@ -19,6 +19,9 @@ function updateWalletDisplay() {
     balanceDisplay.textContent = `$${parseFloat(balance).toFixed(2)}`;
   }
 }
+document.addEventListener("DOMContentLoaded", function () {
+  updateWalletDisplay();
+});
 }
 
 function addToHistory(value) {
