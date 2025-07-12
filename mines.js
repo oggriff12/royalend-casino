@@ -2,74 +2,135 @@ let gridSize = 5;
 let mineCount = 5;
 let gameInProgress = false;
 let minePositions = [];
+let revealedCells = 0;
+let betAmount = 0;
+let walletBalance = parseFloat(localStorage.getItem('walletBalance')) || 100;
+updateWalletUI();
 
 document.getElementById('startGame').addEventListener('click', startGame);
 document.getElementById('cashOut').addEventListener('click', cashOut);
 
-function startGame() {
-  gridSize = parseInt(document.getElementById('gridSize').value);
-  mineCount = parseInt(document.getElementById('mineCount').value);
-  minePositions = [];
-  gameInProgress = true;
+function updateWalletUI() {
+  document.getElementById('walletDisplay').innerText = `$${walletBalance.toFixed(2)}`;
+  localStorage.setItem('walletBalance', walletBalance);
+}
 
+function startGame() {
+  gridSize = 5;
+  mineCount = parseInt(document.getElementById('mineCount').value);
+  betAmount = parseFloat(document.getElementById('betAmount').value);
+
+  if (isNaN(betAmount) || betAmount <= 0 || walletBalance < betAmount) {
+    alert("Invalid bet or insufficient balance.");
+    return;
+  }
+
+  walletBalance -= betAmount;
+  updateWalletUI();
+
+  gameInProgress = true;
+  minePositions = [];
+  revealedCells = 0;
   generateMines();
   renderGrid();
+  updateMultiplierDisplay();
 }
 
 function generateMines() {
   const totalCells = gridSize * gridSize;
   while (minePositions.length < mineCount) {
-    const randomPos = Math.floor(Math.random() * totalCells);
-    if (!minePositions.includes(randomPos)) {
-      minePositions.push(randomPos);
-    }
+    const pos = Math.floor(Math.random() * totalCells);
+    if (!minePositions.includes(pos)) minePositions.push(pos);
   }
 }
 
 function renderGrid() {
-  const gridContainer = document.getElementById('gridContainer');
-  gridContainer.innerHTML = '';
-  gridContainer.style.gridTemplateColumns = `repeat(${gridSize}, 40px)`;
-
+  const grid = document.getElementById('grid');
+  grid.innerHTML = '';
   for (let i = 0; i < gridSize * gridSize; i++) {
     const cell = document.createElement('div');
-    cell.className = 'cell';
+    cell.classList.add('cell');
     cell.dataset.index = i;
-    cell.addEventListener('click', handleCellClick);
-    gridContainer.appendChild(cell);
+    cell.addEventListener('click', () => revealCell(cell, i));
+    grid.appendChild(cell);
   }
 }
 
-function handleCellClick(e) {
-  if (!gameInProgress) return;
+function revealCell(cell, index) {
+  if (!gameInProgress || cell.classList.contains('revealed')) return;
 
-  const index = parseInt(e.target.dataset.index);
   if (minePositions.includes(index)) {
-    e.target.innerHTML = '💣';
-    e.target.style.background = 'red';
-    alert('You hit a mine!');
-    gameInProgress = false;
+    cell.classList.add('bomb');
+    gameOver();
   } else {
-    e.target.innerHTML = '💎';
-    e.target.style.background = 'green';
-    e.target.classList.add('revealed');
+    cell.classList.add('safe', 'revealed');
+    revealedCells++;
+    updateMultiplierDisplay();
+
+    if (revealedCells === (gridSize * gridSize - mineCount)) {
+      winGame(); // user cleared the board
+    }
   }
+}
+
+function updateMultiplierDisplay() {
+  const table = stakeOdds[mineCount];
+  const current = table?.[revealedCells] || { multiplier: 1, odds: 100 };
+
+  document.getElementById('multiplier').innerText = `${current.multiplier.toFixed(2)}x`;
+  document.getElementById('odds').innerText = `${current.odds.toFixed(2)}%`;
 }
 
 function cashOut() {
-  if (!gameInProgress) return;
-  alert('You cashed out!');
+  if (!gameInProgress || revealedCells === 0) return;
+  const payout = stakeOdds[mineCount]?.[revealedCells]?.multiplier || 1;
+  const winnings = betAmount * payout;
+  walletBalance += winnings;
+  updateWalletUI();
+  alert(`You cashed out $${winnings.toFixed(2)}!`);
   gameInProgress = false;
 }
-function updateWallet(amount) {
-  let current = parseFloat(localStorage.getItem("wallet") || "0");
-  current += amount;
-  current = Math.max(current, 0); // Prevent going below $0
-  localStorage.setItem("wallet", current.toFixed(2));
 
-  // Update display if elements exist
-  const balanceDisplay = document.getElementById("balanceDisplay");
-  const balance = document.getElementById("balance");
-  if (balanceDisplay) balanceDisplay.innerText = "$" + current.toFixed(2);
-  if (balance) balance.innerText = "$" + current.toFixed(2);
+function gameOver() {
+  alert("💥 You hit a bomb! Game over.");
+  gameInProgress = false;
 }
+
+function winGame() {
+  const payout = stakeOdds[mineCount]?.[revealedCells]?.multiplier || 2;
+  const winnings = betAmount * payout;
+  walletBalance += winnings;
+  updateWalletUI();
+  alert(`🎉 Perfect game! You win $${winnings.toFixed(2)}!`);
+  gameInProgress = false;
+}
+
+// Stake.us-style multiplier and odds chart for 1 diamond
+const stakeOdds = {
+  1: {
+    1: { multiplier: 1.03, odds: 96.11 },
+    2: { multiplier: 1.08, odds: 91.66 },
+    3: { multiplier: 1.12, odds: 88.39 },
+    4: { multiplier: 1.18, odds: 83.89 },
+    5: { multiplier: 1.24, odds: 79.83 },
+    6: { multiplier: 1.30, odds: 76.15 },
+    7: { multiplier: 1.37, odds: 72.26 },
+    8: { multiplier: 1.46, odds: 67.80 },
+    9: { multiplier: 1.55, odds: 63.87 },
+    10: { multiplier: 1.65, odds: 60 },
+    11: { multiplier: 1.77, odds: 55.93 },
+    12: { multiplier: 1.90, odds: 52.10 },
+    13: { multiplier: 2.06, odds: 48.05 },
+    14: { multiplier: 2.25, odds: 44 },
+    15: { multiplier: 2.47, odds: 40.08 },
+    16: { multiplier: 2.75, odds: 36 },
+    17: { multiplier: 3.09, odds: 32.03 },
+    18: { multiplier: 3.54, odds: 27.96 },
+    19: { multiplier: 4.12, odds: 24.02 },
+    20: { multiplier: 4.95, odds: 20 },
+    21: { multiplier: 6.19, odds: 15.99 },
+    22: { multiplier: 8.25, odds: 12 },
+    23: { multiplier: 12.37, odds: 8 },
+    24: { multiplier: 24.75, odds: 4 },
+  },
+};
