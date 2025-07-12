@@ -58,9 +58,15 @@ function endGame(cashedOut) {
   gameInProgress = false;
   crashed = !cashedOut;
   if (cashedOut) {
-    const winnings = parseFloat(betInput.value) * multiplier;
-    balance += winnings;
-    updateBalanceDisplay();
+  const winnings = parseFloat(betInput.value) * multiplier;
+  balance += winnings;
+  updateBalanceDisplay();
+
+  // Add pulse animation
+  multiplierDisplay.classList.add('win-pulse');
+  setTimeout(() => {
+    multiplierDisplay.classList.remove('win-pulse');
+  }, 400);
   }
   addToHistory(multiplier);
   startButton.disabled = false;
