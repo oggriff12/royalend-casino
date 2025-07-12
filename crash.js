@@ -69,6 +69,13 @@ function endGame(cashedOut) {
     const winnings = parseFloat(betInput.value) * multiplier;
     balance += winnings;
     updateBalanceDisplay();
+    if (multiplier >= 2.00) {
+    confetti({
+      particleCount: 100,
+      spread: 70,
+      origin: { y: 0.6 }
+    });
+  }
 
     // Add pulse animation for win
     multiplierDisplay.classList.add('win-pulse');
