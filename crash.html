@@ -2,109 +2,26 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Crash Game | RoyalEnd Casino</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(135deg, #111, #222);
-      color: white;
-      overflow: hidden;
-    }
-    #game {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 2rem;
-    }
-    #graph {
-      width: 90%;
-      height: 200px;
-      background: #000;
-      border: 2px solid red;
-      margin-bottom: 1rem;
-      position: relative;
-      overflow: hidden;
-      border-radius: 10px;
-    }
-    #car {
-      width: 50px;
-      height: 30px;
-      background: url('https://i.imgur.com/bWPCxzE.png') no-repeat center;
-      background-size: contain;
-      position: absolute;
-      top: 50%;
-      left: 0;
-      transform: translateY(-50%);
-      transition: left 0.05s;
-    }
-    #multiplier {
-      font-size: 2rem;
-      margin: 1rem;
-    }
-    #controls {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.5rem;
-    }
-    input {
-      padding: 0.4rem;
-      font-size: 1rem;
-      width: 100px;
-      text-align: center;
-    }
-    button {
-      padding: 0.6rem 1rem;
-      border: none;
-      font-size: 1rem;
-      cursor: pointer;
-      border-radius: 8px;
-      transition: background 0.2s;
-    }
-    #start {
-      background: limegreen;
-      color: white;
-    }
-    #cashout {
-      background: crimson;
-      color: white;
-    }
-    #balance-box {
-      margin-top: 1rem;
-      font-weight: bold;
-    }
-    #history {
-      margin-top: 2rem;
-      background: #111;
-      padding: 1rem;
-      border-radius: 8px;
-      border: 1px solid #555;
-      width: 300px;
-    }
-    #history h3 {
-      margin-top: 0;
-      color: #aaa;
-    }
-    #historyList {
-      list-style: none;
-      padding: 0;
-    }
-    #historyList li {
-      margin-bottom: 5px;
-    }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RoyalEnd Crash</title>
+  <link rel="stylesheet" href="crash.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet" />
 </head>
 <body>
+
+  <!-- Particle Background -->
   <div id="particles-js"></div>
+
+  <!-- Game Container -->
   <div id="game">
     <h1>🚗 RoyalEnd Crash</h1>
+    
     <div id="graph">
       <div id="car"></div>
     </div>
+    
     <div id="multiplier">1.00x</div>
-
+    
     <div id="controls">
       <label>
         Bet Amount ($):
@@ -118,17 +35,21 @@
         Balance: $<span id="balance">10.00</span>
       </div>
     </div>
-
+    
     <div id="history">
       <h3>Last Games</h3>
       <ul id="historyList"></ul>
-    </div><!-- Sound Effects -->
-<audio id="crashSound" src="sounds/crash.mp3"></audio>
-<audio id="cashoutSound" src="sounds/cashout.mp3"></audio>
+    </div>
+
+    <!-- Sounds -->
+    <audio id="crashSound" src="sounds/crash.mp3"></audio>
+    <audio id="cashoutSound" src="sounds/cashout.mp3"></audio>
   </div>
-<div id="particles-js"></div>
-<script src="https://cdn.jsdelivr.net/npm/particles.js"></script>
-<script src="loadParticles.js"></script>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/particles.js"></script>
+  <script src="loadparticles.js"></script>
   <script src="crash.js"></script>
+
 </body>
 </html>
