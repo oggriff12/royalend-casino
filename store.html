@@ -1,18 +1,45 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>RoyalEnd Store</title>
-  <link rel="stylesheet" href="store.css" />
+  <title>Buy Chips - RoyalEnd Casino</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background: #111;
+      color: #0f0;
+      font-family: 'Orbitron', monospace;
+      text-align: center;
+      padding-top: 60px;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 30px;
+    }
+
+    .package {
+      background: linear-gradient(135deg, #0ff, #00f);
+      padding: 20px;
+      margin: 15px auto;
+      border-radius: 20px;
+      width: 250px;
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 0 20px #0ff;
+    }
+
+    .package:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 30px #0ff;
+    }
+  </style>
 </head>
 <body>
-  <div class="store-container">
-    <h1>Buy Casino Chips</h1>
-    <p>$5 = 500 Chips</p>
-    <button id="payButton">Buy Now</button>
-    <p id="status"></p>
-  </div>
+  <h1>🪙 Buy Chips</h1>
+
+  <div class="package" onclick="startCheckout(500)">Buy 500 Chips - $5</div>
+  <div class="package" onclick="startCheckout(1100)">Buy 1100 Chips - $10</div>
+  <div class="package" onclick="startCheckout(2300)">Buy 2300 Chips - $20</div>
 
   <script src="https://js.stripe.com/v3/"></script>
   <script src="store.js"></script>
