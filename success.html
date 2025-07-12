@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Payment Success</title>
+  <meta http-equiv="refresh" content="2;url=index.html">
+  <style>
+    body {
+      background: #111;
+      color: #0f0;
+      font-family: monospace;
+      text-align: center;
+      padding-top: 100px;
+    }
+  </style>
+</head>
+<body>
+  <h1>✅ Payment Successful!</h1>
+  <p>500 chips have been added to your account.</p>
+  <script>
+    const currentBalance = parseFloat(localStorage.getItem('balance')) || 0;
+    const newBalance = currentBalance + 500;
+    localStorage.setItem('balance', newBalance.toFixed(2));
+  </script>
+</body>
+</html>
