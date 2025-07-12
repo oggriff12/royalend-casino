@@ -1,128 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
-<!-- Firebase SDKs -->
-  <script>
-  firebase.initializeApp(firebaseConfig);
-  const auth = firebase.auth();
-
-  // 🚫 Redirect if not logged in
-  auth.onAuthStateChanged(user => {
-    if (!user) {
-      alert("⚠️ You must log in to access the Mines game.");
-      window.location.href = "index.html";
-    }
-  });
-</script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js"></script>
-
-<script>
-  const firebaseConfig = {
-    apiKey: "AIzaSyAVhEyoBPa_PqyhOqm6jn-XF2IeI1oY3vk",
-    authDomain: "royalendcasino.firebaseapp.com",
-    projectId: "royalendcasino",
-    storageBucket: "royalendcasino.firebasestorage.app",
-    messagingSenderId: "292123456763",
-    appId: "1:292123456763:web:63fabf993b18e8539aac5e",
-    measurementId: "G-SZ9FJHE15G"
-  };
-
-  firebase.initializeApp(firebaseConfig);
-</script>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>RoyalEnd Mines</title>
-  <link rel="stylesheet" href="mines.css" />
+  <meta charset="UTF-8">
+  <title>RoyalEnd Casino – Mines</title>
+  <link rel="stylesheet" href="mines.css">
 </head>
 <body>
-  <div style="text-align: right; padding: 10px; font-weight: bold; font-size: 16px;">
-    Balance: <span id="balanceDisplay">$0.00</span>
-  </div>
-<button id="googleLogin">Login with Google</button>
-  <div class="wallet">
-    Balance: <span id="balance">$1.00</span>
-    <button id="claimBonus">Claim $1 Bonus</button>
-  </div>
-
-  <div class="mines-game">
-    <div class="stats-panel">
-      <p>Wins: <span id="winCount">0</span></p>
-      <p>Losses: <span id="lossCount">0</span></p>
-      <p>Profit: $<span id="profit">0.00</span></p>
-    </div>
-
-    <div class="controls">
-      <label>Grid Size:</label>
-      <select id="gridSize">
-        <option value="5">5x5</option>
-        <option value="6">6x6</option>
-        <option value="8">8x8</option>
-      </select>
-
-      <label>Mines:</label>
-      <input type="number" id="mineCount" min="1" max="60" value="5" />
-
-      <label>Bet Amount:</label>
-      <input type="number" id="betAmount" min="0.01" step="0.01" value="0.10" />
-
+  <div class="mines-wrapper">
+    <header>
+      <h1>Mines Game</h1>
+      <div id="balanceDisplay">💰 Balance: $<span id="balanceValue">0</span></div>
+    </header>
+    <section class="controls">
+      <input type="number" id="betAmount" placeholder="Bet Amount" min="1">
+      <input type="number" id="bombCount" placeholder="Bombs (1–24)" min="1" max="24">
       <button id="startGame">Start Game</button>
-      <button id="cashOut">Cash Out</button>
-    </div>
-
-    <div id="gridContainer" class="grid"></div>
+      <button id="cashOut" disabled>Cash Out</button>
+    </section>
+    <section class="grid"></section>
+    <aside class="odds-panel">
+      <h2>Bombs × Odds</h2>
+      <ul id="oddsList"></ul>
+    </aside>
+    <div class="message" id="gameMessage"></div>
   </div>
-
   <script src="mines.js"></script>
-  <script>
-// Load wallet from localStorage
-document.getElementById("balanceDisplay").innerText = "$" + (localStorage.getItem("wallet") || "10.00");
-document.getElementById("balance").innerText = "$" + (localStorage.getItem("wallet") || "10.00");
-
-// Claim Bonus button logic
-document.getElementById("claimBonus").addEventListener("click", () => {
-  let current = parseFloat(localStorage.getItem("wallet") || "0");
-  current += 1;
-  localStorage.setItem("wallet", current.toFixed(2));
-  document.getElementById("balanceDisplay").innerText = "$" + current.toFixed(2);
-  document.getElementById("balance").innerText = "$" + current.toFixed(2);
-});
-</script>
-  <script>
-  function updateWalletDisplay() {
-    const current = parseFloat(localStorage.getItem("wallet") || "0");
-    document.getElementById("balanceDisplay").innerText = "$" + current.toFixed(2);
-    document.getElementById("balance").innerText = "$" + current.toFixed(2);
-  }
-
-  function claimDailyBonus() {
-    const lastClaim = localStorage.getItem("lastBonusClaim");
-    const now = Date.now();
-    const oneDay = 24 * 60 * 60 * 1000;
-
-    if (!lastClaim || now - parseInt(lastClaim) > oneDay) {
-      let current = parseFloat(localStorage.getItem("wallet") || "0");
-      current += 1;
-      localStorage.setItem("wallet", current.toFixed(2));
-      localStorage.setItem("lastBonusClaim", now.toString());
-      updateWalletDisplay();
-      alert("✅ You received your $1 daily bonus!");
-    } else {
-      const hoursLeft = Math.ceil((oneDay - (now - parseInt(lastClaim))) / (1000 * 60 * 60));
-      alert("❌ Bonus already claimed. Come back in " + hoursLeft + " hour(s).");
-    }
-  }
-
-  document.getElementById("claimBonus").addEventListener("click", claimDailyBonus);
-  updateWalletDisplay();
-</script>
 </body>
 </html>
-<!-- Particle Background -->
-<div id="particles-js" style="position:fixed; top:0; left:0; width:100%; height:100%; z-index:-1;"></div>
-<script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
-<script>
-  particlesJS.load("particles-js", "particles.json", function () {
-    console.log("🎉 Particles loaded on Mines page!");
-  
-
