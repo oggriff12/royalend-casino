@@ -84,7 +84,8 @@ let graphPoints = [];
 function drawGraph(multiplier) {
   graphPoints.push(multiplier);
 
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = "rgba(0, 0, 0, 0.1)";
+ctx.fillRect(0, 0, canvas.width, canvas.height);
   ctx.strokeStyle = '#00ff99';
   ctx.lineWidth = 2;
   ctx.beginPath();
