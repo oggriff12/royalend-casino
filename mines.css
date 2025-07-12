@@ -127,4 +127,46 @@ header {
     width: 90%;
     margin: 5px 0;
   }
+  /* === Cell Reveal Animations === */
+
+.cell {
+  transition: transform 0.2s ease, background-color 0.3s ease;
+  cursor: pointer;
+}
+
+.cell.revealed.safe {
+  background-color: #2ecc71;
+  animation: popIn 0.25s ease-out;
+}
+
+.cell.revealed.bomb {
+  background-color: #e74c3c;
+  animation: shake 0.3s ease-in-out;
+}
+
+@keyframes popIn {
+  0% {
+    transform: scale(0.6);
+    opacity: 0.3;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-5px);
+  }
+  50% {
+    transform: translateX(5px);
+  }
+  75% {
+    transform: translateX(-5px);
+  }
+}
 }
