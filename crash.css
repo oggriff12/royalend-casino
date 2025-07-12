@@ -1,54 +1,100 @@
 body {
-  background: #000;
-  color: #0f0;
-  font-family: 'Courier New', monospace;
+  margin: 0;
+  padding: 0;
+  font-family: 'Orbitron', sans-serif;
+  background: radial-gradient(#0f0f0f, #000000);
+  color: #fff;
   text-align: center;
-  padding-top: 40px;
+  overflow-x: hidden;
 }
 
-#wallet {
-  font-size: 20px;
-  margin-bottom: 10px;
+#particles-js {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
 }
 
-input {
-  width: 80px;
-  font-size: 16px;
-  padding: 4px;
-  margin: 10px;
+header {
+  padding: 20px;
 }
 
-#multiplier {
-  font-size: 48px;
+.hud {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
   margin: 20px 0;
-  transition: all 0.2s ease;
+  font-size: 1.2rem;
+}
+
+main {
+  margin: 20px auto;
+  width: 90%;
+  max-width: 500px;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 20px;
+  border-radius: 15px;
+  border: 2px solid red;
+  box-shadow: 0 0 20px red;
+  position: relative;
+}
+
+#game {
+  height: 100px;
+  position: relative;
+  margin-bottom: 15px;
+  background-color: #111;
+  border-radius: 8px;
 }
 
 #car {
-  font-size: 48px;
-  animation: moveCar 5s linear infinite;
+  font-size: 32px;
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  transition: left 0.1s linear;
 }
 
-@keyframes moveCar {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(200px); }
+#multiplier {
+  font-size: 2rem;
+  margin-bottom: 10px;
+  color: lime;
 }
 
 button {
   padding: 10px 20px;
-  font-size: 18px;
-  margin: 10px;
-  background: #222;
-  color: #fff;
+  margin: 5px;
   border: none;
+  background-color: crimson;
+  color: white;
+  border-radius: 8px;
+  font-size: 1rem;
   cursor: pointer;
+  transition: 0.3s;
 }
 
-button:disabled {
-  background: #444;
+button:hover {
+  background-color: darkred;
 }
 
-#status {
-  margin-top: 15px;
-  font-size: 20px;
+.history {
+  margin-top: 40px;
 }
+
+.history ul {
+  list-style: none;
+  padding: 0;
+  font-size: 0.9rem;
+}
+
+.history li {
+  margin-bottom: 5px;
+  color: #ccc;
+}
+
+input[type="number"] {
+  width: 80px;
+  font-size: 1rem;
+  padding: 5px;
+  border
