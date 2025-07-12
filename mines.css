@@ -70,3 +70,61 @@ header {
   font-size:1.2rem;
   font-weight:bold;
 }
+/* Particle background */
+#particles-js {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+
+/* Leaderboard */
+.leaderboard {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 10px;
+  border-radius: 12px;
+  color: white;
+  width: 200px;
+  z-index: 1;
+}
+.leaderboard h3 {
+  margin-top: 0;
+  font-size: 1.2rem;
+}
+.leaderboard ul {
+  list-style: none;
+  padding-left: 0;
+  font-size: 0.9rem;
+}
+
+/* Mobile polish */
+@media (max-width: 768px) {
+  .mines-wrapper {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .leaderboard {
+    position: relative;
+    width: 90%;
+    margin: 10px auto;
+  }
+
+  .grid {
+    width: 90vw;
+    height: 90vw;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(5, 1fr);
+  }
+
+  .controls input,
+  .controls button {
+    width: 90%;
+    margin: 5px 0;
+  }
+}
