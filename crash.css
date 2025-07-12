@@ -110,3 +110,20 @@ input[type="number"] {
   position: relative;
   z-index: 1;
 }
+#graphCanvas {
+  background: radial-gradient(#111 0%, #000 100%);
+  box-shadow: 0 0 10px #0ff, 0 0 30px #0ff inset;
+  border: 1px solid #0ff;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 600px;
+  height: 300px;
+  margin: 20px auto;
+  display: block;
+}
+
+@keyframes pulseCrash {
+  0%   { transform: scale(1); filter: brightness(2); }
+  50%  { transform: scale(1.05); filter: brightness(4); }
+  100% { transform: scale(1); filter: brightness(1); }
+}
