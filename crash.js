@@ -68,6 +68,7 @@ function endGame(cashedOut) {
   if (cashedOut) {
     const winnings = parseFloat(betInput.value) * multiplier;
     balance += winnings;
+    localStorage.setItem('balance', balance.toFixed(2));
     updateBalanceDisplay();
     if (multiplier >= 2.00) {
     confetti({
