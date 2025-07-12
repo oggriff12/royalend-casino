@@ -22,8 +22,7 @@ function addToHistory(value) {
   historyList.prepend(li);
   if (historyList.childNodes.length > 10) {
     historyList.removeChild(historyList.lastChild);
-  }<audio id="crashSound" src="sounds/crash.mp3"></audio>
-<audio id="cashoutSound" src="sounds/cashout.mp3"></audio>
+  }
 }
 
 function startGame() {
