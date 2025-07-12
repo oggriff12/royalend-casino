@@ -106,3 +106,7 @@ input[type="number"] {
   left: 0;
   z-index: -1;
 }
+#game {
+  position: relative;
+  z-index: 1;
+}
