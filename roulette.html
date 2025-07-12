@@ -60,24 +60,84 @@
   </style>
 </head>
 <body>
-  <div class="roulette-container">
-    <div class="pointer"></div>
-    <div class="wheel" id="wheel"></div>
-  </div>
-  <button id="spin">Spin</button>
-  <div id="result"></div>  <script>
-    const wheel = document.getElementById('wheel');
-    const spinBtn = document.getElementById('spin');
-    const result = document.getElementById('result');
+  <div class="wallet-ui">
+    <p id="balanceDisplay">Balance: $0</p>
+    <input type="number" id="betAmount" placeholder="Bet Amount" />
+    <input type="number" id="betNumber" placeholder="Pick number (0-36)" />
+    <button id="spin">Spin</button>
+    <div class="roulette-container">
+      <div class="pointer"></div>
+      <div class="wheel" id="wheel"></div>
+    </div>
+    <div id="result"></div>
+  </div>  <script>
+    <script>
+  if (!localStorage.getItem('walletBalance')) {
+    localStorage.setItem('walletBalance', '1000');
+  }
 
-    const numbers = [
-      0, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36,
-      11, 30, 8, 23, 10, 5, 24, 16, 33, 1, 20, 14, 31,
-      9, 22, 18, 29, 7, 28, 12, 35, 3, 26
-    ];
+  function updateBalanceUI() {
+    document.getElementById('balanceDisplay').innerText =
+      'Balance: $' + localStorage.getItem('walletBalance');
+  }
 
-    let spinning = false;
+  updateBalanceUI();
 
-    spinBtn.addEventListener('click', () => {
-      if (spinning) return;
+  const wheel = document.getElementById('wheel');
+  const spinBtn = document.getElementById('spin');
+  const result = document.getElementById('result');
+
+  const numbers = [
+    0, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36,
+    11, 30, 8, 23, 10, 5, 24, 16, 33, 1, 20, 14, 31,
+    9, 22, 18, 29, 7, 28, 12, 35, 3, 26
+  ];
+
+  let spinning = false;
+
+  spinBtn.addEventListener('click', () => {
+    if (spinning) return;
+
+    const betAmount = parseInt(document.getElementById('betAmount').value);
+    const betNumber = parseInt(document.getElementById('betNumber').value);
+    let balance = parseInt(localStorage.getItem('walletBalance'));
+
+    if (isNaN(betAmount) || isNaN(betNumber) || betAmount <= 0 || betNumber < 0 || betNumber > 36) {
+      result.innerText = "Invalid bet.";
+      return;
+    }
+
+    if (betAmount > balance) {
+      result.innerText = "Insufficient balance.";
+      return;
+    }
+
+    spinning = true;
+    const degree = Math.floor(3600 + Math.random() * 360);
+    const rotation = degree % 360;
+    wheel.style.transition = 'transform 5s ease-out';
+    wheel.style.transform = `rotate(${degree}deg)`;
+
+    setTimeout(() => {
+      const segment = 360 / numbers.length;
+      const index = Math.floor(((360 - rotation + segment / 2) % 360) / segment);
+      const winningNumber = numbers[index];
+
+      let message = `🎯 Winning Number: ${winningNumber}`;
+      if (winningNumber === betNumber) {
+        const winnings = betAmount * 36;
+        balance += winnings;
+        message += `\n🎉 You WIN $${winnings}!`;
+      } else {
+        balance -= betAmount;
+        message += `\n❌ You lost $${betAmount}.`;
+      }
+
+      localStorage.setItem('walletBalance', balance);
+      updateBalanceUI();
+      result.innerText = message;
+      spinning = false;
+    }, 5000);
+  });
+</script>
      
