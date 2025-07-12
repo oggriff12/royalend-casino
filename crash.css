@@ -127,3 +127,6 @@ input[type="number"] {
   50%  { transform: scale(1.05); filter: brightness(4); }
   100% { transform: scale(1); filter: brightness(1); }
 }
+.win-pulse {
+  animation: pulseCrash 0.4s ease-out;
+}
