@@ -1,158 +1,81 @@
-let balance = parseFloat(localStorage.getItem('balance')) || 10.00;
-let multiplier = 1.00;
-let crashInterval;
+let balance = parseFloat(localStorage.getItem("walletBalance")) || 1000;
+let multiplier = 1.0;
+let crashPoint;
+let interval;
 let gameInProgress = false;
-let crashed = false;
-let car = document.getElementById('car');
-let multiplierDisplay = document.getElementById('multiplier');
-let startButton = document.getElementById('start');
-let cashoutButton = document.getElementById('cashout');
-let balanceDisplay = document.getElementById('balance');
-let betInput = document.getElementById('betAmount');
-let historyList = document.getElementById('historyList');
-const crashSound = document.getElementById("crashSound");
-const cashoutSound = document.getElementById("cashoutSound");
-function updateWalletDisplay() {
-  const balanceDisplay = document.getElementById("walletBalance");
-  if (balanceDisplay) {
-    const balance = localStorage.getItem("walletBalance") || "0";
-    balanceDisplay.textContent = `$${parseFloat(balance).toFixed(2)}`;
-  }
+
+const balanceDisplay = document.getElementById("balance");
+const betAmountInput = document.getElementById("betAmount");
+const startButton = document.getElementById("startButton");
+const cashOutButton = document.getElementById("cashOutButton");
+const multiplierDisplay = document.getElementById("multiplier");
+const historyDisplay = document.getElementById("history");
+
+function updateBalanceDisplay() {
+  balanceDisplay.textContent = `$${balance.toFixed(2)}`;
+  localStorage.setItem("walletBalance", balance);
 }
-document.addEventListener("DOMContentLoaded", function () {
-  updateWalletDisplay();
-});
+
+function generateCrashPoint() {
+  let r = Math.random();
+  return Math.max(1.0, (1 / (1 - r)).toFixed(2));
 }
 
 function addToHistory(value) {
-  const li = document.createElement('li');
-  li.textContent = `${value.toFixed(2)}x`;
-  historyList.prepend(li);
-  if (historyList.childNodes.length > 10) {
-    historyList.removeChild(historyList.lastChild);
+  const entry = document.createElement("span");
+  entry.className = "history-entry";
+  entry.textContent = `${value.toFixed(2)}x`;
+  historyDisplay.prepend(entry);
+  if (historyDisplay.children.length > 10) {
+    historyDisplay.removeChild(historyDisplay.lastChild);
   }
 }
 
-function startGame() {
-  const bet = parseFloat(betInput.value);
-  if (bet < 0.10 || bet > balance || gameInProgress) return;
+function startCrashGame() {
+  const bet = parseFloat(betAmountInput.value);
+  if (isNaN(bet) || bet <= 0 || bet > balance) {
+    alert("Invalid bet amount");
+    return;
+  }
 
-  multiplier = 1.00;
-  crashed = false;
+  multiplier = 1.0;
+  crashPoint = generateCrashPoint();
   gameInProgress = true;
   balance -= bet;
   updateBalanceDisplay();
-  multiplierDisplay.textContent = `${multiplier.toFixed(2)}x`;
-  drawGraph(multiplier);
-  cashoutButton.disabled = false;
   startButton.disabled = true;
+  cashOutButton.disabled = false;
+  multiplierDisplay.textContent = `Multiplier: ${multiplier.toFixed(2)}x`;
 
-  let leftPos = 0;
-  crashInterval = setInterval(() => {
+  interval = setInterval(() => {
     multiplier += 0.01;
-    multiplierDisplay.textContent = `${multiplier.toFixed(2)}x`;
-    drawGraph(multiplier);
-    leftPos += 2;
-    car.style.left = `${leftPos}px`;
+    multiplierDisplay.textContent = `Multiplier: ${multiplier.toFixed(2)}x`;
 
-    if (Math.random() < 0.01 + (multiplier / 200)) {
+    if (multiplier >= crashPoint) {
       endGame(false);
     }
   }, 50);
 }
 
 function endGame(cashedOut) {
-  clearInterval(crashInterval);
-  gameInProgress = false;
-  crashed = !cashedOut;
+  clearInterval(interval);
+  startButton.disabled = false;
+  cashOutButton.disabled = true;
   if (cashedOut) {
-  const winnings = parseFloat(betInput.value) * multiplier;
-  balance += winnings;
-  updateBalanceDisplay();
-function endGame(cashedOut) {
-  clearInterval(crashInterval);
-  gameInProgress = false;
-  crashed = !cashedOut;
-  if (cashedOut) {
-    const winnings = parseFloat(betInput.value) * multiplier;
+    const bet = parseFloat(betAmountInput.value);
+    const winnings = bet * multiplier;
     balance += winnings;
-    localStorage.setItem('balance', balance.toFixed(2));
     updateBalanceDisplay();
-    if (multiplier >= 2.00) {
-    confetti({
-      particleCount: 100,
-      spread: 70,
-      origin: { y: 0.6 }
-    });
-  }
-
-    // Add pulse animation for win
-    multiplierDisplay.classList.add('win-pulse');
-    setTimeout(() => {
-      multiplierDisplay.classList.remove('win-pulse');
-    }, 400);
-  } else {
-    // Add crash animation for loss
-    multiplierDisplay.classList.add('crash-pulse');
-    setTimeout(() => {
-      multiplierDisplay.classList.remove('crash-pulse');
-    }, 400);
-  }
-
-  addToHistory(multiplier);
-  startButton.disabled = false;
-  cashoutButton.disabled = true;
-  car.style.left = '0px';
-}
-  // Add pulse animation
-  multiplierDisplay.classList.add('win-pulse');
-  setTimeout(() => {
-    multiplierDisplay.classList.remove('win-pulse');
-  }, 400);
   }
   addToHistory(multiplier);
-  startButton.disabled = false;
-  cashoutButton.disabled = true;
-  car.style.left = '0px';
+  gameInProgress = false;
 }
 
-startButton.onclick = startGame;
-cashoutButton.onclick = () => {
-  if (gameInProgress && !crashed) {
-    endGame(true);
-  }
-};
+function cashOut() {
+  if (!gameInProgress) return;
+  endGame(true);
+}
 
+startButton.addEventListener("click", startCrashGame);
+cashOutButton.addEventListener("click", cashOut);
 updateBalanceDisplay();
-// --- Realtime Crash Graph ---
-const canvas = document.getElementById('graphCanvas');
-const ctx = canvas.getContext('2d');
-let graphPoints = [];
-
-function drawGraph(multiplier) {
-  graphPoints.push(multiplier);
-
-  ctx.fillStyle = "rgba(0, 0, 0, 0.1)";
-ctx.fillRect(0, 0, canvas.width, canvas.height);
-  ctx.strokeStyle = '#00ff99';
-  ctx.lineWidth = 2;
-  ctx.beginPath();
-
-  for (let i = 0; i < graphPoints.length; i++) {
-    const x = (i / graphPoints.length) * canvas.width;
-    const y = canvas.height - (Math.log(graphPoints[i]) / Math.log(10)) * canvas.height * 0.8;
-
-    if (i === 0) {
-      ctx.moveTo(x, y);
-    } else {
-      ctx.lineTo(x, y);
-    }
-  }
-
-  ctx.stroke();
-}
-
-function resetGraph() {
-  graphPoints = [];
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-}
