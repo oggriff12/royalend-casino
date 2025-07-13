@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,39 +8,55 @@
   <script src="https://cdn.jsdelivr.net/npm/particles.js"></script>
 </head>
 <body>
-  <div id="particles-js"></div>  <div class="game-container">
+  <div id="particles-js"></div>
+
+  <nav class="navbar">
+    <a href="index.html">🏠 Home</a>
+    <a href="blackjack.html">🃏 Blackjack</a>
+    <a href="crash.html">💥 Crash</a>
+    <a href="mines.html">💣 Mines</a>
+    <a href="roulette.html">🎯 Roulette</a>
+    <a href="sports.html">🏈 Sportsbook</a>
+  </nav>
+
+  <div class="game-container portrait-box">
     <h1 class="glow">Blackjack</h1>
-    <div class="wallet">Wallet: <span id="wallet">$0.00</span></div><div class="bet-area">
-  <input type="number" id="betInput" placeholder="Enter bet" />
-  <button onclick="placeBet()">Place Bet</button>
-</div>
+    <div class="wallet">Wallet: <span id="wallet">$0.00</span></div>
 
-<div class="controls">
-  <button id="deal-btn" onclick="deal()">Deal</button>
-  <button id="hit-btn" class="action-btn" onclick="hit()" disabled>Hit</button>
-  <button id="stand-btn" class="action-btn" onclick="stand()" disabled>Stand</button>
-  <button id="double-btn" class="action-btn" onclick="doubleDown()" disabled>Double</button>
-  <button id="split-btn" class="action-btn" onclick="split()" disabled>Split</button>
-  <button id="surrender-btn" class="action-btn" onclick="surrender()" disabled>Surrender</button>
-</div>
+    <div class="bet-area">
+      <input type="number" id="betInput" placeholder="Enter bet" />
+      <button onclick="placeBet()">Place Bet</button>
+    </div>
 
-<div id="insurance" class="insurance hidden">
-  Dealer has an Ace. Take insurance?
-  <button onclick="takeInsurance()">Yes</button>
-  <button onclick="declineInsurance()">No</button>
-</div>
+    <div class="controls">
+      <button id="deal-btn" onclick="deal()">Deal</button>
+      <button id="hit-btn" class="action-btn" onclick="hit()" disabled>Hit</button>
+      <button id="stand-btn" class="action-btn" onclick="stand()" disabled>Stand</button>
+      <button id="double-btn" class="action-btn" onclick="doubleDown()" disabled>Double</button>
+      <button id="split-btn" class="action-btn" onclick="split()" disabled>Split</button>
+      <button id="surrender-btn" class="action-btn" onclick="surrender()" disabled>Surrender</button>
+    </div>
 
-<div class="hand-label">Dealer's Hand:</div>
-<div id="dealer-cards" class="cards"></div>
+    <div id="insurance" class="insurance hidden">
+      Dealer has an Ace. Take insurance?
+      <button onclick="takeInsurance()">Yes</button>
+      <button onclick="declineInsurance()">No</button>
+    </div>
 
-<div class="hand-label">Player's Hand:</div>
-<div id="player-cards" class="cards"></div>
+    <div class="hand-label">Dealer's Hand:</div>
+    <div id="dealer-cards" class="cards"></div>
 
-<div id="status"></div>
+    <div class="hand-label">Player's Hand:</div>
+    <div id="player-cards" class="cards"></div>
 
-  </div>  <script src="blackjack.js"></script>  <script>
+    <div id="status"></div>
+  </div>
+
+  <script src="blackjack.js"></script>
+  <script>
     particlesJS.load('particles-js', 'particles.json', function () {
       console.log('Particles.js config loaded');
     });
-  </script></body>
+  </script>
+</body>
 </html>
