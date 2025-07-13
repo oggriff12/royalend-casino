@@ -1,147 +1,111 @@
-particlesJS("particles-js", {
-  particles: {
-    number: { value: 80 },
-    size: { value: 3 },
-    color: { value: "#ffffff" },
-    line_linked: { enable: true, color: "#ffffff" },
-    move: { enable: true, speed: 1 }
-  },
-  interactivity: {
-    events: {
-      onhover: { enable: true, mode: "repulse" }
-    }
-  }
-});
+// dice.js
 
-let wallet = parseFloat(localStorage.getItem('wallet')) || 10.00;
-document.getElementById("walletAmount").textContent = wallet.toFixed(2);
+let wallet = localStorage.getItem('wallet') ? parseFloat(localStorage.getItem('wallet')) : 100;
+let streak = 0;
+let topStreak = localStorage.getItem('topStreak') || 0;
 
-const chanceSlider = document.getElementById("chanceSlider");
-const chanceValue = document.getElementById("chanceValue");
-const payoutDisplay = document.getElementById("payout");
+document.getElementById('walletBalance').innerText = `$${wallet.toFixed(2)}`;
 
-chanceSlider.addEventListener("input", () => {
-  const chance = parseInt(chanceSlider.value);
-  const payout = (99 / chance).toFixed(2);
-  chanceValue.textContent = chance;
-  payoutDisplay.textContent = `${payout}x`;
-});
+const betInput = document.getElementById('betAmount');
+const targetInput = document.getElementById('target');
+const multiplierDisplay = document.getElementById('multiplier');
+const resultDisplay = document.getElementById('result');
+const rollHistory = document.getElementById('historyList');
+const streaksDisplay = document.getElementById('streaksList');
 
-function updateWalletDisplay() {
-  localStorage.setItem("wallet", wallet.toFixed(2));
-  document.getElementById("walletAmount").textContent = wallet.toFixed(2);
+function calculateMultiplier(target) {
+  return (100 / target).toFixed(2);
 }
 
-function updateHistory(result) {
-  let history = JSON.parse(localStorage.getItem("rollHistory")) || [];
-  history.unshift(result);
-  if (history.length > 10) history.pop();
-  localStorage.setItem("rollHistory", JSON.stringify(history));
-  displayHistory();
+function updateMultiplierDisplay() {
+  const target = parseFloat(targetInput.value);
+  multiplierDisplay.innerText = `🎯 Multiplier: ${calculateMultiplier(target)}x`;
 }
 
-function displayHistory() {
-  let history = JSON.parse(localStorage.getItem("rollHistory")) || [];
-  const historyList = document.getElementById("rollHistory");
-  historyList.innerHTML = "";
-  history.forEach(item => {
-    const li = document.createElement("li");
-    li.textContent = item;
-    historyList.appendChild(li);
-  });
-}
+targetInput.addEventListener('input', updateMultiplierDisplay);
+updateMultiplierDisplay();
 
-function updateLeaderboard(amount) {
-  let board = JSON.parse(localStorage.getItem("leaderboard")) || [];
-  board.push(amount);
-  board.sort((a, b) => b - a);
-  board = board.slice(0, 5);
-  localStorage.setItem("leaderboard", JSON.stringify(board));
-  displayLeaderboard();
-}
-
-function displayLeaderboard() {
-  const board = JSON.parse(localStorage.getItem("leaderboard")) || [];
-  const list = document.getElementById("leaderboardList");
-  list.innerHTML = "";
-  board.forEach((amt, i) => {
-    const li = document.createElement("li");
-    li.textContent = `$${amt.toFixed(2)}`;
-    list.appendChild(li);
-  });
-}
-
-function rollDice() {
-  const betInput = document.getElementById("betAmount");
-  const resultMsg = document.getElementById("resultMsg");
-  const diceAnim = document.getElementById("diceAnim");
-
-  let bet = parseFloat(betInput.value);
-  let chance = parseInt(chanceSlider.value);
-  let payout = 99 / chance;
+document.getElementById('rollButton').addEventListener('click', () => {
+  const bet = parseFloat(betInput.value);
+  const target = parseFloat(targetInput.value);
+  const multiplier = parseFloat(calculateMultiplier(target));
 
   if (isNaN(bet) || bet <= 0) {
-    alert("Enter a valid bet amount.");
+    alert('Please enter a valid bet amount.');
     return;
   }
 
-  if (bet > wallet) {
-    alert("Insufficient balance.");
+  if (wallet < bet) {
+    alert('Insufficient balance!');
     return;
   }
 
-  diceAnim.textContent = "🎲";
-  resultMsg.textContent = "Rolling...";
+  // Disable button during animation
+  const button = document.getElementById('rollButton');
+  button.disabled = true;
 
-  setTimeout(() => {
-    const roll = Math.random() * 100;
-    if (roll < chance) {
-      let win = bet * payout;
-      wallet += (win - bet);
-      resultMsg.textContent = `🎉 You rolled ${roll.toFixed(2)} — WIN $${win.toFixed(2)}!`;
-      updateHistory(`✅ Win $${win.toFixed(2)} on roll ${roll.toFixed(2)}`);
-      updateLeaderboard(win);
+  const roll = Math.floor(Math.random() * 100) + 1;
+  animateDiceRoll(roll, () => {
+    if (roll < target) {
+      const winnings = bet * multiplier;
+      wallet += winnings;
+      resultDisplay.innerHTML = `🎉 You rolled ${roll} and won $${winnings.toFixed(2)}!`;
+      streak++;
     } else {
       wallet -= bet;
-      resultMsg.textContent = `😢 You rolled ${roll.toFixed(2)} — Lost $${bet.toFixed(2)}`;
-      updateHistory(`❌ Loss $${bet.toFixed(2)} on roll ${roll.toFixed(2)}`);
+      resultDisplay.innerHTML = `❌ You rolled ${roll} and lost $${bet.toFixed(2)}.`;
+      streak = 0;
     }
 
-    updateWalletDisplay();
-  }, 800);
+    if (streak > topStreak) {
+      topStreak = streak;
+      localStorage.setItem('topStreak', topStreak);
+    }
+
+    updateWallet();
+    addToHistory(roll, bet, target);
+    updateStreaks();
+    button.disabled = false;
+  });
+});
+
+function updateWallet() {
+  localStorage.setItem('wallet', wallet.toFixed(2));
+  document.getElementById('walletBalance').innerText = `$${wallet.toFixed(2)}`;
 }
 
-// Daily reward
-const streakKey = "dailyStreak";
-const lastClaimKey = "lastClaim";
-
-function claimDaily() {
-  const today = new Date().toDateString();
-  const lastClaim = localStorage.getItem(lastClaimKey);
-
-  if (lastClaim === today) {
-    alert("You already claimed today's reward!");
-    return;
-  }
-
-  let streak = parseInt(localStorage.getItem(streakKey)) || 0;
-  const yesterday = new Date(Date.now() - 86400000).toDateString();
-
-  streak = (lastClaim === yesterday) ? streak + 1 : 1;
-
-  wallet += 1;
-  localStorage.setItem(streakKey, streak);
-  localStorage.setItem(lastClaimKey, today);
-  updateWalletDisplay();
-  document.getElementById("streakDays").textContent = streak;
-  alert("🔥 Daily reward claimed!");
+function addToHistory(roll, bet, target) {
+  const li = document.createElement('li');
+  li.textContent = `🎲 Rolled ${roll} (Target: < ${target}) | Bet: $${bet}`;
+  rollHistory.prepend(li);
 }
 
-function initStreak() {
-  const streak = parseInt(localStorage.getItem(streakKey)) || 0;
-  document.getElementById("streakDays").textContent = streak;
+function updateStreaks() {
+  streaksDisplay.innerHTML = `
+    🔥 Current Streak: ${streak}<br>
+    🏆 Top Streak: ${topStreak}
+  `;
 }
 
-displayHistory();
-displayLeaderboard();
-initStreak();
+function animateDiceRoll(roll, callback) {
+  resultDisplay.innerHTML = '🎲 Rolling...';
+  const animation = document.createElement('div');
+  animation.className = 'dice-animation';
+  animation.textContent = '🎲';
+  resultDisplay.innerHTML = '';
+  resultDisplay.appendChild(animation);
+
+  let frame = 0;
+  const interval = setInterval(() => {
+    animation.textContent = `🎲 ${Math.floor(Math.random() * 100) + 1}`;
+    frame++;
+    if (frame >= 10) {
+      clearInterval(interval);
+      animation.textContent = `🎲 ${roll}`;
+      setTimeout(callback, 500);
+    }
+  }, 100);
+}
+
+// Initialize on load
+updateStreaks();
