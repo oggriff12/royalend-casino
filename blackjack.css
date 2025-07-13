@@ -1,7 +1,7 @@
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background: #000;
+  background-color: #000;
   color: white;
   overflow-x: hidden;
 }
@@ -11,115 +11,135 @@ body {
   width: 100%;
   height: 100%;
   z-index: -1;
-  top: 0;
-  left: 0;
 }
 
 .navbar {
+  background-color: #111;
+  padding: 1em;
   display: flex;
   justify-content: center;
-  background: rgba(0, 0, 0, 0.8);
-  padding: 10px 0;
-  position: relative;
-  z-index: 10;
+  gap: 20px;
 }
 
 .navbar a {
   color: white;
   text-decoration: none;
-  margin: 0 15px;
   font-weight: bold;
 }
 
 .game-container {
-  max-width: 500px;
-  margin: 60px auto;
+  max-width: 600px;
+  margin: 40px auto;
   padding: 30px;
-  background: rgba(20, 20, 20, 0.85);
+  background: #111;
   border-radius: 16px;
-  box-shadow: 0 0 20px #ff0;
+  box-shadow: 0 0 20px 5px yellow;
   text-align: center;
 }
 
 .glow {
-  font-size: 2.5em;
-  color: #ff0;
-  text-shadow: 0 0 10px #ff0, 0 0 20px #ff0;
+  color: yellow;
+  font-size: 2.5rem;
+  text-shadow: 0 0 10px yellow;
 }
 
 .wallet {
-  margin: 10px 0;
-  font-size: 1.2em;
-  color: #00ffcc;
+  margin-top: 10px;
+  font-size: 1.2rem;
+  color: #0f0;
 }
 
-.bet-area input {
-  width: 100px;
+.bet-area {
+  margin: 20px 0;
+}
+
+input[type="number"] {
   padding: 8px;
+  font-size: 1rem;
+  width: 100px;
+  text-align: center;
   border-radius: 6px;
+  border: none;
   margin-right: 10px;
-  border: none;
-  font-size: 1em;
 }
 
-.bet-area button,
-.insurance button,
-.controls button {
-  background: #ffd700;
+button {
+  padding: 10px 20px;
+  font-size: 1rem;
   border: none;
-  padding: 8px 16px;
-  margin: 8px 5px;
-  border-radius: 8px;
-  font-size: 1em;
-  cursor: pointer;
+  border-radius: 6px;
+  background: gold;
+  color: black;
   font-weight: bold;
-  transition: background 0.2s;
+  cursor: pointer;
+  transition: transform 0.2s;
 }
 
-.bet-area button:hover,
-.insurance button:hover,
-.controls button:hover {
-  background: #ffea00;
+button:hover {
+  transform: scale(1.05);
+}
+
+button:disabled {
+  background-color: #555;
+  cursor: not-allowed;
+}
+
+.cards {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+  min-height: 70px;
+  gap: 10px;
+}
+
+.card {
+  width: 60px;
+  height: 90px;
+  font-size: 2rem;
+  background-color: white;
+  color: black;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: dealAnimation 0.4s ease forwards;
+}
+
+.card.red {
+  color: red;
+}
+
+.hand-label {
+  font-weight: bold;
+  margin-top: 20px;
+  font-size: 1.2rem;
+}
+
+#status {
+  margin-top: 20px;
+  font-size: 1.3rem;
+  color: yellow;
+}
+
+.insurance {
+  margin: 15px 0;
+  padding: 10px;
+  background-color: #222;
+  border: 1px solid gold;
+  border-radius: 8px;
 }
 
 .hidden {
   display: none;
 }
 
-.insurance {
-  background: rgba(0, 0, 0, 0.8);
-  margin: 15px auto;
-  padding: 15px;
-  border-radius: 12px;
-}
-
-.cards {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin: 10px 0 20px;
-}
-
-.card {
-  background: #fff;
-  color: #000;
-  padding: 12px;
-  border-radius: 6px;
-  font-size: 1.1em;
-  font-weight: bold;
-  width: 50px;
-  text-align: center;
-  box-shadow: 0 0 8px #000;
-}
-
-.hand-label {
-  font-weight: bold;
-  margin: 5px 0;
-  font-size: 1.2em;
-}
-
-.status {
-  margin-top: 20px;
-  font-size: 1.2em;
-  font-weight: bold;
+@keyframes dealAnimation {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
