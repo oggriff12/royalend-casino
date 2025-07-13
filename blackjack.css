@@ -7,7 +7,7 @@ body, html {
   overflow-x: hidden;
 }
 
-/* Particles Background */
+/* Live Particles Background */
 #particles-js {
   position: fixed;
   width: 100%;
@@ -49,7 +49,7 @@ body, html {
   z-index: 1;
 }
 
-/* Title */
+/* Title Glow Effect */
 h1.glow {
   color: #ffd700;
   font-size: 3rem;
@@ -63,7 +63,7 @@ h1.glow {
   color: #0f0;
 }
 
-/* Bet Area */
+/* Bet Input and Button */
 .bet-area {
   margin: 20px 0;
 }
@@ -94,7 +94,7 @@ h1.glow {
   box-shadow: 0 0 10px #ffd700;
 }
 
-/* Insurance Prompt */
+/* Insurance Section */
 .insurance {
   margin: 20px 0;
   display: none;
@@ -120,7 +120,7 @@ h1.glow {
   color: #000;
 }
 
-/* Hand Display */
+/* Hand Labels */
 .hand-label {
   margin-top: 30px;
   font-weight: bold;
@@ -128,6 +128,7 @@ h1.glow {
   color: #ccc;
 }
 
+/* Card Containers */
 .cards {
   display: flex;
   justify-content: center;
@@ -135,7 +136,7 @@ h1.glow {
   margin-top: 10px;
 }
 
-/* Card Styles */
+/* Individual Card Style */
 .card {
   font-size: 1.5rem;
   background-color: white;
@@ -149,6 +150,7 @@ h1.glow {
   animation: slideIn 0.4s ease;
 }
 
+/* Card Deal Animation */
 @keyframes slideIn {
   from {
     opacity: 0;
@@ -195,4 +197,11 @@ h1.glow {
   font-size: 1.1rem;
   font-weight: bold;
   color: #fff;
+}
+
+/* Stats Section */
+.stats {
+  margin-top: 20px;
+  font-size: 1rem;
+  color: #ccc;
 }
