@@ -1,12 +1,6 @@
 // auth.js
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import {
-  getAuth,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  signOut,
-  onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAVhEyoBPa_PqyhOqm6jn-XF2IeI1oY3vk",
@@ -21,53 +15,26 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-// Register
-window.registerUser = async () => {
-  const email = document.getElementById("regEmail").value;
-  const password = document.getElementById("regPassword").value;
-  try {
-    await createUserWithEmailAndPassword(auth, email, password);
-    alert("Registered successfully!");
-    window.location.href = "index.html";
-  } catch (error) {
-    alert(error.message);
-  }
-};
+// Track auth state
+onAuthStateChanged(auth, user => {
+  const loginBtn = document.getElementById("loginBtn");
+  const logoutBtn = document.getElementById("logoutBtn");
+  const userInfo = document.getElementById("userInfo");
 
-// Login
-window.loginUser = async () => {
-  const email = document.getElementById("loginEmail").value;
-  const password = document.getElementById("loginPassword").value;
-  try {
-    await signInWithEmailAndPassword(auth, email, password);
-    alert("Logged in!");
-    window.location.href = "index.html";
-  } catch (error) {
-    alert(error.message);
+  if (user) {
+    loginBtn.style.display = "none";
+    logoutBtn.style.display = "inline-block";
+    userInfo.textContent = `🎉 Logged in as: ${user.email}`;
+  } else {
+    loginBtn.style.display = "inline-block";
+    logoutBtn.style.display = "none";
+    userInfo.textContent = "";
   }
-};
+});
 
-// Logout
+// Logout function
 window.logoutUser = () => {
   signOut(auth).then(() => {
     alert("Logged out!");
-    window.location.href = "index.html";
   });
 };
-
-// Update UI if logged in
-onAuthStateChanged(auth, (user) => {
-  const userInfo = document.getElementById("userInfo");
-  const loginBtn = document.getElementById("loginBtn");
-  const logoutBtn = document.getElementById("logoutBtn");
-
-  if (user) {
-    userInfo.innerText = `👤 Logged in as ${user.email}`;
-    loginBtn.style.display = "none";
-    logoutBtn.style.display = "inline-block";
-  } else {
-    userInfo.innerText = "";
-    loginBtn.style.display = "inline-block";
-    logoutBtn.style.display = "none";
-  }
-});
