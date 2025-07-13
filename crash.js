@@ -31,8 +31,16 @@ function startCrashGame() {
   }
 
   crashPoint = Math.random() * 5 + 1; // Random crash point between 1 and 6
-  multiplier = 1;
-  graphX = 0;
+ multiplier = 1;
+graphPoints = [];
+startTime = Date.now();
+
+graphInterval = setInterval(() => {
+  const elapsed = (Date.now() - startTime) / 1000;
+  const currentMultiplier = 1 + elapsed * 0.2;
+  graphPoints.push({ x: elapsed, y: currentMultiplier });
+  drawGraph();
+}, 100);
 
   startButton.disabled = true;
   cashOutButton.disabled = false;
@@ -114,3 +122,26 @@ function addToHistory(multiplier) {
 startButton.addEventListener("click", startCrashGame);
 cashOutButton.addEventListener("click", cashOut);
 updateBalanceDisplay();
+function drawGraph() {
+  ctx.clearRect(0, 0, graphCanvas.width, graphCanvas.height);
+  ctx.beginPath();
+  ctx.strokeStyle = "#00ff00";
+  ctx.lineWidth = 2;
+
+  const scaleX = 80; // pixels per second
+  const scaleY = 50; // pixels per multiplier unit
+  const offsetY = graphCanvas.height;
+
+  for (let i = 0; i < graphPoints.length; i++) {
+    const px = graphPoints[i].x * scaleX;
+    const py = offsetY - graphPoints[i].y * scaleY;
+
+    if (i === 0) {
+      ctx.moveTo(px, py);
+    } else {
+      ctx.lineTo(px, py);
+    }
+  }
+
+  ctx.stroke();
+}
