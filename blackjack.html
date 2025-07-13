@@ -5,28 +5,44 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Blackjack</title>
   <link rel="stylesheet" href="blackjack.css">
-  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/particles.js"></script>
 </head>
 <body>
   <div id="particles-js"></div>
 
-  <div class="container">
-    <h1 class="title">Blackjack</h1>
-    <div class="wallet">Wallet: <span id="wallet">$1000</span></div>
+  <nav class="navbar">
+    <a href="/">Home</a>
+    <a href="/blackjack">Blackjack</a>
+    <a href="/crash">Crash</a>
+    <a href="/mines">Mines</a>
+    <a href="/roulette">Roulette</a>
+    <a href="/sportsbook">Sportsbook</a>
+  </nav>
 
-    <div class="hand-title">Dealer</div>
-    <div id="dealer-cards" class="card-row"></div>
+  <div class="game-container">
+    <h1 class="glow">Blackjack</h1>
+    <div class="wallet">Wallet: $<span id="wallet">1000</span></div>
+    <div class="bet-area">
+      <input type="number" id="betInput" min="1" max="1000" value="100">
+      <button onclick="placeBet()">Place Bet</button>
+    </div>
+    <div id="insurance" class="insurance hidden">
+      <p>Dealer shows an Ace. Take Insurance?</p>
+      <button onclick="takeInsurance()">Yes</button>
+      <button onclick="declineInsurance()">No</button>
+    </div>
+    <div class="hand-label">Dealer</div>
+    <div id="dealer-cards" class="cards"></div>
 
-    <div class="hand-title">You</div>
-    <div id="player-cards" class="card-row"></div>
+    <div class="hand-label">You</div>
+    <div id="player-cards" class="cards"></div>
 
-    <div class="buttons">
-      <button onclick="deal()">Deal</button>
+    <div class="controls">
+      <button id="deal-btn" onclick="deal()">Deal</button>
       <button id="hit-btn" onclick="hit()" disabled>Hit</button>
       <button id="stand-btn" onclick="stand()" disabled>Stand</button>
     </div>
-
-    <div id="status" class="status-text"></div>
+    <div id="status"></div>
   </div>
 
   <script src="blackjack.js"></script>
