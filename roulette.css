@@ -1,171 +1,30 @@
-/* roulette.css */
-body {
-  margin: 0;
-  font-family: 'Segoe UI', sans-serif;
-  background: #0c0c0c;
-  color: #fff;
-  overflow: hidden;
-}
+body { margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #0e0e23; color: white; overflow: hidden; }
 
-#particles-js {
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
-}
+#particles-js { position: absolute; width: 100%; height: 100%; z-index: -1; }
 
-.container {
-  position: relative;
-  z-index: 1;
-  max-width: 600px;
-  margin: 60px auto;
-  padding: 20px;
-  background: rgba(20, 20, 20, 0.8);
-  border: 2px solid #ffd700;
-  border-radius: 20px;
-  box-shadow: 0 0 20px #ffd700;
-  text-align: center;
-}
+.container { text-align: center; padding: 2rem; position: relative; z-index: 1; }
 
-.glow {
-  color: #ffd700;
-  text-shadow: 0 0 10px #ffd700, 0 0 20px #ffa500;
-}
+.glow { text-shadow: 0 0 10px #fff, 0 0 20px #ff00cc, 0 0 30px #ff00cc; }
 
-.wallet {
-  font-size: 1.2rem;
-  margin-bottom: 20px;
-}
+.wallet { margin-bottom: 1rem; font-size: 1.2rem; }
 
-.controls {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin-bottom: 20px;
-  flex-wrap: wrap;
-}
+.controls input { padding: 10px; margin: 5px; width: 150px; font-size: 1rem; border-radius: 8px; border: none; }
 
-.controls input, .controls button {
-  padding: 10px;
-  font-size: 1rem;
-  border-radius: 8px;
-  border: none;
-}
+#spinButton { padding: 10px 20px; font-size: 1.2rem; background-color: #ff00cc; border: none; border-radius: 10px; color: white; cursor: pointer; transition: transform 0.3s ease; }
 
-.controls input {
-  width: 120px;
-}
+#spinButton:hover { transform: scale(1.1); background-color: #ff33dd; }
 
-.controls button {
-  background: #ff4500;
-  color: white;
-  font-weight: bold;
-  cursor: pointer;
-  transition: transform 0.2s ease;
-}
+.roulette-wrapper { margin-top: 2rem; position: relative; width: 300px; height: 300px; margin-left: auto; margin-right: auto; }
 
-.controls button:hover {
-  transform: scale(1.1);
-  background: #ff6347;
-}
+.wheel { width: 100%; height: 100%; border: 8px solid #ff00cc; border-radius: 50%; background: repeating-conic-gradient( red 0deg 9.72deg, black 9.72deg 19.45deg ); transition: transform 4s ease-out; position: absolute; top: 0; left: 0; }
 
-.roulette-wrapper {
-  position: relative;
-  width: 300px;
-  height: 300px;
-  margin: 20px auto;
-  border-radius: 50%;
-  border: 8px solid #444;
-  overflow: hidden;
-  background: conic-gradient(
-    red 0deg 9.73deg,
-    black 9.73deg 19.45deg,
-    red 19.45deg 29.18deg,
-    black 29.18deg 38.91deg,
-    red 38.91deg 48.64deg,
-    black 48.64deg 58.36deg,
-    red 58.36deg 68.09deg,
-    black 68.09deg 77.82deg,
-    red 77.82deg 87.55deg,
-    black 87.55deg 97.27deg,
-    green 97.27deg 107deg,
-    red 107deg 116.73deg,
-    black 116.73deg 126.45deg,
-    red 126.45deg 136.18deg,
-    black 136.18deg 145.91deg,
-    red 145.91deg 155.64deg,
-    black 155.64deg 165.36deg,
-    red 165.36deg 175.09deg,
-    black 175.09deg 184.82deg,
-    red 184.82deg 194.55deg,
-    black 194.55deg 204.27deg,
-    red 204.27deg 214deg,
-    black 214deg 223.73deg,
-    red 223.73deg 233.45deg,
-    black 233.45deg 243.18deg,
-    red 243.18deg 252.91deg,
-    black 252.91deg 262.64deg,
-    red 262.64deg 272.36deg,
-    black 272.36deg 282.09deg,
-    red 282.09deg 291.82deg,
-    black 291.82deg 301.55deg,
-    red 301.55deg 311.27deg,
-    black 311.27deg 321deg,
-    red 321deg 330.73deg,
-    black 330.73deg 340.45deg,
-    red 340.45deg 350.18deg,
-    black 350.18deg 360deg
-  );
-}
+.ball { width: 20px; height: 20px; background: white; border-radius: 50%; position: absolute; top: 10px; left: 50%; margin-left: -10px; z-index: 2; transition: transform 4s ease-out; }
 
-.wheel {
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  position: relative;
-  transition: transform 4s ease-in-out;
-}
+.status { margin-top: 2rem; font-size: 1.4rem; }
 
-.ball {
-  position: absolute;
-  width: 20px;
-  height: 20px;
-  background: white;
-  border-radius: 50%;
-  top: 10px;
-  left: calc(50% - 10px);
-  z-index: 2;
-  transition: transform 4s ease-in-out;
-}
+.navigation { margin-top: 2rem; }
 
-.status {
-  margin-top: 15px;
-  font-size: 1.2rem;
-  color: #ffd700;
-}
+.navigation a { margin: 0 10px; color: #00ffff; text-decoration: none; font-size: 1rem; transition: color 0.3s ease; }
 
-/* Navigation Links */
-.navigation {
-  margin-top: 30px;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 15px;
-}
+.navigation a:hover { color: #ff00cc; }
 
-.navigation a {
-  color: #ffd700;
-  text-decoration: none;
-  font-weight: bold;
-  padding: 10px 14px;
-  border: 2px solid #ffd700;
-  border-radius: 10px;
-  background-color: rgba(255, 215, 0, 0.1);
-  transition: background 0.3s ease, transform 0.2s ease;
-}
-
-.navigation a:hover {
-  background-color: #ffd700;
-  color: #000;
-  transform: scale(1.05);
-}
