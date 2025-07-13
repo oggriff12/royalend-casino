@@ -3,60 +3,61 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Blackjack Game</title>
+  <title>Blackjack</title>
   <link rel="stylesheet" href="blackjack.css" />
-  <script src="https://cdn.jsdelivr.net/npm/particles.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/tsparticles@2/tsparticles.bundle.min.js"></script>
 </head>
 <body>
-  <div id="particles-js"></div>
+  <div id="tsparticles"></div>
 
   <nav class="navbar">
-    <a href="index.html">🏠 Home</a>
-    <a href="blackjack.html">🃏 Blackjack</a>
-    <a href="crash.html">💥 Crash</a>
-    <a href="mines.html">💣 Mines</a>
-    <a href="roulette.html">🎯 Roulette</a>
-    <a href="sports.html">🏈 Sportsbook</a>
+    <a href="/">Home</a>
+    <a href="/blackjack">Blackjack</a>
+    <a href="/crash">Crash</a>
+    <a href="/mines">Mines</a>
+    <a href="/roulette">Roulette</a>
+    <a href="/sportsbook">Sportsbook</a>
   </nav>
 
-  <div class="game-container portrait-box">
+  <div class="game-container">
     <h1 class="glow">Blackjack</h1>
-    <div class="wallet">Wallet: <span id="wallet">$0.00</span></div>
+    <div class="wallet">Wallet: $<span id="wallet">10.00</span></div>
 
     <div class="bet-area">
-      <input type="number" id="betInput" placeholder="Enter bet" />
+      <input type="number" id="betInput" min="0.01" step="0.01" value="1.00" />
       <button onclick="placeBet()">Place Bet</button>
     </div>
 
-    <div class="controls">
-      <button id="deal-btn" onclick="deal()">Deal</button>
-      <button id="hit-btn" class="action-btn" onclick="hit()" disabled>Hit</button>
-      <button id="stand-btn" class="action-btn" onclick="stand()" disabled>Stand</button>
-      <button id="double-btn" class="action-btn" onclick="doubleDown()" disabled>Double</button>
-      <button id="split-btn" class="action-btn" onclick="split()" disabled>Split</button>
-      <button id="surrender-btn" class="action-btn" onclick="surrender()" disabled>Surrender</button>
-    </div>
-
     <div id="insurance" class="insurance hidden">
-      Dealer has an Ace. Take insurance?
+      <p>Dealer shows an Ace. Take Insurance?</p>
       <button onclick="takeInsurance()">Yes</button>
       <button onclick="declineInsurance()">No</button>
     </div>
 
-    <div class="hand-label">Dealer's Hand:</div>
+    <div class="hand-label">DEALER</div>
     <div id="dealer-cards" class="cards"></div>
 
-    <div class="hand-label">Player's Hand:</div>
+    <div class="hand-label">YOU</div>
     <div id="player-cards" class="cards"></div>
 
+    <div class="controls">
+      <button id="deal-btn" onclick="deal()" class="glow-btn">Deal</button>
+      <button id="hit-btn" onclick="hit()" class="glow-btn" disabled>Hit</button>
+      <button id="stand-btn" onclick="stand()" class="glow-btn" disabled>Stand</button>
+    </div>
+
     <div id="status"></div>
+
+    <div class="stats">
+      <p>Wins: <span id="wins">0</span></p>
+      <p>Losses: <span id="losses">0</span></p>
+      <p>Ties: <span id="ties">0</span></p>
+    </div>
   </div>
 
   <script src="blackjack.js"></script>
   <script>
-    particlesJS.load('particles-js', 'particles.json', function () {
-      console.log('Particles.js config loaded');
-    });
+    tsParticles.load("tsparticles", "particles.json");
   </script>
 </body>
 </html>
