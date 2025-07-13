@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dice | RoyalEnd Casino</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Orbitron', sans-serif;
+      background-color: #0f0f1b;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      justify-content: center;
+    }
+
+    #particles-js {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      z-index: -1;
+    }
+
+    .wallet {
+      font-size: 18px;
+      color: #00ffff;
+      margin-bottom: 20px;
+    }
+
+    .dice-container {
+      background: #1f1f2f;
+      border: 2px solid #00ffff;
+      border-radius: 20px;
+      padding: 30px;
+      text-align: center;
+      box-shadow: 0 0 20px #00ffff44;
+      width: 320px;
+    }
+
+    .dice-container h2 {
+      margin-bottom: 20px;
+    }
+
+    input {
+      padding: 10px;
+      font-size: 16px;
+      width: 60%;
+      margin-bottom: 15px;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+    }
+
+    .button {
+      background-color: #00ffff;
+      color: #000;
+      border: none;
+      border-radius: 10px;
+      padding: 12px 20px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .button:hover {
+      background-color: #00dddd;
+    }
+
+    .result {
+      margin-top: 15px;
+      font-size: 18px;
+    }
+
+    nav {
+      margin-top: 40px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    nav a {
+      background-color: #1f1f2f;
+      color: #00ffff;
+      text-decoration: none;
+      border: 1px solid #00ffff;
+      padding: 8px 14px;
+      border-radius: 10px;
+      transition: background 0.3s;
+      font-size: 14px;
+    }
+
+    nav a:hover {
+      background-color: #00ffff;
+      color: #000;
+    }
+  </style>
+</head>
+<body>
+  <div id="particles-js"></div>
+
+  <div class="wallet">
+    Wallet: $<span id="walletAmount">0</span>
+  </div>
+
+  <div class="dice-container">
+    <h2>🎲 Dice Roll</h2>
+    <p>Pick a number (1–12). If you roll below it, you win!</p>
+    <input type="number" id="threshold" min="2" max="12" value="7" />
+    <input type="number" id="betAmount" min="0.01" step="0.01" placeholder="Enter Bet ($)" />
+    <button class="button" onclick="rollDice()">Roll</button>
+    <div class="result" id="resultText"></div>
+  </div>
+
+  <nav>
+    <a href="index.html">🏠 Home</a>
+    <a href="mines.html">💣 Mines</a>
+    <a href="crash.html">📉 Crash</a>
+    <a href="blackjack.html">🂡 Blackjack</a>
+    <a href="roulette.html">🎯 Roulette</a>
+    <a href="store.html">🏪 Store</a>
+  </nav>
+
+  <script>
+    const walletDisplay = document.getElementById("walletAmount");
+    let wallet = parseFloat(localStorage.getItem("wallet")) || 10.0;
+    walletDisplay.textContent = wallet.toFixed(2);
+
+    function updateWallet(amount) {
+      wallet = parseFloat((wallet + amount).toFixed(2));
+      localStorage.setItem("wallet", wallet);
+      walletDisplay.textContent = wallet.toFixed(2);
+    }
+
+    function rollDice() {
+      const threshold = parseInt(document.getElementById("threshold").value);
+      const bet = parseFloat(document.getElementById("betAmount").value);
+      const resultText = document.getElementById("resultText");
+
+      if (isNaN(bet) || bet <= 0) {
+        resultText.textContent = "Enter a valid bet amount.";
+        return;
+      }
+
+      if (bet > wallet) {
+        resultText.textContent = "Insufficient funds!";
+        return;
+      }
+
+      if (threshold < 2 || threshold > 12) {
+        resultText.textContent = "Pick a number between 2 and 12.";
+        return;
+      }
+
+      const roll = Math.floor(Math.random() * 12) + 1;
+      let win = roll < threshold;
+
+      if (win) {
+        const payout = bet * 1.9;
+        updateWallet(payout);
+        resultText.textContent = `🎉 You rolled ${roll} and won $${payout.toFixed(2)}!`;
+      } else {
+        updateWallet(-bet);
+        resultText.textContent = `😢 You rolled ${roll} and lost $${bet.toFixed(2)}.`;
+      }
+    }
+  </script>
+
+  <!-- Particle Background -->
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+  <script>
+    particlesJS("particles-js", {
+      particles: {
+        number: { value: 80 },
+        size: { value: 3 },
+        color: { value: "#ffffff" },
+        line_linked: {
+          enable: true,
+          color: "#ffffff"
+        },
+        move: {
+          enable: true,
+          speed: 1
+        }
+      },
+      interactivity: {
+        events: {
+          onhover: { enable: true, mode: "repulse" }
+        }
+      }
+    });
+  </script>
+</body>
+</html>
