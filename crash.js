@@ -4,6 +4,12 @@ let gameInProgress = false;
 let balance = 1000;
 let crashPoint;
 let graphX = 0;
+const graphCanvas = document.getElementById("graphCanvas");
+const ctx = graphCanvas.getContext("2d");
+
+let graphPoints = [];
+let graphInterval;
+let startTime;
 
 const startButton = document.getElementById("startButton");
 const cashOutButton = document.getElementById("cashOutButton");
