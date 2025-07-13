@@ -16,14 +16,9 @@
     <a href="/sportsbook">Sportsbook</a>
   </nav>  <div class="game-container">
     <h1 class="glow">Blackjack</h1>
-    <div class="wallet">Wallet: <span id="wallet">$10.00</span></div><div class="chips-area">
-  <p>Choose Chips:</p>
-  <button onclick="addChip(1)">$1</button>
-  <button onclick="addChip(5)">$5</button>
-  <button onclick="addChip(25)">$25</button>
-  <button onclick="addChip(100)">$100</button>
-  <button onclick="clearBet()">Clear</button>
-  <div>Bet: $<span id="bet-display">0.00</span></div>
+    <div class="wallet">Wallet: <span id="wallet">$10.00</span></div><div class="bet-area">
+  <input type="number" id="betInput" min="0.01" step="0.01" value="1.00" />
+  <button onclick="placeBet()">Place Bet</button>
 </div>
 
 <div id="insurance" class="insurance hidden">
