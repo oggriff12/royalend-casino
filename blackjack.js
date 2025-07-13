@@ -1,145 +1,155 @@
-let balance = parseFloat(localStorage.getItem("wallet")) || 10;
-let deck = [];
+// Initial setup
+let wallet = parseFloat(localStorage.getItem("wallet")) || 10.00;
 let playerHand = [];
 let dealerHand = [];
-let gameOver = false;
+let deck = [];
 let betAmount = 0;
+let gameOver = true;
 
-const balanceDisplay = document.getElementById("balance");
-const betInput = document.getElementById("betInput");
-const dealButton = document.getElementById("dealButton");
-const hitButton = document.getElementById("hitButton");
-const standButton = document.getElementById("standButton");
-const playerHandDiv = document.getElementById("playerHand");
-const dealerHandDiv = document.getElementById("dealerHand");
-const gameStatus = document.getElementById("gameStatus");
+const walletDisplay = document.getElementById("wallet");
+const playerCards = document.getElementById("player-cards");
+const dealerCards = document.getElementById("dealer-cards");
+const statusDisplay = document.getElementById("status");
+const betInput = document.getElementById("bet-input");
 
-function updateBalance() {
-  balanceDisplay.textContent = balance.toFixed(2);
-  localStorage.setItem("wallet", balance);
+function updateWalletDisplay() {
+  walletDisplay.textContent = `$${wallet.toFixed(2)}`;
+  localStorage.setItem("wallet", wallet.toFixed(2));
 }
 
+// Card deck
 function createDeck() {
   const suits = ["♠", "♥", "♦", "♣"];
   const values = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
-  deck = [];
+  let newDeck = [];
 
   for (let suit of suits) {
     for (let value of values) {
-      deck.push({ value, suit });
+      newDeck.push({ value, suit });
     }
   }
 
-  deck = deck.sort(() => Math.random() - 0.5);
+  return newDeck.sort(() => Math.random() - 0.5);
 }
 
 function getCardValue(card) {
-  if (["J", "Q", "K"].includes(card.value)) return 10;
+  if (["K", "Q", "J"].includes(card.value)) return 10;
   if (card.value === "A") return 11;
   return parseInt(card.value);
 }
 
-function calculateHandValue(hand) {
+function getHandValue(hand) {
   let value = 0;
-  let aceCount = 0;
+  let aces = 0;
 
   for (let card of hand) {
     value += getCardValue(card);
-    if (card.value === "A") aceCount++;
+    if (card.value === "A") aces++;
   }
 
-  while (value > 21 && aceCount > 0) {
+  while (value > 21 && aces > 0) {
     value -= 10;
-    aceCount--;
+    aces--;
   }
 
   return value;
 }
 
-function displayHand(hand, container) {
-  container.innerHTML = "";
-  for (let card of hand) {
-    const cardDiv = document.createElement("div");
-    cardDiv.className = "card";
-    if (card.suit === "♥" || card.suit === "♦") cardDiv.classList.add("red");
-    cardDiv.textContent = `${card.value}${card.suit}`;
-    container.appendChild(cardDiv);
+function createCardElement(card) {
+  const cardEl = document.createElement("div");
+  cardEl.className = "card";
+  cardEl.innerHTML = `${card.value}${card.suit}`;
+  return cardEl;
+}
+
+function dealCard(toDealer = false) {
+  const card = deck.pop();
+  const cardEl = createCardElement(card);
+  cardEl.style.opacity = 0;
+  cardEl.style.transform = "translateY(-20px)";
+  setTimeout(() => {
+    cardEl.style.opacity = 1;
+    cardEl.style.transform = "translateY(0)";
+  }, 50);
+
+  if (toDealer) {
+    dealerHand.push(card);
+    dealerCards.appendChild(cardEl);
+  } else {
+    playerHand.push(card);
+    playerCards.appendChild(cardEl);
   }
 }
 
-function startGame() {
-  betAmount = parseFloat(betInput.value);
-  if (isNaN(betAmount) || betAmount <= 0 || betAmount > balance) {
-    alert("Invalid bet.");
+function placeBet() {
+  const amount = parseFloat(betInput.value);
+  if (isNaN(amount) || amount <= 0 || amount > wallet) {
+    alert("Invalid bet amount.");
     return;
   }
 
-  balance -= betAmount;
-  updateBalance();
+  betAmount = amount;
+  wallet -= betAmount;
+  updateWalletDisplay();
+  startGame();
+}
 
-  createDeck();
-  playerHand = [deck.pop(), deck.pop()];
-  dealerHand = [deck.pop(), deck.pop()];
+function startGame() {
   gameOver = false;
+  deck = createDeck();
+  playerHand = [];
+  dealerHand = [];
+  playerCards.innerHTML = "";
+  dealerCards.innerHTML = "";
+  statusDisplay.textContent = "";
 
-  displayHand(playerHand, playerHandDiv);
-  displayHand([dealerHand[0], { value: "?", suit: "?" }], dealerHandDiv);
+  dealCard();
+  dealCard(true);
+  dealCard();
+  dealCard(true);
 
-  gameStatus.textContent = "Your move.";
-  dealButton.disabled = true;
-  hitButton.disabled = false;
-  standButton.disabled = false;
+  document.getElementById("hit-btn").disabled = false;
+  document.getElementById("stand-btn").disabled = false;
 }
 
 function hit() {
   if (gameOver) return;
-
-  playerHand.push(deck.pop());
-  displayHand(playerHand, playerHandDiv);
-
-  const playerValue = calculateHandValue(playerHand);
-  if (playerValue > 21) {
-    endGame();
-  }
+  dealCard();
+  const value = getHandValue(playerHand);
+  if (value > 21) endGame("Bust! Dealer wins.");
 }
 
 function stand() {
   if (gameOver) return;
 
-  while (calculateHandValue(dealerHand) < 17) {
-    dealerHand.push(deck.pop());
+  while (getHandValue(dealerHand) < 17) {
+    dealCard(true);
   }
 
-  endGame();
-}
+  const playerValue = getHandValue(playerHand);
+  const dealerValue = getHandValue(dealerHand);
 
-function endGame() {
-  gameOver = true;
-  const playerValue = calculateHandValue(playerHand);
-  const dealerValue = calculateHandValue(dealerHand);
-
-  displayHand(dealerHand, dealerHandDiv);
-
-  if (playerValue > 21) {
-    gameStatus.textContent = "You busted! Dealer wins.";
-  } else if (dealerValue > 21 || playerValue > dealerValue) {
-    gameStatus.textContent = "You win!";
-    balance += betAmount * 2;
-  } else if (playerValue === dealerValue) {
-    gameStatus.textContent = "Push. Bet returned.";
-    balance += betAmount;
+  if (dealerValue > 21 || playerValue > dealerValue) {
+    wallet += betAmount * 2;
+    updateWalletDisplay();
+    endGame("You win!");
+  } else if (dealerValue === playerValue) {
+    wallet += betAmount;
+    updateWalletDisplay();
+    endGame("Push. It's a tie.");
   } else {
-    gameStatus.textContent = "Dealer wins.";
+    endGame("Dealer wins.");
   }
-
-  updateBalance();
-  dealButton.disabled = false;
-  hitButton.disabled = true;
-  standButton.disabled = true;
 }
 
-dealButton.addEventListener("click", startGame);
-hitButton.addEventListener("click", hit);
-standButton.addEventListener("click", stand);
+function endGame(message) {
+  gameOver = true;
+  statusDisplay.textContent = message;
+  document.getElementById("hit-btn").disabled = true;
+  document.getElementById("stand-btn").disabled = true;
+}
 
-updateBalance();
+// Load balance on page load
+window.onload = () => {
+  updateWalletDisplay();
+};
