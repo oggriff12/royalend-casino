@@ -1,24 +1,145 @@
-// roulette.js let balance = parseFloat(localStorage.getItem("wallet")) || 10; let spinning = false;
+let balance = parseFloat(localStorage.getItem("wallet")) || 10;
+let deck = [];
+let playerHand = [];
+let dealerHand = [];
+let gameOver = false;
+let betAmount = 0;
 
-const balanceDisplay = document.getElementById("balance"); const betAmountInput = document.getElementById("betAmount"); const betNumberInput = document.getElementById("betNumber"); const spinButton = document.getElementById("spinButton"); const wheel = document.getElementById("wheel"); const ball = document.getElementById("ball"); const statusDisplay = document.getElementById("status");
+const balanceDisplay = document.getElementById("balance");
+const betInput = document.getElementById("betInput");
+const dealButton = document.getElementById("dealButton");
+const hitButton = document.getElementById("hitButton");
+const standButton = document.getElementById("standButton");
+const playerHandDiv = document.getElementById("playerHand");
+const dealerHandDiv = document.getElementById("dealerHand");
+const gameStatus = document.getElementById("gameStatus");
 
-function updateBalanceDisplay() { balanceDisplay.textContent = $${balance.toFixed(2)}; localStorage.setItem("wallet", balance); }
+function updateBalance() {
+  balanceDisplay.textContent = balance.toFixed(2);
+  localStorage.setItem("wallet", balance);
+}
 
-function spinWheel() { if (spinning) return;
+function createDeck() {
+  const suits = ["♠", "♥", "♦", "♣"];
+  const values = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
+  deck = [];
 
-const bet = parseFloat(betAmountInput.value); const betNumber = parseInt(betNumberInput.value);
+  for (let suit of suits) {
+    for (let value of values) {
+      deck.push({ value, suit });
+    }
+  }
 
-if (isNaN(bet) || bet <= 0 || bet > balance) { alert("Invalid bet amount"); return; }
+  deck = deck.sort(() => Math.random() - 0.5);
+}
 
-if (isNaN(betNumber) || betNumber < 0 || betNumber > 36) { alert("Choose a valid number between 0 and 36"); return; }
+function getCardValue(card) {
+  if (["J", "Q", "K"].includes(card.value)) return 10;
+  if (card.value === "A") return 11;
+  return parseInt(card.value);
+}
 
-spinning = true; balance -= bet; updateBalanceDisplay(); statusDisplay.textContent = "Spinning...";
+function calculateHandValue(hand) {
+  let value = 0;
+  let aceCount = 0;
 
-const winningNumber = Math.floor(Math.random() * 37); const degrees = 360 * 10 + (360 / 37) * winningNumber; const ballOffset = 360 * 4 + (360 / 37) * winningNumber;
+  for (let card of hand) {
+    value += getCardValue(card);
+    if (card.value === "A") aceCount++;
+  }
 
-wheel.style.transform = rotate(${degrees}deg); ball.style.transform = rotate(${ballOffset}deg);
+  while (value > 21 && aceCount > 0) {
+    value -= 10;
+    aceCount--;
+  }
 
-setTimeout(() => { spinning = false; if (betNumber === winningNumber) { const payout = bet * 36; balance += payout; statusDisplay.textContent = 🎉 You won! Number: ${winningNumber}. Payout: $${payout}; } else { statusDisplay.textContent = ❌ You lost. Number was ${winningNumber}.; } updateBalanceDisplay(); }, 4500); }
+  return value;
+}
 
-spinButton.addEventListener("click", spinWheel); updateBalanceDisplay();
+function displayHand(hand, container) {
+  container.innerHTML = "";
+  for (let card of hand) {
+    const cardDiv = document.createElement("div");
+    cardDiv.className = "card";
+    if (card.suit === "♥" || card.suit === "♦") cardDiv.classList.add("red");
+    cardDiv.textContent = `${card.value}${card.suit}`;
+    container.appendChild(cardDiv);
+  }
+}
 
+function startGame() {
+  betAmount = parseFloat(betInput.value);
+  if (isNaN(betAmount) || betAmount <= 0 || betAmount > balance) {
+    alert("Invalid bet.");
+    return;
+  }
+
+  balance -= betAmount;
+  updateBalance();
+
+  createDeck();
+  playerHand = [deck.pop(), deck.pop()];
+  dealerHand = [deck.pop(), deck.pop()];
+  gameOver = false;
+
+  displayHand(playerHand, playerHandDiv);
+  displayHand([dealerHand[0], { value: "?", suit: "?" }], dealerHandDiv);
+
+  gameStatus.textContent = "Your move.";
+  dealButton.disabled = true;
+  hitButton.disabled = false;
+  standButton.disabled = false;
+}
+
+function hit() {
+  if (gameOver) return;
+
+  playerHand.push(deck.pop());
+  displayHand(playerHand, playerHandDiv);
+
+  const playerValue = calculateHandValue(playerHand);
+  if (playerValue > 21) {
+    endGame();
+  }
+}
+
+function stand() {
+  if (gameOver) return;
+
+  while (calculateHandValue(dealerHand) < 17) {
+    dealerHand.push(deck.pop());
+  }
+
+  endGame();
+}
+
+function endGame() {
+  gameOver = true;
+  const playerValue = calculateHandValue(playerHand);
+  const dealerValue = calculateHandValue(dealerHand);
+
+  displayHand(dealerHand, dealerHandDiv);
+
+  if (playerValue > 21) {
+    gameStatus.textContent = "You busted! Dealer wins.";
+  } else if (dealerValue > 21 || playerValue > dealerValue) {
+    gameStatus.textContent = "You win!";
+    balance += betAmount * 2;
+  } else if (playerValue === dealerValue) {
+    gameStatus.textContent = "Push. Bet returned.";
+    balance += betAmount;
+  } else {
+    gameStatus.textContent = "Dealer wins.";
+  }
+
+  updateBalance();
+  dealButton.disabled = false;
+  hitButton.disabled = true;
+  standButton.disabled = true;
+}
+
+dealButton.addEventListener("click", startGame);
+hitButton.addEventListener("click", hit);
+standButton.addEventListener("click", stand);
+
+updateBalance();
