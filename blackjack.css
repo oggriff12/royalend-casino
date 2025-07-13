@@ -1,145 +1,44 @@
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background-color: #000;
-  color: white;
-  overflow-x: hidden;
-}
+body, html { margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #000; color: white; overflow: hidden; }
 
-#particles-js {
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  z-index: -1;
-}
+#particles-js { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; }
 
-.navbar {
-  background-color: #111;
-  padding: 1em;
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-}
+.navbar { background-color: #111; padding: 10px; text-align: center; position: relative; z-index: 1; }
 
-.navbar a {
-  color: white;
-  text-decoration: none;
-  font-weight: bold;
-}
+.navbar a { margin: 0 10px; text-decoration: none; color: white; font-weight: bold; }
 
-.game-container {
-  max-width: 600px;
-  margin: 40px auto;
-  padding: 30px;
-  background: #111;
-  border-radius: 16px;
-  box-shadow: 0 0 20px 5px yellow;
-  text-align: center;
-}
+.game-container { background-color: #111; margin: 50px auto; padding: 20px; border: 2px solid gold; border-radius: 20px; width: 400px; text-align: center; box-shadow: 0 0 20px gold; position: relative; z-index: 1; }
 
-.glow {
-  color: yellow;
-  font-size: 2.5rem;
-  text-shadow: 0 0 10px yellow;
-}
+.glow { font-size: 2.5rem; color: gold; text-shadow: 0 0 5px #fff200, 0 0 10px #fff200; }
 
-.wallet {
-  margin-top: 10px;
-  font-size: 1.2rem;
-  color: #0f0;
-}
+.wallet { color: lime; margin-bottom: 10px; }
 
-.bet-area {
-  margin: 20px 0;
-}
+.bet-area input { width: 60px; padding: 5px; text-align: center; font-size: 1rem; }
 
-input[type="number"] {
-  padding: 8px;
-  font-size: 1rem;
-  width: 100px;
-  text-align: center;
-  border-radius: 6px;
-  border: none;
-  margin-right: 10px;
-}
+.bet-area button { background: gold; border: none; padding: 5px 15px; font-size: 1rem; cursor: pointer; border-radius: 5px; margin-left: 10px; transition: background 0.3s ease; }
 
-button {
-  padding: 10px 20px;
-  font-size: 1rem;
-  border: none;
-  border-radius: 6px;
-  background: gold;
-  color: black;
-  font-weight: bold;
-  cursor: pointer;
-  transition: transform 0.2s;
-}
+.bet-area button:hover { background: #ffcc00; }
 
-button:hover {
-  transform: scale(1.05);
-}
+.cards { display: flex; justify-content: center; gap: 10px; margin: 10px 0; flex-wrap: wrap; }
 
-button:disabled {
-  background-color: #555;
-  cursor: not-allowed;
-}
+.card { width: 60px; height: 90px; background-color: white; color: black; font-weight: bold; border-radius: 10px; display: flex; justify-content: center; align-items: center; animation: popIn 0.5s ease; box-shadow: 0 0 5px #ccc; }
 
-.cards {
-  display: flex;
-  justify-content: center;
-  margin: 20px 0;
-  min-height: 70px;
-  gap: 10px;
-}
+@keyframes popIn { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
-.card {
-  width: 60px;
-  height: 90px;
-  font-size: 2rem;
-  background-color: white;
-  color: black;
-  border-radius: 8px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  animation: dealAnimation 0.4s ease forwards;
-}
+.action-btn { background: gold; border: none; padding: 10px 15px; margin: 10px 5px; border-radius: 10px; font-weight: bold; cursor: pointer; transition: transform 0.2s ease, background 0.3s ease; }
 
-.card.red {
-  color: red;
-}
+.action-btn:hover:not(:disabled) { background: #ffcc00; transform: scale(1.05); }
 
-.hand-label {
-  font-weight: bold;
-  margin-top: 20px;
-  font-size: 1.2rem;
-}
+.action-btn:disabled { background: #555; cursor: not-allowed; }
 
-#status {
-  margin-top: 20px;
-  font-size: 1.3rem;
-  color: yellow;
-}
+.hand-label { font-weight: bold; margin-top: 10px; }
 
-.insurance {
-  margin: 15px 0;
-  padding: 10px;
-  background-color: #222;
-  border: 1px solid gold;
-  border-radius: 8px;
-}
+#status { margin-top: 10px; font-size: 1.2rem; font-weight: bold; color: gold; }
 
-.hidden {
-  display: none;
-}
+.insurance.hidden { display: none; }
 
-@keyframes dealAnimation {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
+.insurance { background: rgba(255, 255, 255, 0.1); padding: 10px; border: 1px solid gold; margin: 10px; border-radius: 8px; color: white; }
+
+.insurance button { margin: 0 5px; background: gold; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; transition: background 0.2s ease; }
+
+.insurance button:hover { background: #ffcc00; }
+
