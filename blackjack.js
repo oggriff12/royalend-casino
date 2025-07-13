@@ -1,174 +1,149 @@
-let wallet = parseFloat(localStorage.getItem("wallet")) || 10.00;
-let playerHand = [];
-let dealerHand = [];
-let deck = [];
-let betAmount = 0;
-let gameOver = true;
-let roundsPlayed = 0;
-let stats = JSON.parse(localStorage.getItem("stats")) || { wins: 0, losses: 0, ties: 0 };
+// blackjack.js
+let deck, playerHand, dealerHand;
+let wallet = parseFloat(localStorage.getItem('wallet')) || 10;
+let bet = 0;
+let stats = { wins: 0, losses: 0, ties: 0 };
 
 const walletDisplay = document.getElementById("wallet");
-const statusDisplay = document.getElementById("status");
 const playerCards = document.getElementById("player-cards");
 const dealerCards = document.getElementById("dealer-cards");
+const statusDisplay = document.getElementById("status");
 const betInput = document.getElementById("betInput");
-const insuranceDiv = document.getElementById("insurance");
-const winsDisplay = document.getElementById("wins");
-const lossesDisplay = document.getElementById("losses");
-const tiesDisplay = document.getElementById("ties");
+const insuranceBox = document.getElementById("insurance");
 
 function updateWalletDisplay() {
   walletDisplay.textContent = wallet.toFixed(2);
-  localStorage.setItem("wallet", wallet.toFixed(2));
+  localStorage.setItem('wallet', wallet);
 }
+
 function updateStatsDisplay() {
-  winsDisplay.textContent = stats.wins;
-  lossesDisplay.textContent = stats.losses;
-  tiesDisplay.textContent = stats.ties;
-  localStorage.setItem("stats", JSON.stringify(stats));
+  document.getElementById("wins").textContent = stats.wins;
+  document.getElementById("losses").textContent = stats.losses;
+  document.getElementById("ties").textContent = stats.ties;
 }
+
 function createDeck() {
   const suits = ["♠", "♥", "♦", "♣"];
   const values = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
-  const newDeck = [];
-  for (let suit of suits) {
-    for (let value of values) {
-      newDeck.push({ suit, value });
+  return suits.flatMap(suit => values.map(value => ({ suit, value })));
+}
+
+function shuffleDeck(deck) {
+  for (let i = deck.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [deck[i], deck[j]] = [deck[j], deck[i]];
+  }
+  return deck;
+}
+
+function calculateValue(hand) {
+  let total = 0;
+  let aces = 0;
+  for (const card of hand) {
+    if (card.value === "A") {
+      aces++;
+      total += 11;
+    } else if (["K", "Q", "J"].includes(card.value)) {
+      total += 10;
+    } else {
+      total += parseInt(card.value);
     }
   }
-  return shuffle(newDeck);
-}
-function shuffle(array) {
-  for (let i = array.length - 1; i > 0; i--) {
-    let j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-  return array;
-}
-function dealCard(toDealer = false) {
-  const card = deck.pop();
-  const cardEl = document.createElement("div");
-  cardEl.className = "card";
-  cardEl.innerHTML = `<span>${card.value}</span><span>${card.suit}</span>`;
-  cardEl.style.animation = "deal 0.3s ease";
-  (toDealer ? dealerCards : playerCards).appendChild(cardEl);
-  (toDealer ? dealerHand : playerHand).push(card);
-}
-function getCardValue(card) {
-  if (["K", "Q", "J"].includes(card.value)) return 10;
-  if (card.value === "A") return 11;
-  return parseInt(card.value);
-}
-function getHandValue(hand) {
-  let value = 0;
-  let aces = 0;
-  for (let card of hand) {
-    value += getCardValue(card);
-    if (card.value === "A") aces++;
-  }
-  while (value > 21 && aces > 0) {
-    value -= 10;
+  while (total > 21 && aces) {
+    total -= 10;
     aces--;
   }
-  return value;
+  return total;
 }
+
+function renderCards(container, hand) {
+  container.innerHTML = "";
+  hand.forEach(card => {
+    const cardEl = document.createElement("div");
+    cardEl.className = "card";
+    cardEl.innerHTML = `${card.value}${card.suit}`;
+    container.appendChild(cardEl);
+  });
+}
+
 function placeBet() {
-  const amount = parseFloat(betInput.value);
-  if (isNaN(amount) || amount <= 0 || amount > wallet) {
-    alert("Invalid bet");
+  bet = parseFloat(betInput.value);
+  if (isNaN(bet) || bet <= 0 || bet > wallet) {
+    alert("Invalid bet amount");
     return;
   }
-  betAmount = amount;
-  wallet -= betAmount;
+
+  wallet -= bet;
   updateWalletDisplay();
   startGame();
 }
+
 function startGame() {
-  gameOver = false;
-  deck = createDeck();
-  playerHand = [];
-  dealerHand = [];
-  playerCards.innerHTML = "";
-  dealerCards.innerHTML = "";
-  statusDisplay.textContent = "";
-  insuranceDiv.classList.add("hidden");
-
-  dealCard();         // Player 1
-  dealCard(true);     // Dealer 1
-  dealCard();         // Player 2
-  dealCard(true);     // Dealer 2
-
+  deck = shuffleDeck(createDeck());
+  playerHand = [deck.pop(), deck.pop()];
+  dealerHand = [deck.pop(), deck.pop()];
+  renderCards(playerCards, playerHand);
+  renderCards(dealerCards, [dealerHand[0], { value: "?", suit: "" }]);
+  statusDisplay.textContent = "Game in progress...";
   document.getElementById("hit-btn").disabled = false;
   document.getElementById("stand-btn").disabled = false;
 
+  // Show insurance if dealer shows Ace
   if (dealerHand[0].value === "A") {
-    insuranceDiv.classList.remove("hidden");
+    insuranceBox.classList.add("show");
+  } else {
+    insuranceBox.classList.remove("show");
   }
+}
 
-  checkBlackjack();
-}
-function checkBlackjack() {
-  const playerTotal = getHandValue(playerHand);
-  const dealerTotal = getHandValue(dealerHand);
-  if (playerTotal === 21 || dealerTotal === 21) {
-    endGame();
-  }
-}
 function hit() {
-  if (gameOver) return;
-  dealCard();
-  const value = getHandValue(playerHand);
-  if (value > 21) {
-    endGame("Bust! Dealer wins.");
-  }
-}
-function stand() {
-  if (gameOver) return;
-  while (getHandValue(dealerHand) < 17) {
-    dealCard(true);
-  }
-  endGame();
-}
-function endGame(msg) {
-  gameOver = true;
-  const playerValue = getHandValue(playerHand);
-  const dealerValue = getHandValue(dealerHand);
-  let result = "";
+  playerHand.push(deck.pop());
+  renderCards(playerCards, playerHand);
 
-  if (msg) {
-    result = msg;
-  } else if (playerValue > 21) {
-    result = "Bust! Dealer wins.";
+  if (calculateValue(playerHand) > 21) {
+    endGame("Bust! You lose.");
     stats.losses++;
-  } else if (dealerValue > 21 || playerValue > dealerValue) {
-    result = "You win!";
-    wallet += betAmount * 2;
+    updateStatsDisplay();
+  }
+}
+
+function stand() {
+  while (calculateValue(dealerHand) < 17) {
+    dealerHand.push(deck.pop());
+  }
+
+  const playerScore = calculateValue(playerHand);
+  const dealerScore = calculateValue(dealerHand);
+
+  renderCards(dealerCards, dealerHand);
+
+  if (dealerScore > 21 || playerScore > dealerScore) {
+    wallet += bet * 2;
+    statusDisplay.textContent = "You win!";
     stats.wins++;
-  } else if (playerValue === dealerValue) {
-    result = "Push. It's a tie.";
-    wallet += betAmount;
+  } else if (dealerScore === playerScore) {
+    wallet += bet;
+    statusDisplay.textContent = "Push (tie).";
     stats.ties++;
   } else {
-    result = "Dealer wins.";
+    statusDisplay.textContent = "Dealer wins.";
     stats.losses++;
   }
 
   updateWalletDisplay();
   updateStatsDisplay();
-  statusDisplay.textContent = result;
-
   document.getElementById("hit-btn").disabled = true;
   document.getElementById("stand-btn").disabled = true;
 }
+
 function takeInsurance() {
-  insuranceDiv.classList.add("hidden");
-  statusDisplay.textContent = "Insurance taken (not yet functional).";
-}
-function declineInsurance() {
-  insuranceDiv.classList.add("hidden");
-  statusDisplay.textContent = "Insurance declined.";
+  insuranceBox.classList.remove("show");
+  alert("Insurance taken (not implemented fully). Good luck!");
 }
 
-// Initialize on page load
+function declineInsurance() {
+  insuranceBox.classList.remove("show");
+}
+
 updateWalletDisplay();
 updateStatsDisplay();
