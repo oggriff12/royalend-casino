@@ -1,13 +1,106 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Register - RoyalEnd</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Register | RoyalEnd Casino</title>
+  <style>
+    body {
+      background-color: #0f0f1b;
+      color: white;
+      font-family: 'Orbitron', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      flex-direction: column;
+    }
+    .form-box {
+      background: #1a1a2e;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(255,255,255,0.1);
+    }
+    h2 {
+      margin-bottom: 20px;
+    }
+    input {
+      width: 250px;
+      padding: 10px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 6px;
+    }
+    button {
+      padding: 10px 20px;
+      background-color: #ffcc00;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    #message {
+      margin-top: 15px;
+      font-size: 14px;
+    }
+    a {
+      color: #ffcc00;
+      margin-top: 10px;
+      display: inline-block;
+    }
+  </style>
 </head>
 <body>
-  <h2>Register</h2>
-  <input type="email" id="regEmail" placeholder="Email"><br>
-  <input type="password" id="regPassword" placeholder="Password"><br>
-  <button onclick="registerUser()">Register</button>
-  <script type="module" src="auth.js"></script>
+  <div class="form-box">
+    <h2>🎰 Create Your Casino Account</h2>
+    <input type="email" id="email" placeholder="Email" required />
+    <br />
+    <input type="password" id="password" placeholder="Password" required />
+    <br />
+    <button onclick="register()">Register</button>
+    <div id="message"></div>
+    <a href="login.html">Already have an account? Login here</a>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+
+  <script>
+    // Your Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyAVhEyoBPa_PqyhOqm6jn-XF2IeI1oY3vk",
+      authDomain: "royalendcasino.firebaseapp.com",
+      projectId: "royalendcasino",
+      storageBucket: "royalendcasino.firebasestorage.app",
+      messagingSenderId: "292123456763",
+      appId: "1:292123456763:web:9326eb99056157ed9aac5e",
+      measurementId: "G-HWF6L9KTNQ"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    // Registration function
+    function register() {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      const msg = document.getElementById("message");
+
+      auth.createUserWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+          msg.style.color = "lightgreen";
+          msg.textContent = "✅ Account created! Redirecting...";
+          setTimeout(() => {
+            window.location.href = "index.html";
+          }, 1500);
+        })
+        .catch((error) => {
+          msg.style.color = "red";
+          msg.textContent = "❌ " + error.message;
+        });
+    }
+  </script>
 </body>
 </html>
