@@ -1,14 +1,96 @@
-<!DOCTYPE html>
-<html>
+<!DOCTYPE html><html lang="en">
 <head>
-  <title>Login to RoyalEnd</title>
-  <script type="module" src="login.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login | RoyalEnd Casino</title>
+  <style>
+    body {
+      background-color: #0f0f1b;
+      color: white;
+      font-family: 'Orbitron', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      flex-direction: column;
+    }
+    .form-box {
+      background: #1a1a2e;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(255,255,255,0.1);
+    }
+    h2 {
+      margin-bottom: 20px;
+    }
+    input {
+      width: 250px;
+      padding: 10px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 6px;
+    }
+    button {
+      padding: 10px 20px;
+      background-color: #ffcc00;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    #message {
+      margin-top: 15px;
+      font-size: 14px;
+    }
+    a {
+      color: #ffcc00;
+      margin-top: 10px;
+      display: inline-block;
+    }
+  </style>
 </head>
-<body style="text-align: center; font-family: sans-serif; background: #0f0f1b; color: white;">
-  <h2>🔐 Login / Register</h2>
-  <input id="email" type="email" placeholder="Email" /><br><br>
-  <input id="password" type="password" placeholder="Password" /><br><br>
-  <button id="loginBtn">Login</button>
-  <button id="registerBtn">Register</button>
-</body>
+<body>
+  <div class="form-box">
+    <h2>🎰 Login to Your Account</h2>
+    <input type="email" id="email" placeholder="Email" required />
+    <br />
+    <input type="password" id="password" placeholder="Password" required />
+    <br />
+    <button onclick="login()">Login</button>
+    <div id="message"></div>
+    <a href="register.html">Need an account? Register here</a>
+  </div>  <!-- Firebase SDK -->  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>  <script>
+    // Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyAVhEyoBPa_PqyhOqm6jn-XF2IeI1oY3vk",
+      authDomain: "royalendcasino.firebaseapp.com",
+      projectId: "royalendcasino",
+      storageBucket: "royalendcasino.firebasestorage.app",
+      messagingSenderId: "292123456763",
+      appId: "1:292123456763:web:9326eb99056157ed9aac5e",
+      measurementId: "G-HWF6L9KTNQ"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    function login() {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      const msg = document.getElementById("message");
+
+      auth.signInWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+          msg.style.color = "lightgreen";
+          msg.textContent = "✅ Login successful! Redirecting...";
+          setTimeout(() => {
+            window.location.href = "index.html";
+          }, 1500);
+        })
+        .catch((error) => {
+          msg.style.color = "red";
+          msg.textContent = "❌ " + error.message;
+        });
+    }
+  </script></body>
 </html>
