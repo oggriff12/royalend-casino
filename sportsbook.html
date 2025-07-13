@@ -16,7 +16,7 @@
     .container {
       position: relative;
       z-index: 1;
-      padding: 40px;
+      padding: 40px 20px;
       max-width: 1200px;
       margin: auto;
     }
@@ -24,36 +24,63 @@
       text-align: center;
       font-size: 36px;
       color: gold;
-      margin-bottom: 20px;
+      margin-bottom: 10px;
+      animation: fadeInDown 1s ease-in-out;
     }
-    .buttons {
-      text-align: center;
-      margin-bottom: 30px;
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
     .buttons button {
-      background: gold;
-      color: black;
-      padding: 10px 20px;
-      margin: 0 10px;
+      background-color: gold;
+      color: #000;
       border: none;
-      border-radius: 5px;
-      font-size: 16px;
+      padding: 10px 16px;
+      margin: 5px;
       cursor: pointer;
+      border-radius: 5px;
+      transition: transform 0.2s;
     }
-    .odds, .stream, .chat {
+    .buttons button:hover {
+      transform: scale(1.05);
+    }
+    .odds {
+      margin-top: 20px;
+      background-color: #111;
+      padding: 20px;
+      border-radius: 10px;
+      min-height: 120px;
+      animation: fadeIn 1s ease-in;
+    }
+    .streams-container {
+      display: flex;
+      justify-content: center;
+      padding: 20px;
+    }
+    .stream-frame {
+      width: 80%;
+      height: 450px;
+      border: none;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+    }
+    .bet-slip, .schedule, .chat, .theme-toggle {
+      margin-top: 30px;
       background: #111;
       padding: 20px;
-      margin-bottom: 20px;
       border-radius: 10px;
     }
-    .stream iframe {
-      width: 100%;
-      height: 400px;
+    .theme-toggle button {
+      background: #333;
+      color: #fff;
       border: none;
+      padding: 10px;
+      cursor: pointer;
+      border-radius: 5px;
     }
-    .chat {
-      text-align: center;
-      color: #aaa;
+    .light-theme {
+      background-color: #f0f0f0;
+      color: #000;
     }
     #particles-js {
       position: fixed;
@@ -63,6 +90,20 @@
       left: 0;
       z-index: 0;
     }
+    .back-home {
+      margin: 15px 0;
+      animation: fadeIn 1s ease-in;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    .buttons img {
+      width: 24px;
+      height: 24px;
+      vertical-align: middle;
+      margin-right: 5px;
+    }
   </style>
 </head>
 <body>
@@ -70,44 +111,59 @@
   <div class="container">
     <div class="header">
       <img src="https://cdn-icons-png.flaticon.com/512/1047/1047711.png" alt="stadium" width="40" style="vertical-align: middle;"> Live Sportsbook
-    </div>
-    <div class="buttons">
-      <button onclick="loadOdds('basketball_nba')">NBA</button>
-      <button onclick="loadOdds('americanfootball_nfl')">NFL</button>
-      <button onclick="loadOdds('baseball_mlb')">MLB</button>
-    </div><div class="odds" id="odds">Loading odds...</div>
-
-<!-- Live Stream Placeholders -->
-<div class="streams-container">
-  <iframe id="nbaStream" class="stream-frame" src="https://www.youtube.com/embed/live_stream?channel=UCWJ2lWNubArHWmf3FIHbfcQ" allowfullscreen></iframe>
-  <iframe id="nflStream" class="stream-frame" style="display:none;" src="https://www.youtube.com/embed/live_stream?channel=UCX6OQ3DkcsbYNE6H8uQQuVA" allowfullscreen></iframe>
-  <iframe id="mlbStream" class="stream-frame" style="display:none;" src="https://www.youtube.com/embed/live_stream?channel=UCqFMzb-4AUf6WAIbl132QKA" allowfullscreen></iframe>
+    </div><!-- ✅ Back to Homepage button -->
+<div class="back-home" style="text-align:center;">
+  <a href="/index.html">
+    <button style="padding: 10px 20px; font-size: 16px; background-color: gold; color: #000; border: none; border-radius: 8px; cursor: pointer;">
+      ← Back to Homepage
+    </button>
+  </a>
 </div>
 
-<style>
-  .streams-container {
-    display: flex;
-    justify-content: center;
-    padding: 20px;
-  }
-  .stream-frame {
-    width: 80%;
-    height: 450px;
-    border: none;
-    border-radius: 12px;
-  }
-</style>
+<div class="buttons" style="text-align:center;">
+  <button onclick="loadOdds('basketball_nba')">
+    <img src="https://cdn-icons-png.flaticon.com/512/3088/3088310.png" alt="NBA"> NBA
+  </button>
+  <button onclick="loadOdds('americanfootball_nfl')">
+    <img src="https://cdn-icons-png.flaticon.com/512/3088/3088390.png" alt="NFL"> NFL
+  </button>
+  <button onclick="loadOdds('baseball_mlb')">
+    <img src="https://cdn-icons-png.flaticon.com/512/3088/3088280.png" alt="MLB"> MLB
+  </button>
+</div>
+
+<div class="odds" id="odds">Loading odds...</div>
+
+<div class="streams-container">
+  <iframe id="nbaStream" class="stream-frame" src="https://www.youtube.com/embed/live_stream?channel=UCWJ2lWNubArHWmf3FIHbfcQ" allowfullscreen></iframe>
+  <iframe id="nflStream" class="stream-frame" style="display:none;" src="https://www.youtube.com/embed/live_stream?channel=UCk60Q3D0kcbsbYNE6H8u0QVA" allowfullscreen></iframe>
+  <iframe id="mlbStream" class="stream-frame" style="display:none;" src="https://www.youtube.com/embed/live_stream?channel=UCQFM2b-4AUF6WA1bIl32QkA" allowfullscreen></iframe>
+</div>
+
+<div class="schedule">
+  <h3>📅 Upcoming Streams</h3>
+  <ul>
+    <li>NFL: Giants vs Cowboys – 8:00 PM EST</li>
+    <li>NBA: Lakers vs Celtics – 10:30 PM EST</li>
+    <li>MLB: Yankees vs Red Sox – 7:00 PM EST</li>
+  </ul>
+</div>
+
+<div class="bet-slip">
+  <h3>🧾 Bet Slip</h3>
+  <p>No bets selected yet.</p>
+</div>
 
 <div class="chat">
-  <h3>💬 Live Chat (coming soon)</h3>
-  <p>Chat functionality will be integrated soon using Discord or WebSockets.</p>
+  <h3>💬 Live Chat</h3>
+  <iframe src="https://discord.com/widget?id=YOUR_DISCORD_SERVER_ID&theme=dark" width="100%" height="300" allowtransparency="true" frameborder="0"></iframe>
+</div>
+
+<div class="theme-toggle" style="text-align:center;">
+  <button onclick="toggleTheme()">🌓 Toggle Theme</button>
 </div>
 
   </div>  <script>
-    particlesJS.load('particles-js', 'particles.json', function () {
-      console.log('Particles.js config loaded');
-    });
-
     async function loadOdds(sport = 'basketball_nba') {
       document.getElementById('odds').textContent = 'Loading odds...';
       try {
@@ -123,7 +179,7 @@
           const teams = game.teams.join(' vs ');
           const site = game.sites?.[0];
           const odds = site?.odds?.h2h?.join(' / ');
-          return `<p><strong>${teams}</strong> — ${odds || 'No odds available'} (${site?.site_nice || 'N/A'})</p>`;
+          return `<p><strong>${teams}</strong> – ${odds || 'No odds available'} (${site?.site_nice || 'N/A'})</p>`;
         }).join('');
 
         document.getElementById('odds').innerHTML = oddsHtml || '<p>No games available.</p>';
@@ -133,18 +189,21 @@
       }
     }
 
+    function showStream(sport) {
+      document.getElementById("nbaStream").style.display = sport === "nba" ? "block" : "none";
+      document.getElementById("nflStream").style.display = sport === "nfl" ? "block" : "none";
+      document.getElementById("mlbStream").style.display = sport === "mlb" ? "block" : "none";
+    }
+
+    function toggleTheme() {
+      document.body.classList.toggle("light-theme");
+    }
+
+    document.querySelector('button[onclick="loadOdds(\'basketball_nba\')"]').addEventListener("click", () => showStream("nba"));
+    document.querySelector('button[onclick="loadOdds(\'americanfootball_nfl\')"]').addEventListener("click", () => showStream("nfl"));
+    document.querySelector('button[onclick="loadOdds(\'baseball_mlb\')"]').addEventListener("click", () => showStream("mlb"));
+
     loadOdds();
     setInterval(() => loadOdds(), 30000);
-    <script>
-  function showStream(sport) {
-    document.getElementById("nbaStream").style.display = sport === "nba" ? "block" : "none";
-    document.getElementById("nflStream").style.display = sport === "nfl" ? "block" : "none";
-    document.getElementById("mlbStream").style.display = sport === "mlb" ? "block" : "none";
-  }
-
-  document.querySelector('button[onclick*="basketball_nba"]').addEventListener("click", () => showStream("nba"));
-  document.querySelector('button[onclick*="americanfootball_nfl"]').addEventListener("click", () => showStream("nfl"));
-  document.querySelector('button[onclick*="baseball_mlb"]').addEventListener("click", () => showStream("mlb"));
-</script>
   </script></body>
 </html>
