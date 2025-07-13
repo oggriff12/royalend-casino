@@ -1,21 +1,22 @@
-document.addEventListener('DOMContentLoaded', () => {
-  const walletEl = document.getElementById('wallet');
-  const betInput = document.getElementById('betAmount');
-  const slider = document.getElementById('targetSlider');
-  const targetValue = document.getElementById('targetValue');
-  const multiplierEl = document.getElementById('multiplier');
-  const rollButton = document.getElementById('rollButton');
-  const rollResult = document.getElementById('rollResult');
-  const historyList = document.getElementById('historyList');
-  const streakList = document.getElementById('streakList');
+document.addEventListener("DOMContentLoaded", () => {
+  const walletEl = document.getElementById("wallet");
+  const betInput = document.getElementById("betAmount");
+  const slider = document.getElementById("targetSlider");
+  const targetValue = document.getElementById("targetValue");
+  const multiplierEl = document.getElementById("multiplier");
+  const rollButton = document.getElementById("rollButton");
+  const rollResult = document.getElementById("rollResult");
+  const historyList = document.getElementById("historyList");
+  const streakList = document.getElementById("streakList");
+  const leaderboardList = document.getElementById("leaderboardList");
 
-  let wallet = parseFloat(localStorage.getItem('wallet')) || 100;
+  let wallet = parseFloat(localStorage.getItem("wallet")) || 100;
   let currentStreak = 0;
-  let topStreaks = JSON.parse(localStorage.getItem('streaks')) || [];
+  let topStreaks = JSON.parse(localStorage.getItem("streaks")) || [];
 
   function updateWalletDisplay() {
     walletEl.textContent = wallet.toFixed(2);
-    localStorage.setItem('wallet', wallet);
+    localStorage.setItem("wallet", wallet);
   }
 
   function updateMultiplier() {
@@ -25,29 +26,60 @@ document.addEventListener('DOMContentLoaded', () => {
     targetValue.textContent = target;
   }
 
-  function addToHistory(result, win) {
-    const li = document.createElement('li');
-    li.textContent = `Rolled ${result} — ${win ? 'WIN 🎉' : 'LOSE ❌'}`;
+  function addToHistory(roll, win) {
+    const li = document.createElement("li");
+    li.textContent = `Rolled ${roll} — ${win ? "WIN 🎉" : "LOSE ❌"}`;
     historyList.prepend(li);
   }
 
   function updateStreaks(newStreak) {
     if (newStreak > 1) topStreaks.push(newStreak);
     topStreaks = topStreaks.sort((a, b) => b - a).slice(0, 5);
-    localStorage.setItem('streaks', JSON.stringify(topStreaks));
-
-    streakList.innerHTML = '';
+    localStorage.setItem("streaks", JSON.stringify(topStreaks));
+    streakList.innerHTML = "";
     topStreaks.forEach((s, i) => {
-      const li = document.createElement('li');
+      const li = document.createElement("li");
       li.textContent = `#${i + 1}: ${s} wins`;
       streakList.appendChild(li);
     });
   }
 
-  rollButton.addEventListener('click', () => {
+  function updateLeaderboard() {
+    let leaderboard = JSON.parse(localStorage.getItem("diceLeaderboard")) || [];
+    const player = {
+      name: "Player",
+      balance: wallet,
+      timestamp: Date.now()
+    };
+    const existing = leaderboard.find(p => p.name === player.name);
+    if (existing) existing.balance = player.balance;
+    else leaderboard.push(player);
+    leaderboard = leaderboard.sort((a, b) => b.balance - a.balance).slice(0, 5);
+    localStorage.setItem("diceLeaderboard", JSON.stringify(leaderboard));
+
+    leaderboardList.innerHTML = "";
+    leaderboard.forEach((p, i) => {
+      const li = document.createElement("li");
+      li.textContent = `#${i + 1}: ${p.name} - $${p.balance.toFixed(2)}`;
+      leaderboardList.appendChild(li);
+    });
+  }
+
+  function checkDailyBonus() {
+    const last = localStorage.getItem("lastDailyBonus");
+    const today = new Date().toDateString();
+    if (last !== today) {
+      alert("🎁 Daily Bonus! +$25");
+      wallet += 25;
+      localStorage.setItem("lastDailyBonus", today);
+      updateWalletDisplay();
+    }
+  }
+
+  rollButton.addEventListener("click", () => {
     const bet = parseFloat(betInput.value);
     const target = parseInt(slider.value);
-    if (bet <= 0 || bet > wallet) return alert('Invalid bet.');
+    if (bet <= 0 || bet > wallet) return alert("Invalid bet.");
 
     const roll = Math.floor(Math.random() * 100) + 1;
     const win = roll < target;
@@ -64,13 +96,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     updateWalletDisplay();
     addToHistory(roll, win);
+    updateLeaderboard();
+
     rollResult.innerHTML = `🎲 Rolled: <strong>${roll}</strong> — ${win ? '<span style="color:#0f0;">WIN 🎉</span>' : '<span style="color:#f33;">LOSE ❌</span>'}`;
   });
 
-  slider.addEventListener('input', updateMultiplier);
+  slider.addEventListener("input", updateMultiplier);
   updateWalletDisplay();
   updateMultiplier();
   updateStreaks(currentStreak);
+  updateLeaderboard();
+  checkDailyBonus();
 
   tsParticles.load("particles-js", {
     particles: {
