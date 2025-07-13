@@ -1,92 +1,106 @@
 body {
   margin: 0;
-  padding: 0;
   font-family: Arial, sans-serif;
-  background: #000;
-  color: #fff;
+  background-color: #000;
+  color: white;
   overflow: hidden;
 }
-
 #particles-js {
   position: fixed;
   width: 100%;
   height: 100%;
   z-index: 0;
 }
-
-.container {
+.navbar {
+  z-index: 2;
   position: relative;
-  z-index: 1;
-  padding: 30px;
-  text-align: center;
-}
-
-.title {
-  font-size: 48px;
-  color: gold;
-  margin-bottom: 10px;
-  text-shadow: 0 0 20px gold;
-}
-
-.wallet {
-  font-size: 20px;
-  margin-bottom: 20px;
-  color: #00ff99;
-}
-
-.hand-title {
-  font-weight: bold;
-  margin-top: 20px;
-}
-
-.card-row {
+  background: #111;
+  padding: 10px;
   display: flex;
   justify-content: center;
-  margin-bottom: 20px;
+  gap: 20px;
 }
-
+.navbar a {
+  color: gold;
+  text-decoration: none;
+  font-weight: bold;
+}
+.game-container {
+  z-index: 2;
+  position: relative;
+  text-align: center;
+  padding-top: 20px;
+  border: 4px solid gold;
+  margin: 40px auto;
+  max-width: 800px;
+  background-color: rgba(0, 0, 0, 0.8);
+  border-radius: 20px;
+}
+.glow {
+  font-size: 48px;
+  color: gold;
+  text-shadow: 0 0 10px #ffd700, 0 0 20px #ffd700;
+}
+.wallet {
+  margin: 10px;
+  font-size: 20px;
+  color: #0f0;
+}
+.bet-area {
+  margin-bottom: 10px;
+}
+.bet-area input {
+  padding: 5px;
+  width: 100px;
+}
+.hand-label {
+  margin-top: 20px;
+  font-weight: bold;
+  font-size: 24px;
+}
+.cards {
+  display: flex;
+  justify-content: center;
+  margin: 10px 0;
+}
 .card {
   background: white;
   color: black;
-  border-radius: 5px;
+  border: 1px solid #ccc;
   padding: 10px;
-  margin: 0 5px;
-  width: 40px;
-  font-weight: bold;
-  animation: popIn 0.3s ease;
-  box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
+  margin: 5px;
+  width: 60px;
+  text-align: center;
+  font-size: 18px;
+  border-radius: 10px;
+  animation: pop 0.3s ease-out;
 }
-
-@keyframes popIn {
+.controls button {
+  padding: 10px 20px;
+  background: gold;
+  border: none;
+  border-radius: 8px;
+  margin: 10px;
+  cursor: pointer;
+  font-weight: bold;
+}
+#status {
+  margin-top: 20px;
+  font-size: 20px;
+}
+.insurance {
+  margin: 10px;
+}
+.hidden {
+  display: none;
+}
+@keyframes pop {
   from {
-    transform: scale(0.8);
+    transform: scale(0.5);
     opacity: 0;
   }
   to {
     transform: scale(1);
     opacity: 1;
   }
-}
-
-.buttons button {
-  margin: 10px;
-  padding: 12px 20px;
-  font-size: 16px;
-  background-color: gold;
-  color: #000;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: transform 0.2s ease, background 0.2s ease;
-}
-
-.buttons button:hover {
-  transform: scale(1.05);
-  background-color: #ffd700;
-}
-
-.status-text {
-  margin-top: 20px;
-  font-size: 24px;
-  font-weight: bold;
 }
