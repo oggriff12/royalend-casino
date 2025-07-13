@@ -1,45 +1,56 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Blackjack</title>
   <link rel="stylesheet" href="blackjack.css" />
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
 </head>
 <body>
-  <div id="particles-js"></div>  <div class="container">
-    <h1 class="glow">♠️ Blackjack</h1>
-    <div class="wallet">Balance: $<span id="balance">0.00</span></div><div class="controls">
-  <input type="number" id="betInput" placeholder="Enter bet amount" min="1" />
-  <button id="dealButton">Deal</button>
-  <button id="hitButton" disabled>Hit</button>
-  <button id="standButton" disabled>Stand</button>
-</div>
 
-<div class="game-area">
-  <div class="hand-box">
-    <h2>Dealer</h2>
-    <div id="dealerHand" class="hand"></div>
+  <!-- Particle Background -->
+  <div id="particles-js"></div>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <a href="/">🏠 Home</a>
+    <a href="/roulette">🎰 Roulette</a>
+    <a href="/crash">🚀 Crash</a>
+    <a href="/mines">💣 Mines</a>
+    <a href="/sportsbook">🏈 Sportsbook</a>
+  </nav>
+
+  <!-- Game Container -->
+  <div class="game-box">
+    <h1 class="title">♠️ Blackjack</h1>
+    <div class="balance">Balance: $<span id="wallet">10.00</span></div>
+
+    <div class="bet-section">
+      <input type="number" id="betInput" min="1" step="1" value="1" />
+      <button class="btn deal-btn" onclick="placeBet()">Deal</button>
+      <button class="btn" id="hit-btn" onclick="hit()" disabled>Hit</button>
+      <button class="btn" id="stand-btn" onclick="stand()" disabled>Stand</button>
+    </div>
+
+    <div class="hand-section">
+      <h2>Dealer</h2>
+      <div id="dealer-cards" class="card-container"></div>
+
+      <h2>You</h2>
+      <div id="player-cards" class="card-container"></div>
+    </div>
+
+    <div id="status" class="status-message"></div>
   </div>
 
-  <div class="hand-box">
-    <h2>You</h2>
-    <div id="playerHand" class="hand"></div>
-  </div>
-</div>
-
-<div class="status" id="gameStatus"></div>
-
-<div class="navigation">
-  <a href="index.html">🏠 Home</a>
-  <a href="roulette.html">🎡 Roulette</a>
-  <a href="crash.html">🚀 Crash</a>
-  <a href="mines.html">💣 Mines</a>
-  <a href="sports.html">🏈 Sportsbook</a>
-</div>
-
-  </div>  <!-- Particle JS Background -->  <script src="particles.min.js"></script>  <script>
+  <!-- Load Particles -->
+  <script>
     particlesJS.load('particles-js', 'particles.json', function () {
-      console.log('Particles.js config loaded.');
+      console.log('Particles loaded');
     });
-  </script>  <script src="blackjack.js"></script></body>
+  </script>
+
+  <script src="blackjack.js"></script>
+</body>
 </html>
