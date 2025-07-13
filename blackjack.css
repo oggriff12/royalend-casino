@@ -1,30 +1,126 @@
-body { margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #0e0e23; color: white; overflow: hidden; }
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #0a0a23;
+  color: #fff;
+  overflow: hidden;
+}
 
-#particles-js { position: absolute; width: 100%; height: 100%; z-index: -1; }
+#particles-js {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
 
-.container { text-align: center; padding: 2rem; position: relative; z-index: 1; }
+.container {
+  max-width: 800px;
+  margin: auto;
+  padding: 2rem;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
 
-.glow { text-shadow: 0 0 10px #fff, 0 0 20px #ff00cc, 0 0 30px #ff00cc; }
+.glow {
+  text-shadow: 0 0 10px #fff, 0 0 20px #00ffff, 0 0 30px #00ffff;
+}
 
-.wallet { margin-bottom: 1rem; font-size: 1.2rem; }
+.wallet {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
 
-.controls input { padding: 10px; margin: 5px; width: 150px; font-size: 1rem; border-radius: 8px; border: none; }
+.controls {
+  margin-bottom: 1rem;
+}
 
-#spinButton { padding: 10px 20px; font-size: 1.2rem; background-color: #ff00cc; border: none; border-radius: 10px; color: white; cursor: pointer; transition: transform 0.3s ease; }
+.controls input,
+.controls button {
+  padding: 10px;
+  margin: 5px;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: none;
+}
 
-#spinButton:hover { transform: scale(1.1); background-color: #ff33dd; }
+button {
+  background-color: #00ffff;
+  color: #000;
+  cursor: pointer;
+  transition: transform 0.2s, background 0.2s;
+}
 
-.roulette-wrapper { margin-top: 2rem; position: relative; width: 300px; height: 300px; margin-left: auto; margin-right: auto; }
+button:hover {
+  transform: scale(1.05);
+  background-color: #33ffff;
+}
 
-.wheel { width: 100%; height: 100%; border: 8px solid #ff00cc; border-radius: 50%; background: repeating-conic-gradient( red 0deg 9.72deg, black 9.72deg 19.45deg ); transition: transform 4s ease-out; position: absolute; top: 0; left: 0; }
+button:disabled {
+  background: #444;
+  cursor: not-allowed;
+}
 
-.ball { width: 20px; height: 20px; background: white; border-radius: 50%; position: absolute; top: 10px; left: 50%; margin-left: -10px; z-index: 2; transition: transform 4s ease-out; }
+.game-area {
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
+  margin-top: 2rem;
+  flex-wrap: wrap;
+}
 
-.status { margin-top: 2rem; font-size: 1.4rem; }
+.hand-box {
+  flex: 1;
+  min-width: 300px;
+}
 
-.navigation { margin-top: 2rem; }
+.hand {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
 
-.navigation a { margin: 0 10px; color: #00ffff; text-decoration: none; font-size: 1rem; transition: color 0.3s ease; }
+.card {
+  width: 60px;
+  height: 90px;
+  background: white;
+  color: black;
+  border-radius: 8px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 2px 2px 10px rgba(0,0,0,0.4);
+  animation: popIn 0.3s ease;
+}
 
-.navigation a:hover { color: #ff00cc; }
+.card.red {
+  color: red;
+}
 
+@keyframes popIn {
+  from { transform: scale(0); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.status {
+  margin-top: 2rem;
+  font-size: 1.3rem;
+}
+
+.navigation {
+  margin-top: 2rem;
+}
+
+.navigation a {
+  color: #00ffff;
+  text-decoration: none;
+  margin: 0 10px;
+}
+
+.navigation a:hover {
+  color: #fff;
+}
