@@ -1,52 +1,33 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>RoyalEnd Blackjack</title>
-  <link rel="stylesheet" href="blackjack.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blackjack Game</title>
+  <link rel="stylesheet" href="blackjack.css">
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
 </head>
 <body>
   <div id="particles-js"></div>
-
-  <div class="wallet-bar">Balance: $<span id="wallet">100.00</span></div>
-
   <div class="game-container">
-    <div class="portrait-box">
-      <h1>Blackjack</h1>
-      <div class="status" id="statusText">Place your bet to start!</div>
-
-      <input type="number" id="betAmount" min="1" step="0.1" value="10" />
-      <button onclick="startGame()">Play</button>
-      <div id="gameArea">
-        <div class="hand" id="playerHand"></div>
-        <div class="hand" id="dealerHand"></div>
-        <div class="actions">
-          <button onclick="hit()">Hit</button>
-          <button onclick="stand()">Stand</button>
-          <button onclick="doubleDown()">Double</button>
-          <button onclick="insurance()">Insurance</button>
-        </div>
+    <h1 class="title">Blackjack</h1>
+    <div class="wallet">Wallet: $<span id="wallet">1000</span></div>
+    <div class="table">
+      <div class="hand">
+        <h2>Dealer</h2>
+        <div id="dealer-hand" class="cards"></div>
+      </div>
+      <div class="hand">
+        <h2>You</h2>
+        <div id="player-hand" class="cards"></div>
       </div>
     </div>
-  </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.11.0/tsparticles.bundle.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/tsparticles-preset-firefly@2.11.0/tsparticles.preset.firefly.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/particles.js"></script>
-  <script src="blackjack.js"></script>
-  <script>
-    tsParticles.load("particles-js", {
-      preset: "firefly",
-      background: {
-        color: "#000000"
-      },
-      particles: {
-        color: {
-          value: "#00ff00"
-        }
-      }
-    });
-  </script>
-</body>
+    <div class="controls">
+      <button id="deal">Deal</button>
+      <button id="hit" disabled>Hit</button>
+      <button id="stand" disabled>Stand</button>
+    </div>
+    <div id="message"></div>
+  </div>  <script src="blackjack.js"></script>  <script>
+    particlesJS.load('particles-js', 'particles.json');
+  </script></body>
 </html>
