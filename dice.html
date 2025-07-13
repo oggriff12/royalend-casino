@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Dice - RoyalEnd Casino</title>
   <link rel="stylesheet" href="dice.css" />
   <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet">
@@ -23,17 +23,17 @@
       </div>
     </div>
 
-    <h1 class="title">🎲 Dice Game</h1>
+    <h1 class="title">🎲 RoyalEnd Dice</h1>
 
     <div class="game">
-      <label for="betAmount">Bet Amount: $</label>
+      <label for="betAmount">💸 Bet Amount: $</label>
       <input type="number" id="betAmount" value="10" min="1" max="1000" />
-      
-      <p>🎯 Choose Your Target (Roll Under): <span id="targetValue">50</span></p>
+
+      <p>🎯 Roll Under: <span id="targetValue">50</span></p>
       <input type="range" id="targetSlider" min="2" max="98" value="50" />
       <p>📈 Multiplier: <span id="multiplier">1.98x</span></p>
 
-      <button id="rollButton">🎲 Roll</button>
+      <button id="rollButton">🎲 Roll Now</button>
       <div id="rollResult"></div>
     </div>
 
@@ -43,8 +43,13 @@
     </div>
 
     <div class="leaderboard">
-      <h3>🏆 Top Streaks</h3>
+      <h3>🔥 Top Streaks</h3>
       <ul id="streakList"></ul>
+    </div>
+
+    <div class="leaderboard">
+      <h3>🏅 Global Leaderboard</h3>
+      <ul id="leaderboardList"></ul>
     </div>
   </div>
 
