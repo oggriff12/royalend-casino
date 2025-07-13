@@ -206,4 +206,33 @@
     loadOdds();
     setInterval(() => loadOdds(), 30000);
   </script></body>
+  <script>
+  particlesJS('particles-js', {
+    particles: {
+      number: { value: 80 },
+      color: { value: '#ffffff' },
+      shape: { type: 'circle' },
+      opacity: { value: 0.5 },
+      size: { value: 3 },
+      move: {
+        enable: true,
+        speed: 2,
+        direction: 'none',
+        out_mode: 'out'
+      }
+    },
+    interactivity: {
+      detect_on: 'canvas',
+      events: {
+        onhover: { enable: true, mode: 'repulse' },
+        onclick: { enable: true, mode: 'push' }
+      },
+      modes: {
+        repulse: { distance: 100 },
+        push: { quantity: 4 }
+      }
+    },
+    retina_detect: true
+  });
+</script>
 </html>
