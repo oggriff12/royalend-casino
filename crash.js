@@ -38,6 +38,15 @@ startTime = Date.now();
 graphInterval = setInterval(() => {
   const elapsed = (Date.now() - startTime) / 1000;
   const currentMultiplier = 1 + elapsed * 0.2;
+
+  if (currentMultiplier >= crashPoint) {
+    clearInterval(graphInterval);
+    gameInProgress = false;
+    startButton.disabled = false;
+    cashOutButton.disabled = true;
+    return;
+  }
+
   graphPoints.push({ x: elapsed, y: currentMultiplier });
   drawGraph();
 }, 100);
