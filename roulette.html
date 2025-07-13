@@ -1,143 +1,46 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Casino Roulette</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      background: radial-gradient(#0c0c0c, #1a1a1a);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      color: white;
-      font-family: 'Arial';
-    }.roulette-container {
-  position: relative;
-  width: 500px;
-  height: 500px;
-}
-
-.wheel {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background: url('https://i.ibb.co/0D6X0Sp/roulette-wheel.png') no-repeat center/contain;
-  border-radius: 50%;
-  transition: transform 5s ease-out;
-}
-
-.pointer {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 30px;
-  height: 30px;
-  background: yellow;
-  clip-path: polygon(50% 0, 0 100%, 100% 100%);
-  z-index: 2;
-}
-
-#spin {
-  margin-top: 40px;
-  padding: 10px 20px;
-  background: limegreen;
-  border: none;
-  font-size: 1.2rem;
-  cursor: pointer;
-  border-radius: 8px;
-}
-
-#result {
-  margin-top: 20px;
-  font-size: 1.5rem;
-}
-
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Royalend Roulette</title>
+  <link rel="stylesheet" href="roulette.css" />
 </head>
 <body>
-  <div class="wallet-ui">
-    <p id="balanceDisplay">Balance: $0</p>
-    <input type="number" id="betAmount" placeholder="Bet Amount" />
-    <input type="number" id="betNumber" placeholder="Pick number (0-36)" />
-    <button id="spin">Spin</button>
-    <div class="roulette-container">
-      <div class="pointer"></div>
-      <div class="wheel" id="wheel"></div>
+  <!-- Particle background -->
+  <div id="particles-js"></div>
+
+  <!-- Game Container -->
+  <div class="container">
+    <h1 class="glow">🎡 Royalend Roulette</h1>
+
+    <div class="wallet">Balance: <span id="balance">$10.00</span></div>
+
+    <div class="controls">
+      <input type="number" id="betAmount" placeholder="Bet $" min="1" />
+      <input type="number" id="betNumber" placeholder="Number (0-36)" min="0" max="36"/>
+      <button id="spinButton">Spin the Wheel</button>
     </div>
-    <div id="result"></div>
-  </div>  <script>
-    <script>
-  if (!localStorage.getItem('walletBalance')) {
-    localStorage.setItem('walletBalance', '1000');
-  }
 
-  function updateBalanceUI() {
-    document.getElementById('balanceDisplay').innerText =
-      'Balance: $' + localStorage.getItem('walletBalance');
-  }
+    <div class="roulette-wrapper">
+      <div class="wheel" id="wheel">
+        <div class="numbers">
+          <!-- Visual wheel slots can be drawn using CSS -->
+        </div>
+        <div class="ball" id="ball"></div>
+      </div>
+    </div>
 
-  updateBalanceUI();
+    <div id="status" class="status">Place your bet and spin!</div>
+  </div>
 
-  const wheel = document.getElementById('wheel');
-  const spinBtn = document.getElementById('spin');
-  const result = document.getElementById('result');
-
-  const numbers = [
-    0, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36,
-    11, 30, 8, 23, 10, 5, 24, 16, 33, 1, 20, 14, 31,
-    9, 22, 18, 29, 7, 28, 12, 35, 3, 26
-  ];
-
-  let spinning = false;
-
-  spinBtn.addEventListener('click', () => {
-    if (spinning) return;
-
-    const betAmount = parseInt(document.getElementById('betAmount').value);
-    const betNumber = parseInt(document.getElementById('betNumber').value);
-    let balance = parseInt(localStorage.getItem('walletBalance'));
-
-    if (isNaN(betAmount) || isNaN(betNumber) || betAmount <= 0 || betNumber < 0 || betNumber > 36) {
-      result.innerText = "Invalid bet.";
-      return;
-    }
-
-    if (betAmount > balance) {
-      result.innerText = "Insufficient balance.";
-      return;
-    }
-
-    spinning = true;
-    const degree = Math.floor(3600 + Math.random() * 360);
-    const rotation = degree % 360;
-    wheel.style.transition = 'transform 5s ease-out';
-    wheel.style.transform = `rotate(${degree}deg)`;
-
-    setTimeout(() => {
-      const segment = 360 / numbers.length;
-      const index = Math.floor(((360 - rotation + segment / 2) % 360) / segment);
-      const winningNumber = numbers[index];
-
-      let message = `🎯 Winning Number: ${winningNumber}`;
-      if (winningNumber === betNumber) {
-        const winnings = betAmount * 36;
-        balance += winnings;
-        message += `\n🎉 You WIN $${winnings}!`;
-      } else {
-        balance -= betAmount;
-        message += `\n❌ You lost $${betAmount}.`;
-      }
-
-      localStorage.setItem('walletBalance', balance);
-      updateBalanceUI();
-      result.innerText = message;
-      spinning = false;
-    }, 5000);
-  });
-</script>
-     
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/particles.js"></script>
+  <script src="roulette.js"></script>
+  <script>
+    particlesJS.load('particles-js', 'particles.json', function() {
+      console.log('Particles loaded');
+    });
+  </script>
+</body>
+</html>
