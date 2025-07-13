@@ -1,137 +1,133 @@
 <!DOCTYPE html><html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Sportsbook - RoyalEnd</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet">
   <style>
     body {
-      margin: 0;
       font-family: 'Orbitron', sans-serif;
       background-color: #0f0f1b;
-      color: #fff;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      color: #ffffff;
+      margin: 0;
       padding: 20px;
-    }header {
-  font-size: 32px;
-  margin-bottom: 20px;
-  color: gold;
-}
-
-.tabs {
-  display: flex;
-  gap: 15px;
-  margin-bottom: 20px;
-}
-
-.tab {
-  background: #222;
-  padding: 10px 20px;
-  border-radius: 8px;
-  cursor: pointer;
-  border: 2px solid gold;
-  color: gold;
-}
-
-.tab.active {
-  background: gold;
-  color: #000;
-}
-
-#oddsContainer {
-  width: 100%;
-  max-width: 800px;
-  background: #1a1a2e;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 0 10px #000;
-  margin-bottom: 30px;
-}
-
-.game {
-  border-bottom: 1px solid #444;
-  padding: 10px 0;
-}
-
-iframe {
-  border: none;
-  width: 100%;
-  max-width: 800px;
-  height: 400px;
-  border-radius: 12px;
-  margin-bottom: 30px;
-}
-
-#chat {
-  width: 100%;
-  max-width: 800px;
-  background: #111;
-  border-radius: 10px;
-  padding: 10px;
-}
-
-#chatLog {
-  max-height: 200px;
-  overflow-y: auto;
-  margin-bottom: 10px;
-  background: #222;
-  padding: 10px;
-  border-radius: 8px;
-}
-
-#chatInput {
-  width: 100%;
-  padding: 10px;
-  border: none;
-  border-radius: 6px;
-}
-
+    }
+    .tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .tab {
+      padding: 10px 20px;
+      border: 2px solid #00ffff;
+      border-radius: 10px;
+      background: transparent;
+      color: #00ffff;
+      cursor: pointer;
+    }
+    .tab.active {
+      background: #00ffff;
+      color: #0f0f1b;
+    }
+    .section {
+      margin-bottom: 30px;
+    }
+    iframe {
+      width: 100%;
+      height: 300px;
+      border: none;
+      border-radius: 12px;
+    }
+    .chat-box {
+      width: 100%;
+      height: 300px;
+      background: #1f1f2f;
+      border: 2px solid #00ffff;
+      border-radius: 12px;
+      padding: 10px;
+      overflow-y: auto;
+    }
+    .chat-input {
+      margin-top: 10px;
+      display: flex;
+      gap: 10px;
+    }
+    input[type="text"] {
+      flex: 1;
+      padding: 10px;
+      border-radius: 10px;
+      border: none;
+    }
+    button {
+      padding: 10px 15px;
+      border: none;
+      border-radius: 10px;
+      background-color: #00ffff;
+      color: #0f0f1b;
+      cursor: pointer;
+    }
+    .odds-card {
+      background: #1a1a2e;
+      padding: 10px;
+      border-radius: 12px;
+      margin-bottom: 10px;
+    }
   </style>
 </head>
 <body>
-  <header>
-    🏈 RoyalEnd Sportsbook
-  </header>  <div class="tabs">
+  <h1>🏟️ Sportsbook - Live Odds & Streams</h1>  <!-- Tabs -->  <div class="tabs">
     <div class="tab active" data-sport="basketball_nba">NBA</div>
     <div class="tab" data-sport="americanfootball_nfl">NFL</div>
     <div class="tab" data-sport="baseball_mlb">MLB</div>
-  </div>  <div id="oddsContainer">Loading odds...</div>  <iframe src="https://www.netflix.com" title="Live Game Stream Placeholder"></iframe>  <div id="chat">
-    <div id="chatLog"></div>
-    <input type="text" id="chatInput" placeholder="Type your message and press Enter...">
+  </div>  <!-- Odds Section -->  <div class="section">
+    <h2>🧮 Live Odds</h2>
+    <div id="odds-container">Loading odds...</div>
+  </div>  <!-- Stream Section -->  <div class="section">
+    <h2>📺 Live Game Stream</h2>
+    <iframe src="https://www.netflix.com" allowfullscreen></iframe>
+  </div>  <!-- Chat Section -->  <div class="section">
+    <h2>💬 Live Chat</h2>
+    <div class="chat-box" id="chatBox"></div>
+    <div class="chat-input">
+      <input type="text" id="chatInput" placeholder="Type your message..." />
+      <button onclick="sendMessage()">Send</button>
+    </div>
   </div>  <script>
-    const oddsContainer = document.getElementById("oddsContainer");
-    const tabs = document.querySelectorAll(".tab");
-    let currentSport = "basketball_nba";
+    const oddsContainer = document.getElementById('odds-container');
+    const tabs = document.querySelectorAll('.tab');
+
+    let currentSport = 'basketball_nba';
 
     async function fetchOdds(sport) {
+      oddsContainer.innerHTML = 'Loading odds...';
       try {
         const response = await fetch(`/.netlify/functions/get-odds?sport=${sport}`);
         const data = await response.json();
-        renderOdds(data);
-      } catch (err) {
-        oddsContainer.innerHTML = "Failed to load odds.";
-      }
-    }
 
-    function renderOdds(data) {
-      if (!data || data.length === 0) {
-        oddsContainer.innerHTML = "No odds available.";
-        return;
+        oddsContainer.innerHTML = '';
+        if (!data || data.length === 0) {
+          oddsContainer.innerHTML = 'No odds available.';
+          return;
+        }
+
+        data.slice(0, 5).forEach(game => {
+          const card = document.createElement('div');
+          card.className = 'odds-card';
+          card.innerHTML = `
+            <strong>${game.teams[0]}</strong> vs <strong>${game.teams[1]}</strong><br>
+            <em>Odds:</em> ${game.sites[0]?.odds?.h2h?.join(' | ') || 'N/A'} (${game.sites[0]?.site_nice || 'N/A'})
+          `;
+          oddsContainer.appendChild(card);
+        });
+      } catch (err) {
+        oddsContainer.innerHTML = 'Failed to load odds.';
+        console.error(err);
       }
-      oddsContainer.innerHTML = data.slice(0, 10).map(game => `
-        <div class="game">
-          <strong>${game.teams[0]}</strong> vs <strong>${game.teams[1]}</strong><br>
-          <small>${game.sites[0]?.site_nice || 'Unknown'} | Odds: ${game.sites[0]?.odds?.h2h?.join(" / ") || 'N/A'}</small>
-        </div>
-      `).join('');
     }
 
     tabs.forEach(tab => {
-      tab.addEventListener("click", () => {
-        tabs.forEach(t => t.classList.remove("active"));
-        tab.classList.add("active");
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
         currentSport = tab.dataset.sport;
         fetchOdds(currentSport);
       });
@@ -139,18 +135,19 @@ iframe {
 
     fetchOdds(currentSport);
 
-    const chatInput = document.getElementById("chatInput");
-    const chatLog = document.getElementById("chatLog");
+    // Basic Chat
+    const chatBox = document.getElementById('chatBox');
+    const chatInput = document.getElementById('chatInput');
 
-    chatInput.addEventListener("keydown", (e) => {
-      if (e.key === "Enter" && chatInput.value.trim()) {
-        const msg = chatInput.value.trim();
-        const msgElem = document.createElement("div");
-        msgElem.textContent = `🗣️ ${msg}`;
-        chatLog.appendChild(msgElem);
-        chatInput.value = "";
-        chatLog.scrollTop = chatLog.scrollHeight;
+    function sendMessage() {
+      const text = chatInput.value.trim();
+      if (text) {
+        const msg = document.createElement('div');
+        msg.textContent = `👤 You: ${text}`;
+        chatBox.appendChild(msg);
+        chatBox.scrollTop = chatBox.scrollHeight;
+        chatInput.value = '';
       }
-    });
+    }
   </script></body>
 </html>
