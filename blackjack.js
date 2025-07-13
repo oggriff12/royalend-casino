@@ -1,163 +1,195 @@
-let wallet = parseFloat(localStorage.getItem("wallet")) || 10.0;
-document.getElementById("wallet").textContent = `$${wallet.toFixed(2)}`;
+// Blackjack Game Script with Split, Double Down, Surrender, Insurance, and Persistent Wallet
 
-const dealerCards = document.getElementById("dealer-cards");
+let deck = [];
+let playerHand = [];
+let dealerHand = [];
+let playerSplitHand = [];
+let isSplit = false;
+let currentHand = 'main';
+let betAmount = 0;
+let wallet = parseFloat(localStorage.getItem("walletBalance")) || 10;
+let hasInsurance = false;
+
+const walletDisplay = document.getElementById("wallet");
 const playerCards = document.getElementById("player-cards");
-const status = document.getElementById("status");
-const dealBtn = document.getElementById("deal-btn");
-const hitBtn = document.getElementById("hit-btn");
-const standBtn = document.getElementById("stand-btn");
-const betInput = document.getElementById("betInput");
+const dealerCards = document.getElementById("dealer-cards");
+const statusDisplay = document.getElementById("status");
+const insuranceBox = document.getElementById("insurance");
 
-let deck, playerHand, dealerHand, currentBet;
+function updateWallet() {
+  walletDisplay.textContent = `$${wallet.toFixed(2)}`;
+  localStorage.setItem("walletBalance", wallet);
+}
 
 function createDeck() {
-  const suits = ["♠", "♥", "♦", "♣"];
+  const suits = ["♠", "♣", "♥", "♦"];
   const values = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
-  const newDeck = [];
+  deck = [];
   for (let suit of suits) {
     for (let value of values) {
-      newDeck.push({ suit, value });
+      deck.push({ value, suit });
     }
   }
-  return newDeck.sort(() => Math.random() - 0.5);
+  deck = deck.sort(() => Math.random() - 0.5);
+}
+
+function getCardValue(card) {
+  if (["J", "Q", "K"].includes(card.value)) return 10;
+  if (card.value === "A") return 11;
+  return parseInt(card.value);
+}
+
+function calculateHandValue(hand) {
+  let value = hand.reduce((sum, card) => sum + getCardValue(card), 0);
+  let aces = hand.filter(card => card.value === "A").length;
+  while (value > 21 && aces > 0) {
+    value -= 10;
+    aces--;
+  }
+  return value;
+}
+
+function displayHand(hand, element) {
+  element.innerHTML = "";
+  for (let card of hand) {
+    const cardDiv = document.createElement("div");
+    cardDiv.className = "card";
+    cardDiv.textContent = `${card.value}${card.suit}`;
+    element.appendChild(cardDiv);
+  }
+}
+
+function dealCard(hand) {
+  const card = deck.pop();
+  hand.push(card);
+}
+
+function resetGame() {
+  playerHand = [];
+  dealerHand = [];
+  playerSplitHand = [];
+  isSplit = false;
+  currentHand = 'main';
+  statusDisplay.textContent = "";
+  insuranceBox.classList.add("hidden");
+  document.getElementById("hit-btn").disabled = true;
+  document.getElementById("stand-btn").disabled = true;
+  document.getElementById("double-btn").disabled = true;
+  document.getElementById("split-btn").disabled = true;
+  document.getElementById("surrender-btn").disabled = true;
 }
 
 function placeBet() {
-  currentBet = parseFloat(betInput.value);
-  if (isNaN(currentBet) || currentBet <= 0 || currentBet > wallet) {
+  const input = document.getElementById("betInput");
+  const value = parseFloat(input.value);
+  if (isNaN(value) || value <= 0 || value > wallet) {
     alert("Invalid bet amount");
     return;
   }
-  wallet -= currentBet;
-  updateWalletDisplay();
-  deal();
-}
-
-function updateWalletDisplay() {
-  localStorage.setItem("wallet", wallet);
-  document.getElementById("wallet").textContent = `$${wallet.toFixed(2)}`;
+  betAmount = value;
+  wallet -= betAmount;
+  updateWallet();
+  document.getElementById("deal-btn").disabled = false;
 }
 
 function deal() {
-  status.textContent = "";
-  dealerCards.innerHTML = "";
-  playerCards.innerHTML = "";
-  deck = createDeck();
-  playerHand = [deck.pop(), deck.pop()];
-  dealerHand = [deck.pop(), deck.pop()];
-  renderCards();
-  hitBtn.disabled = false;
-  standBtn.disabled = false;
-  dealBtn.disabled = true;
-  checkBlackjack();
-}
-
-function renderCards() {
-  playerCards.innerHTML = "";
-  dealerCards.innerHTML = "";
-
-  playerHand.forEach(card => {
-    const el = createCardElement(card);
-    playerCards.appendChild(el);
-  });
-
-  dealerHand.forEach((card, i) => {
-    const el = createCardElement(i === 0 ? { suit: "?", value: "?" } : card);
-    dealerCards.appendChild(el);
-  });
-}
-
-function createCardElement(card) {
-  const el = document.createElement("div");
-  el.className = "card";
-  el.textContent = `${card.value}${card.suit}`;
-  return el;
+  resetGame();
+  createDeck();
+  dealCard(playerHand);
+  dealCard(dealerHand);
+  dealCard(playerHand);
+  dealCard(dealerHand);
+  displayHand(playerHand, playerCards);
+  displayHand(dealerHand, dealerCards);
+  document.getElementById("hit-btn").disabled = false;
+  document.getElementById("stand-btn").disabled = false;
+  document.getElementById("double-btn").disabled = false;
+  document.getElementById("surrender-btn").disabled = false;
+  if (playerHand[0].value === playerHand[1].value) {
+    document.getElementById("split-btn").disabled = false;
+  }
+  if (dealerHand[0].value === "A") {
+    insuranceBox.classList.remove("hidden");
+  }
+  document.getElementById("deal-btn").disabled = true;
 }
 
 function hit() {
-  playerHand.push(deck.pop());
-  renderCards();
-  if (calculateScore(playerHand) > 21) {
-    endRound("Bust! Dealer wins.");
+  const hand = isSplit && currentHand === 'split' ? playerSplitHand : playerHand;
+  dealCard(hand);
+  displayHand(hand, playerCards);
+  const value = calculateHandValue(hand);
+  if (value > 21) {
+    statusDisplay.textContent = "Bust! You lose.";
+    endRound();
   }
 }
 
 function stand() {
-  while (calculateScore(dealerHand) < 17) {
-    dealerHand.push(deck.pop());
+  while (calculateHandValue(dealerHand) < 17) {
+    dealCard(dealerHand);
   }
-  renderCards();
-  determineWinner();
-}
-
-function calculateScore(hand) {
-  let score = 0;
-  let aces = 0;
-  for (let card of hand) {
-    if (["J", "Q", "K"].includes(card.value)) score += 10;
-    else if (card.value === "A") {
-      score += 11;
-      aces++;
-    } else {
-      score += parseInt(card.value);
-    }
-  }
-  while (score > 21 && aces) {
-    score -= 10;
-    aces--;
-  }
-  return score;
-}
-
-function checkBlackjack() {
-  const playerScore = calculateScore(playerHand);
-  if (playerScore === 21) {
-    endRound("Blackjack! You win!", true);
-  }
-}
-
-function determineWinner() {
-  const playerScore = calculateScore(playerHand);
-  const dealerScore = calculateScore(dealerHand);
-
-  if (dealerScore > 21 || playerScore > dealerScore) {
-    endRound("You win!", true);
-  } else if (playerScore < dealerScore) {
-    endRound("Dealer wins.");
+  displayHand(dealerHand, dealerCards);
+  const dealerValue = calculateHandValue(dealerHand);
+  const playerValue = calculateHandValue(playerHand);
+  if (dealerValue > 21 || playerValue > dealerValue) {
+    statusDisplay.textContent = "You win!";
+    wallet += betAmount * 2;
+  } else if (playerValue === dealerValue) {
+    statusDisplay.textContent = "Push.";
+    wallet += betAmount;
   } else {
-    endRound("Push. Bet returned.", null);
+    statusDisplay.textContent = "Dealer wins.";
+  }
+  updateWallet();
+  endRound();
+}
+
+function doubleDown() {
+  if (wallet >= betAmount) {
+    wallet -= betAmount;
+    betAmount *= 2;
+    updateWallet();
+    hit();
+    stand();
   }
 }
 
-function endRound(msg, win = false) {
-  status.textContent = msg;
-  if (win) {
-    wallet += currentBet * 2;
-  } else if (win === null) {
-    wallet += currentBet;
+function split() {
+  if (playerHand[0].value === playerHand[1].value) {
+    isSplit = true;
+    playerSplitHand.push(playerHand.pop());
+    dealCard(playerHand);
+    dealCard(playerSplitHand);
+    displayHand(playerHand, playerCards);
+    currentHand = 'split';
   }
-  updateWalletDisplay();
-  hitBtn.disabled = true;
-  standBtn.disabled = true;
-  dealBtn.disabled = false;
-
-  // Reveal dealer's full hand
-  renderCards = () => {
-    dealerCards.innerHTML = "";
-    playerCards.innerHTML = "";
-
-    playerHand.forEach(card => {
-      playerCards.appendChild(createCardElement(card));
-    });
-    dealerHand.forEach(card => {
-      dealerCards.appendChild(createCardElement(card));
-    });
-  };
-  renderCards();
 }
 
-// Initialize particles background
-tsParticles.loadJSON("particles-js", "particles.json").then(() => {
-  console.log("Particles loaded.");
-});
+function surrender() {
+  statusDisplay.textContent = "You surrendered. Half bet returned.";
+  wallet += betAmount / 2;
+  updateWallet();
+  endRound();
+}
+
+function endRound() {
+  document.getElementById("hit-btn").disabled = true;
+  document.getElementById("stand-btn").disabled = true;
+  document.getElementById("double-btn").disabled = true;
+  document.getElementById("split-btn").disabled = true;
+  document.getElementById("surrender-btn").disabled = true;
+  document.getElementById("deal-btn").disabled = false;
+}
+
+function takeInsurance() {
+  hasInsurance = true;
+  insuranceBox.classList.add("hidden");
+}
+
+function declineInsurance() {
+  hasInsurance = false;
+  insuranceBox.classList.add("hidden");
+}
+
+updateWallet();
