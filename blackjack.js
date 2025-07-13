@@ -1,5 +1,5 @@
 let walletBalance = parseFloat(localStorage.getItem("walletBalance")) || 1000;
-let betAmount = 0;
+let betAmount = 1.00;
 let deck = [];
 let playerHand = [];
 let dealerHand = [];
@@ -7,11 +7,11 @@ let insuranceTaken = false;
 
 function updateWalletDisplay() {
   document.getElementById("wallet").textContent = walletBalance.toFixed(2);
-  localStorage.setItem("walletBalance", walletBalance);
+  localStorage.setItem("walletBalance", walletBalance.toFixed(2));
 }
 
 function placeBet() {
-  const inputVal = parseInt(document.getElementById("betInput").value);
+  const inputVal = parseFloat(document.getElementById("betInput").value);
   if (isNaN(inputVal) || inputVal <= 0) {
     alert("Please enter a valid bet greater than 0.");
     return;
@@ -22,20 +22,18 @@ function placeBet() {
   }
 
   betAmount = inputVal;
-  document.getElementById("status").textContent = `Bet placed: $${betAmount}`;
+  document.getElementById("status").textContent = `Bet placed: $${betAmount.toFixed(2)}`;
 }
 
 function createDeck() {
   const suits = ["C", "D", "H", "S"];
   const values = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
   deck = [];
-
   for (let suit of suits) {
     for (let value of values) {
-      deck.push({ suit, value });
+      deck.push({ value, suit });
     }
   }
-
   deck.sort(() => Math.random() - 0.5);
 }
 
@@ -62,22 +60,18 @@ function renderHand(hand, elementId) {
   const container = document.getElementById(elementId);
   container.innerHTML = "";
   for (let card of hand) {
-    const img = document.createElement("img");
-    img.src = `https://deckofcardsapi.com/static/img/${card.value}${card.suit}.png`;
-    img.alt = `${card.value} of ${card.suit}`;
-    img.className = "card";
-    container.appendChild(img);
+    const div = document.createElement("div");
+    div.className = "card";
+    div.textContent = `${card.value} ${card.suit}`;
+    container.appendChild(div);
   }
 }
 
 function deal() {
-  if (betAmount <= 0 || betAmount > walletBalance) {
-    alert("Not enough funds.");
-    return;
-  }
-
+  if (betAmount > walletBalance) return alert("Not enough funds.");
   walletBalance -= betAmount;
   insuranceTaken = false;
+
   updateWalletDisplay();
   createDeck();
 
@@ -124,27 +118,26 @@ function stand() {
 
 function endGame() {
   renderHand(dealerHand, "dealer-cards");
-
   const playerVal = calculateHandValue(playerHand);
   const dealerVal = calculateHandValue(dealerHand);
-
   let message = "";
+
   if (playerVal > 21) {
     message = "You busted!";
   } else if (dealerVal > 21 || playerVal > dealerVal) {
     message = "You win!";
     walletBalance += betAmount * 2;
   } else if (playerVal === dealerVal) {
-    message = "Push! Bet returned.";
+    message = "Push. Bet returned.";
     walletBalance += betAmount;
   } else {
-    message = "Dealer wins.";
+    message = "You lose.";
   }
 
   if (insuranceTaken && dealerVal === 21) {
     const insurancePayout = (betAmount / 2).toFixed(2);
     walletBalance += parseFloat(insurancePayout);
-    message += ` Insurance paid $${insurancePayout}`;
+    message += ` Insurance paid $${insurancePayout}.`;
   }
 
   updateWalletDisplay();
@@ -155,6 +148,7 @@ function endGame() {
 
 updateWalletDisplay();
 
+// Optional: Load particles background
 particlesJS("particles-js", {
   particles: {
     number: { value: 80 },
@@ -162,28 +156,12 @@ particlesJS("particles-js", {
     shape: { type: "circle" },
     opacity: { value: 0.5 },
     size: { value: 3 },
-    line_linked: {
-      enable: true,
-      distance: 150,
-      color: "#ffffff",
-      opacity: 0.4,
-      width: 1,
-    },
-    move: {
-      enable: true,
-      speed: 2,
-      direction: "none",
-      out_mode: "out",
-    },
+    line_linked: { enable: true, distance: 150, color: "#ffffff", opacity: 0.4, width: 1 },
+    move: { enable: true, speed: 3 }
   },
   interactivity: {
-    detect_on: "canvas",
-    events: {
-      onhover: { enable: true, mode: "repulse" },
-    },
-    modes: {
-      repulse: { distance: 100, duration: 0.4 },
-    },
+    events: { onhover: { enable: true, mode: "grab" } },
+    modes: { grab: { distance: 200, line_linked: { opacity: 0.6 } } }
   },
-  retina_detect: true,
+  retina_detect: true
 });
