@@ -1,87 +1,32 @@
-let playerHand = [];
-let dealerHand = [];
-let wallet = 100;
-let bet = 0;
+// blackjack.js
 
-document.getElementById("wallet").textContent = wallet.toFixed(2);
+let walletBalance = 1000; let betAmount = 100; let deck = []; let playerHand = []; let dealerHand = [];
 
-function startGame() {
-  bet = parseFloat(document.getElementById("betAmount").value);
-  if (bet > wallet || bet <= 0) {
-    alert("Invalid bet amount.");
-    return;
-  }
+function updateWalletDisplay() { document.getElementById("wallet").textContent = Wallet: $${walletBalance}; }
 
-  wallet -= bet;
-  updateWallet();
+function createDeck() { const suits = ["Hearts", "Diamonds", "Clubs", "Spades"]; const values = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]; deck = []; for (let suit of suits) { for (let value of values) { deck.push({ value, suit }); } } deck = deck.sort(() => Math.random() - 0.5); }
 
-  playerHand = [drawCard(), drawCard()];
-  dealerHand = [drawCard(), drawCard()];
+function getCardValue(card) { if (["J", "Q", "K"].includes(card.value)) return 10; if (card.value === "A") return 11; return parseInt(card.value); }
 
-  displayHands();
-  document.getElementById("statusText").textContent = "Your turn!";
-}
+function calculateHandValue(hand) { let value = 0; let aces = 0; for (let card of hand) { value += getCardValue(card); if (card.value === "A") aces++; } while (value > 21 && aces > 0) { value -= 10; aces--; } return value; }
 
-function drawCard() {
-  return Math.floor(Math.random() * 10) + 1;
-}
+function renderHand(hand, elementId) { const container = document.getElementById(elementId); container.innerHTML = ""; for (let card of hand) { const div = document.createElement("div"); div.className = "card"; div.textContent = ${card.value} ${card.suit}; container.appendChild(div); } }
 
-function getTotal(hand) {
-  return hand.reduce((a, b) => a + b, 0);
-}
+function deal() { if (walletBalance < betAmount) { alert("Not enough funds."); return; } walletBalance -= betAmount; updateWalletDisplay();
 
-function displayHands() {
-  document.getElementById("playerHand").textContent = "Player: " + playerHand.join(", ") + " (Total: " + getTotal(playerHand) + ")";
-  document.getElementById("dealerHand").textContent = "Dealer: " + dealerHand[0] + ", ?";
-}
+createDeck(); playerHand = [deck.pop(), deck.pop()]; dealerHand = [deck.pop(), deck.pop()];
 
-function hit() {
-  playerHand.push(drawCard());
-  displayHands();
+renderHand(playerHand, "player-cards"); renderHand([dealerHand[0]], "dealer-cards");
 
-  if (getTotal(playerHand) > 21) {
-    document.getElementById("statusText").textContent = "Bust! You lost.";
-  }
-}
+document.getElementById("status").textContent = "Hit or Stand?"; document.getElementById("hit-btn").disabled = false; document.getElementById("stand-btn").disabled = false; }
 
-function stand() {
-  while (getTotal(dealerHand) < 17) {
-    dealerHand.push(drawCard());
-  }
+function hit() { playerHand.push(deck.pop()); renderHand(playerHand, "player-cards"); const value = calculateHandValue(playerHand); if (value > 21) { endGame(); } }
 
-  const playerTotal = getTotal(playerHand);
-  const dealerTotal = getTotal(dealerHand);
+function stand() { while (calculateHandValue(dealerHand) < 17) { dealerHand.push(deck.pop()); } endGame(); }
 
-  document.getElementById("dealerHand").textContent = "Dealer: " + dealerHand.join(", ") + " (Total: " + dealerTotal + ")";
+function endGame() { renderHand(dealerHand, "dealer-cards"); const playerVal = calculateHandValue(playerHand); const dealerVal = calculateHandValue(dealerHand); let result = ""; if (playerVal > 21) { result = "Bust! Dealer wins."; } else if (dealerVal > 21 || playerVal > dealerVal) { result = "You win!"; walletBalance += betAmount * 2; } else if (playerVal < dealerVal) { result = "Dealer wins."; } else { result = "Push. Bet returned."; walletBalance += betAmount; } updateWalletDisplay(); document.getElementById("status").textContent = result; document.getElementById("hit-btn").disabled = true; document.getElementById("stand-btn").disabled = true; }
 
-  if (dealerTotal > 21 || playerTotal > dealerTotal) {
-    wallet += bet * 2;
-    document.getElementById("statusText").textContent = "You win!";
-  } else if (playerTotal === dealerTotal) {
-    wallet += bet;
-    document.getElementById("statusText").textContent = "Push!";
-  } else {
-    document.getElementById("statusText").textContent = "Dealer wins.";
-  }
+document.getElementById("deal-btn").onclick = deal; document.getElementById("hit-btn").onclick = hit; document.getElementById("stand-btn").onclick = stand;
 
-  updateWallet();
-}
+updateWalletDisplay();
 
-function doubleDown() {
-  if (wallet >= bet) {
-    wallet -= bet;
-    bet *= 2;
-    hit();
-    stand();
-  } else {
-    alert("Not enough funds to double.");
-  }
-}
-
-function insurance() {
-  alert("Insurance placed (stub)");
-}
-
-function updateWallet() {
-  document.getElementById("wallet").textContent = wallet.toFixed(2);
-}
