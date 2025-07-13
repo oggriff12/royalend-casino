@@ -77,10 +77,26 @@
       <button onclick="loadOdds('baseball_mlb')">MLB</button>
     </div><div class="odds" id="odds">Loading odds...</div>
 
-<div class="stream">
-  <h3>🏟️ Live Stream</h3>
-  <iframe src="https://www.youtube.com/embed/live_stream?channel=UC1DCedRgGHBdm81E1llLhOQ" allowfullscreen></iframe>
+<!-- Live Stream Placeholders -->
+<div class="streams-container">
+  <iframe id="nbaStream" class="stream-frame" src="https://www.youtube.com/embed/live_stream?channel=UCWJ2lWNubArHWmf3FIHbfcQ" allowfullscreen></iframe>
+  <iframe id="nflStream" class="stream-frame" style="display:none;" src="https://www.youtube.com/embed/live_stream?channel=UCX6OQ3DkcsbYNE6H8uQQuVA" allowfullscreen></iframe>
+  <iframe id="mlbStream" class="stream-frame" style="display:none;" src="https://www.youtube.com/embed/live_stream?channel=UCqFMzb-4AUf6WAIbl132QKA" allowfullscreen></iframe>
 </div>
+
+<style>
+  .streams-container {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+  }
+  .stream-frame {
+    width: 80%;
+    height: 450px;
+    border: none;
+    border-radius: 12px;
+  }
+</style>
 
 <div class="chat">
   <h3>💬 Live Chat (coming soon)</h3>
