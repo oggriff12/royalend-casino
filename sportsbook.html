@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sportsbook</title>
+  <link rel="stylesheet" href="sportsbook.css" />
+</head>
+<body>
+  <header>
+    <h1>MGM Style Sportsbook</h1>
+    <a href="index.html">⬅ Back to Lobby</a>
+  </header>
+
+  <main>
+    <section id="live-odds">
+      <h2>Live Odds</h2>
+      <div id="odds-list">Loading odds...</div>
+    </section>
+
+    <section id="live-stream">
+      <h2>Live Match Stream</h2>
+      <iframe src="https://www.youtube.com/embed/live_stream?channel=YOUR_CHANNEL_ID" allowfullscreen></iframe>
+    </section>
+
+    <section id="chat">
+      <h2>Live Chat</h2>
+      <div id="chat-box"></div>
+      <input type="text" id="chat-input" placeholder="Type a message..." />
+      <button id="send-btn">Send</button>
+    </section>
+  </main>
+
+  <script src="sportsbook.js"></script>
+</body>
+</html>
