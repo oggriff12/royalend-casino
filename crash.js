@@ -57,18 +57,30 @@ function startCrashGame() {
   startButton.disabled = true;
   cashOutButton.disabled = false;
   multiplierDisplay.textContent = `Multiplier: ${multiplier.toFixed(2)}x`;
+ctx.clearRect(0, 0, 800, 300);
+  const ctx = document.getElementById("graphCanvas").getContext("2d");
+let graphX = 0;
 
-  interval = setInterval(() => {
-    multiplier += 0.01;
-    multiplierDisplay.textContent = `Multiplier: ${multiplier.toFixed(2)}x`;
+interval = setInterval(() => {
+  multiplier += 0.01;
+  multiplierDisplay.textContent = `Multiplier: ${multiplier.toFixed(2)}x`;
 
-    if (multiplier >= crashPoint) {
-      endGame(false);
-      const x = window.innerWidth / 2;
-const y = window.innerHeight / 2;
-triggerExplosion(x, y);
-    }
-  }, 50);
+  // Draw the line
+  ctx.beginPath();
+  ctx.moveTo(graphX, 300 - (multiplier - 1) * 50); // Y decreases as multiplier increases
+  graphX += 5;
+  ctx.lineTo(graphX, 300 - (multiplier - 1) * 50);
+  ctx.strokeStyle = "lime";
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  if (multiplier >= crashPoint) {
+    endGame(false);
+    const x = graphX;
+    const y = 300 - (multiplier - 1) * 50;
+    triggerExplosion(x, y);
+  }
+}, 100);
 }
 
 function endGame(cashedOut) {
