@@ -1,16 +1,38 @@
-const promoCodes = {
-  ROYAL10: 0.10,  // +10% bonus chips
-  BONUS25: 0.25   // +25% bonus chips
-};
-
 let activePromo = null;
+const DEFAULT_BALANCE = 1000;
 
+// --------- BALANCE STORAGE ---------
+function getBalance() {
+  return parseFloat(localStorage.getItem('balance')) || DEFAULT_BALANCE;
+}
+
+function setBalance(amount) {
+  localStorage.setItem('balance', amount.toFixed(2));
+}
+
+function updateBalanceDisplay(elementId = 'balanceDisplay') {
+  const el = document.getElementById(elementId);
+  if (el) el.textContent = `Balance: $${getBalance().toFixed(2)}`;
+}
+
+function resetBalance() {
+  setBalance(DEFAULT_BALANCE);
+  updateBalanceDisplay();
+}
+
+// --------- PROMO / PAYMENT ---------
 document.querySelectorAll('.pay-button').forEach(button => {
   button.addEventListener('click', async () => {
     const baseAmount = parseInt(button.getAttribute('data-amount'));
     const bonus = activePromo ? Math.round(baseAmount * promoCodes[activePromo]) : 0;
     const finalAmount = baseAmount + bonus;
 
+    // Add chips directly to balance
+    const newBalance = getBalance() + finalAmount;
+    setBalance(newBalance);
+    updateBalanceDisplay();
+
+    // Optional: Send to Stripe checkout if using real payment system
     const response = await fetch('/.netlify/functions/create-checkout-session', {
       method: 'POST',
       headers: {
@@ -20,12 +42,12 @@ document.querySelectorAll('.pay-button').forEach(button => {
     });
 
     const session = await response.json();
-    const stripe = Stripe(pk_live_51LtHnPLIlCvt9RCoW1Kp2kz3fJsJxoKE8xhuX29pUnAqD4xOBKIQCPLFhpNWJW1a3P9Lo5SEqxsB6FTkuxFpPdeO00wiLyt2XW
-);
+    const stripe = Stripe('pk_live_...'); // Replace with your real key
     stripe.redirectToCheckout({ sessionId: session.id });
   });
 });
 
+// --------- PROMO CODE ---------
 document.getElementById('applyPromo').addEventListener('click', () => {
   const input = document.getElementById('promoCode').value.trim().toUpperCase();
   const message = document.getElementById('promoMessage');
