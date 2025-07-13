@@ -26,9 +26,9 @@ h1.glow { color: #ffd700; text-shadow: 0 0 10px #ffd700, 0 0 20px #ff8c00; }
 
 .cards { display: flex; justify-content: center; gap: 10px; margin: 10px 0; flex-wrap: wrap; }
 
-.card { width: 60px; height: 90px; background: white; color: black; border-radius: 8px; display: flex; justify-content: center; align-items: center; font-size: 1.3rem; font-weight: bold; animation: pop-in 0.3s ease; box-shadow: 0 0 5px rgba(0,0,0,0.5); }
+.card { width: 60px; height: 90px; background: white; color: black; border-radius: 8px; display: flex; justify-content: center; align-items: center; font-size: 1.3rem; font-weight: bold; animation: flip-in 0.4s ease; box-shadow: 0 0 5px rgba(0,0,0,0.5); flex-direction: column; transform-style: preserve-3d; }
 
-@keyframes pop-in { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+@keyframes flip-in { from { transform: rotateY(90deg); opacity: 0; } to { transform: rotateY(0deg); opacity: 1; } }
 
 .controls { margin-top: 15px; display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; }
 
@@ -45,4 +45,6 @@ h1.glow { color: #ffd700; text-shadow: 0 0 10px #ffd700, 0 0 20px #ff8c00; }
 .insurance { margin: 10px 0; background-color: #222; padding: 10px; border-radius: 10px; }
 
 .hidden { display: none; }
+
+.stats { margin-top: 20px; font-size: 1.1rem; color: #ffc107; }
 
