@@ -1,341 +1,79 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>RoyalEnd Casino</title>
-  <!-- Firebase Auth UI -->
-<div id="authSection" style="margin-top: 10px;">
-  <div id="userInfo" style="font-size: 14px; margin-bottom: 10px;"></div>
-  <a href="login.html" id="loginBtn">🔐 Login</a>
-  <button onclick="logoutUser()" id="logoutBtn" style="display:none;">🚪 Logout</button>
-</div>
-
-<!-- Firebase Auth Script -->
-<script type="module" src="auth.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
   <style>
     body {
       margin: 0;
+      padding: 0;
       font-family: 'Orbitron', sans-serif;
-      background-color: #0f0f1b;
-      color: #fff;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-height: 100vh;
-      justify-content: center;
-      animation: fadeIn 1s ease-in;
+      background: #0f0f1b;
+      color: white;
+      text-align: center;
     }
-
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-
     header {
-      font-size: 26px;
-      font-weight: bold;
-      margin-bottom: 20px;
-      text-shadow: 0 0 10px #00ffff;
+      padding: 30px 0 10px;
     }
-
-    .intro {
-      font-size: 16px;
-      margin-bottom: 30px;
-      text-align: center;
-      max-width: 600px;
-      opacity: 0.85;
+    h1 {
+      font-size: 3em;
+      color: #ffcc00;
     }
-
-    .game-buttons {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      gap: 15px;
-      width: 100%;
-      max-width: 500px;
-      padding: 0 20px;
+    nav {
+      margin-top: 20px;
     }
-
-    .button {
-      background-color: #1f1f2f;
-      color: #00ffff;
-      border: 2px solid #00ffff;
-      padding: 14px;
-      border-radius: 12px;
-      text-align: center;
-      font-size: 18px;
+    nav a {
+      display: inline-block;
+      margin: 10px 15px;
+      padding: 12px 20px;
+      background-color: #1a1a2e;
+      color: #fff;
       text-decoration: none;
-      transition: all 0.3s ease;
-      box-shadow: 0 0 10px transparent;
+      border-radius: 8px;
+      transition: 0.3s;
     }
-
-    .button:hover {
-      background-color: #00ffff;
-      color: #1f1f2f;
-      transform: scale(1.07);
-      box-shadow: 0 0 20px #00ffffaa;
+    nav a:hover {
+      background-color: #ffcc00;
+      color: #000;
     }
-
-    .footer {
+    .auth-box {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 10px 20px;
+      border-radius: 8px;
+    }
+    .auth-box button {
+      margin-left: 10px;
+      padding: 6px 12px;
+      background-color: #ff0000;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    footer {
       margin-top: 40px;
-      font-size: 12px;
-      opacity: 0.5;
+      font-size: 0.9em;
+      color: #aaa;
     }
   </style>
 </head>
 <body>
-
-  <header>🎰 RoyalEnd Casino – Created by Nyeem Stewart</header>
-<div id="wallet" style="margin: 15px auto; font-size: 18px; color: #00ffff; text-align: center;">
-  💰 Wallet Balance: <span id="walletAmount">$10</span>
-</div>
-  <div class="intro">
-    Welcome to RoyalEnd! Play legendary games like Blackjack, Roulette, Mines, and Crash. 
-    Earn rewards, claim bonuses, and win big — all in one place.
-  </div>
-  <section id="about-casino" style="margin-top: 30px; max-width: 800px; text-align: center; font-size: 16px; line-height: 1.6;">
-  <h2 style="color: #00ffff; margin-bottom: 10px;">🎰 About RoyalEnd Casino</h2>
-  <p>
-    RoyalEnd Casino is a fun, interactive web-based gaming experience where all games run on <strong>fake currency</strong>. 
-    Your balance is purely for entertainment — there’s no real gambling or financial risk involved!
-  </p>
-  <p>
-    We designed RoyalEnd to bring excitement and casino vibes to your screen without involving real money or gambling.
-    You can earn bonus coins, explore new games, and challenge your luck every day!
-  </p>
-  <p>
-    Want to support us? ❤️ By purchasing casino coins, you're helping us grow, add more exciting features, and keep the site online. 
-    Every contribution goes directly toward development, hosting, and expanding the RoyalEnd experience.
-  </p>
-  <p><strong>Play. Support. Enjoy.</strong> 🎉</p>
-<section class="homepage-section">
-  <h2 class="homepage-header">🃏 Games Overview</h2>
-  <p>
-    Play <a href="blackjack.html">Blackjack</a>, 
-    <a href="roulette.html">Roulette</a>, 
-    <a href="crash.html">Crash</a>, 
-    <a href="mines.html">Mines</a>, and 
-    <a href="dice.html">Dice</a> — all using free casino coins. 
-    Enjoy smooth animations and fast-paced gameplay!
-  </p>
-</section>
-
-<section class="homepage-section">
-  <h2 class="homepage-header">💰 Bonuses & Rewards</h2>
-  <p>Log in daily to claim bonuses, earn top player spots, and climb the leaderboard. The more you play, the more you earn!</p>
-</section>
-
-<section class="homepage-section">
-  <h2 class="homepage-header">🛒 Coin Store</h2>
-  <p>Out of coins? No worries. Visit our store to top up your casino coins and keep the fun rolling!</p>
-</section>
-
-<section class="homepage-section">
-  <h2 class="homepage-header">🧠 How It Works</h2>
-  <p>This casino runs on fake money — there’s no real gambling or risk. Everything is purely for fun, skill, and entertainment.</p>
-</section>
-
-<section class="homepage-section">
-  <h2 class="homepage-header">❤️ Support Us</h2>
-  <p>Buying coins helps us fund hosting, new features, and game development. Thank you for helping us grow!</p>
-</section>
-  <div class="game-buttons">
-    <a href="mines.html" class="button">💣 Play Mines</a>
-    <a href="crash.html" class="button">🚀 Play Crash</a>
-    <a href="blackjack.html" class="button">🂡 Play Blackjack</a>
-    <a href="roulette.html" class="button">🎡 Play Roulette</a>
-    <a href="store.html" class="button">🛍️ Bonus Store</a>
-    <a href="dice.html" class="button">🎲 Play Dice</a>
-    <!-- Sportsbook Section -->
-<section id="sportsbook" class="game-section">
-  <div class="game-card mgm-theme" onclick="location.href='sportsbook.html';">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/MGM_Resorts_Logo_2021.svg/512px-MGM_Resorts_Logo_2021.svg.png" alt="Sportsbook" class="game-icon">
-    <h3 class="game-title">Live Sportsbook</h3>
-    <p class="game-description">Bet on live games with real-time odds & live streams. Join the chat!</p>
-  </div>
-</section>
-  </div>
-<div style="margin-top: 30px;">
-  <button id="claimBonus" class="button">💰 Claim Daily $1 Bonus</button>
-  <p id="bonusStatus" style="margin-top: 10px; font-size: 14px; opacity: 0.7;"></p>
-</div>
-<!-- Live Stats / Top Wins -->
-<div id="topWinners" style="margin-top: 40px; font-size: 15px; opacity: 0.8; text-align: center;">
-  <p>🎉 Top Wins:</p>
-  <ul id="winnersList" style="list-style: none; padding: 0;"></ul>
-</div>
-
-<script>
-  const winners = [
-    { name: '💎 Alice', amount: '$250' },
-    { name: '🔥 Bob', amount: '$180' },
-    { name: '👑 Cleo', amount: '$120' },
-    { name: '🚀 Drake', amount: '$340' },
-    { name: '🎯 Ellie', amount: '$99' },
-  ];
-
-  let currentIndex = 0;
-
-  function renderWinners() {
-    const list = document.getElementById('winnersList');
-    list.innerHTML = '';
-    
-    const item = document.createElement('li');
-    const winner = winners[currentIndex];
-    item.textContent = `${winner.name} won ${winner.amount}`;
-    list.appendChild(item);
-
-    currentIndex = (currentIndex + 1) % winners.length;
-  }
-
-  setInterval(renderWinners, 2000); // updates every 2 seconds
-  renderWinners();
-</script>
-<script>
-  const bonusBtn = document.getElementById('claimBonus');
-  const bonusStatus = document.getElementById('bonusStatus');
-
-  const lastClaim = localStorage.getItem('lastBonusTime');
-  const now = Date.now();
-  const oneDay = 24 * 60 * 60 * 1000;
-
-  if (lastClaim && now - parseInt(lastClaim) < oneDay) {
-    bonusBtn.disabled = true;
-    bonusStatus.textContent = "✅ You've already claimed your daily bonus.";
-  }
-
-  bonusBtn.onclick = () => {
-    const claimedTime = localStorage.getItem('lastBonusTime');
-    if (!claimedTime || now - parseInt(claimedTime) >= oneDay) {
-      localStorage.setItem('lastBonusTime', Date.now().toString());
-      let currentBalance = parseFloat(localStorage.getItem('wallet') || '0');
-      currentBalance += 1.00;
-      localStorage.setItem('wallet', currentBalance.toFixed(2));
-      bonusStatus.textContent = "🎉 $1 bonus claimed! Check your wallet.";
-      bonusBtn.disabled = true;
-    }
-  };
-</script>
-  <div class="footer">
-    © 2025 RoyalEnd. All rights reserved.
-  </div>
-<!-- Particles Background -->
-<div id="particles-js"></div>
-<script src="https://cdn.jsdelivr.net/npm/particles.js"></script>
-<script>
-  particlesJS("particles-js", {
-    "particles": {
-      "number": { "value": 80 },
-      "size": { "value": 2 },
-      "color": { "value": "#ffffff" },
-      "line_linked": {
-        "enable": true,
-        "color": "#ffffff"
-      },
-      "move": {
-        "enable": true,
-        "speed": 1
-      }
-    },
-    "interactivity": {
-      "events": {
-        "onhover": { "enable": true, "mode": "repulse" }
-      }
-    }
-  });
-</script>
-
-<style>
-  .homepage-section {
-  margin-top: 30px;
-  max-width: 800px;
-  text-align: center;
-  font-size: 16px;
-  line-height: 1.6;
-  color: #fff;
-  opacity: 0;
-  animation: fadeInInfo 1.2s ease-out forwards;
-  animation-delay: 0.4s;
-}
-
-.homepage-header {
-  color: #00ffff;
-  font-size: 22px;
-  margin-bottom: 10px;
-  text-shadow: 0 0 8px #00ffffaa;
-}
-  #particles-js {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    z-index: -1;
-  }
-  #about-casino {
-  opacity: 0;
-  animation: fadeInInfo 1.2s ease-out forwards;
-  animation-delay: 0.3s;
-}
-
-@keyframes fadeInInfo {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-</style>
-  <!-- 🔐 Google Login Button -->
-<button id="googleLogin" style="padding: 12px 24px; font-size: 16px; margin: 20px;">
-  🔐 Login with Google
-</button>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js"></script>
-  <script>
-  const firebaseConfig = {
-    apiKey: "AIzaSyAVhEyoBPa_PqyhOqm6jn-XF2IeI1oY3vk",
-    authDomain: "royalendcasino.firebaseapp.com",
-    projectId: "royalendcasino",
-    storageBucket: "royalendcasino.firebasestorage.app",
-    messagingSenderId: "292123456763",
-    appId: "1:292123456763:web:63fabf993b18e8539aac5e",
-    measurementId: "G-SZ9FJHE15G"
-  };
-
-  firebase.initializeApp(firebaseConfig);
-  const auth = firebase.auth();
-
-  document.getElementById("googleLogin").addEventListener("click", () => {
-    const provider = new firebase.auth.GoogleAuthProvider();
-    auth.signInWithPopup(provider)
-      .then(result => {
-        const user = result.user;
-        alert("✅ Welcome, " + user.displayName + "!");
-        localStorage.setItem("uid", user.uid); // store for access control
-        window.location.href = "mines.html"; // send to Mines game
-      })
-      .catch(error => {
-        alert("❌ Login failed: " + error.message);
-        console.error(error);
-      });
-  });
-</script>
-</body>
-  <script>
-// Wallet Balance Logic
-let wallet = parseFloat(localStorage.getItem('wallet')) || 1000;
-const walletAmount = document.getElementById('walletAmount');
-walletAmount.textContent = `$${wallet}`;
-
-const bonusBtn = document.getElementById('claimBonus');
-const bonusStatus = document.getElementById('bonusStatus');
-
-bonusBtn.addEventListener('click', () => {
-  if (!localStorage.getItem('bonusClaimed')) {
-    wallet += 1;
-    localStorage.setItem('wallet', wallet);
-    walletAmount.textContent = `$${wallet}`;
-  }
-});
-</script>
+  <header>
+    <h1>🎰 RoyalEnd Casino 🎲</h1>
+    <div class="auth-box">
+      Logged in as: <span id="userEmail"></span>
+      <button onclick="logout()">Logout</button>
+    </div>
+  </header>  <nav>
+    <a href="blackjack.html">Blackjack</a>
+    <a href="roulette.html">Roulette</a>
+    <a href="dice.html">Dice</a>
+    <a href="sports.html">Sportsbook</a>
+  </nav>  <footer>
+    <p>This casino runs on fake money for entertainment only. Purchasing casino coins supports site development and unlocks special features.</p>
+  </footer>  <!-- Firebase SDKs -->  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>  <script src="auth.js"></script></body>
 </html>
-
