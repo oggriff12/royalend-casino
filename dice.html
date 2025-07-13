@@ -2,305 +2,52 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>🎲 Dice - RoyalEnd Casino</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet">
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Orbitron', sans-serif;
-      background-color: #0f0f1b;
-      color: #fff;
-      text-align: center;
-      padding-top: 60px;
-    }
-
-    #particles-js {
-      position: fixed;
-      width: 100%;
-      height: 100%;
-      top: 0;
-      left: 0;
-      z-index: -1;
-    }
-
-    .wallet {
-      font-size: 18px;
-      margin-bottom: 20px;
-      color: #00ffff;
-    }
-
-    .dice-container {
-      background: #1f1f2f;
-      padding: 30px;
-      border-radius: 15px;
-      width: 340px;
-      margin: 0 auto;
-      box-shadow: 0 0 10px #00ffff66;
-    }
-
-    input, button {
-      margin-top: 10px;
-      padding: 10px;
-      width: 90%;
-      border-radius: 10px;
-      border: none;
-      font-size: 16px;
-      font-family: 'Orbitron', sans-serif;
-    }
-
-    .nav {
-      margin: 20px 0;
-    }
-
-    .nav a {
-      margin: 0 10px;
-      text-decoration: none;
-      color: #00ffff;
-    }
-
-    .result {
-      font-size: 20px;
-      margin-top: 15px;
-    }
-
-    .dice-animation {
-      font-size: 40px;
-      margin-top: 10px;
-    }
-
-    .slider-label {
-      margin-top: 15px;
-      font-size: 14px;
-      color: #ccc;
-    }
-
-    .history, .leaderboard {
-      margin-top: 20px;
-      text-align: left;
-      background: #161626;
-      padding: 15px;
-      border-radius: 10px;
-    }
-
-    .history h3, .leaderboard h3 {
-      margin-bottom: 10px;
-    }
-
-    .daily {
-      margin-top: 15px;
-      font-size: 15px;
-      color: #ff0;
-    }
-
-    .daily button {
-      background: #222;
-      color: #ff0;
-      font-size: 14px;
-      margin-top: 8px;
-    }
-  </style>
+  <link rel="stylesheet" href="css/dice.css">
 </head>
 <body>
+  <div id="particles-js"></div>
 
-<div id="particles-js"></div>
+  <div class="wallet">
+    💰 Wallet Balance: <span id="walletAmount">$100</span>
+  </div>
 
-<div class="nav">
-  <a href="index.html">🏠 Home</a>
-  <a href="mines.html">💣 Mines</a>
-  <a href="crash.html">📉 Crash</a>
-  <a href="blackjack.html">🃏 Blackjack</a>
-  <a href="roulette.html">🎡 Roulette</a>
-  <a href="store.html">🛒 Store</a>
-</div>
+  <nav class="nav">
+    <a href="index.html">🏠 Home</a>
+    <a href="blackjack.html">🂡 Blackjack</a>
+    <a href="mines.html">💣 Mines</a>
+    <a href="roulette.html">🎡 Roulette</a>
+    <a href="crash.html">📉 Crash</a>
+    <a href="dice.html">🎲 Dice</a>
+  </nav>
 
-<div class="wallet">
-  💰 Wallet Balance: $<span id="walletAmount">0</span>
-</div>
+  <h1>🎲 Dice Game</h1>
 
-<div class="dice-container">
-  <h2>🎲 Dice Game</h2>
-  <input type="number" id="betAmount" placeholder="Enter bet amount" min="0.01" step="0.01" />
+  <div>
+    <label>Bet Amount: $<input type="number" id="betAmount" value="10" min="1" /></label>
+    <p class="slider-label">🎯 Choose Your Target (Roll Under): <span id="targetDisplay">50</span></p>
+    <input type="range" id="targetSlider" min="1" max="98" value="50" />
+    <p>Multiplier: <span id="multiplier">1.98x</span></p>
+    <button onclick="rollDice()">🎲 Roll</button>
+  </div>
 
-  <div class="slider-label">🎚️ Win Chance: <span id="chanceValue">50</span>%</div>
-  <input type="range" id="chanceSlider" min="1" max="95" value="50" />
-  <p class="slider-label">💸 Payout: <span id="payout">1.98x</span></p>
+  <div class="result" id="resultText"></div>
+  <div class="dice-animation" id="diceNumber"></div>
 
-  <button onclick="rollDice()">Roll Dice</button>
-  <div class="dice-animation" id="diceAnim">🎲</div>
-  <div class="result" id="resultMsg"></div>
-</div>
+  <div class="history">
+    <h3>📜 Roll History</h3>
+    <ul id="rollHistory"></ul>
+  </div>
 
-<div class="daily" id="dailyReward">
-  🔥 Daily Streak: <span id="streakDays">0</span> day(s)
-  <br />
-  <button onclick="claimDaily()">Claim Daily $1</button>
-</div>
+  <div class="leaderboard">
+    <h3>🏆 Top Streaks</h3>
+    <ul id="leaderboard"></ul>
+  </div>
 
-<div class="history">
-  <h3>🕓 Roll History</h3>
-  <ul id="rollHistory"></ul>
-</div>
-
-<div class="leaderboard">
-  <h3>🏆 Top 5 Wins</h3>
-  <ol id="leaderboardList"></ol>
-</div>
-
-<!-- Particles JS -->
-<script src="https://cdn.jsdelivr.net/npm/particles.js"></script>
-<script>
-  particlesJS("particles-js", {
-    particles: {
-      number: { value: 80 },
-      size: { value: 3 },
-      color: { value: "#ffffff" },
-      line_linked: { enable: true, color: "#ffffff" },
-      move: { enable: true, speed: 1 }
-    },
-    interactivity: {
-      events: {
-        onhover: { enable: true, mode: "repulse" }
-      }
-    }
-  });
-</script>
-
-<script>
-  let wallet = parseFloat(localStorage.getItem('wallet')) || 10.00;
-  document.getElementById("walletAmount").textContent = wallet.toFixed(2);
-
-  const chanceSlider = document.getElementById("chanceSlider");
-  const chanceValue = document.getElementById("chanceValue");
-  const payoutDisplay = document.getElementById("payout");
-
-  chanceSlider.addEventListener("input", () => {
-    const chance = parseInt(chanceSlider.value);
-    const payout = (99 / chance).toFixed(2);
-    chanceValue.textContent = chance;
-    payoutDisplay.textContent = `${payout}x`;
-  });
-
-  function updateWalletDisplay() {
-    localStorage.setItem("wallet", wallet.toFixed(2));
-    document.getElementById("walletAmount").textContent = wallet.toFixed(2);
-  }
-
-  function updateHistory(result) {
-    let history = JSON.parse(localStorage.getItem("rollHistory")) || [];
-    history.unshift(result);
-    if (history.length > 10) history.pop();
-    localStorage.setItem("rollHistory", JSON.stringify(history));
-    displayHistory();
-  }
-
-  function displayHistory() {
-    let history = JSON.parse(localStorage.getItem("rollHistory")) || [];
-    const historyList = document.getElementById("rollHistory");
-    historyList.innerHTML = "";
-    history.forEach(item => {
-      const li = document.createElement("li");
-      li.textContent = item;
-      historyList.appendChild(li);
-    });
-  }
-
-  function updateLeaderboard(amount) {
-    let board = JSON.parse(localStorage.getItem("leaderboard")) || [];
-    board.push(amount);
-    board.sort((a, b) => b - a);
-    board = board.slice(0, 5);
-    localStorage.setItem("leaderboard", JSON.stringify(board));
-    displayLeaderboard();
-  }
-
-  function displayLeaderboard() {
-    const board = JSON.parse(localStorage.getItem("leaderboard")) || [];
-    const list = document.getElementById("leaderboardList");
-    list.innerHTML = "";
-    board.forEach((amt, i) => {
-      const li = document.createElement("li");
-      li.textContent = `$${amt.toFixed(2)}`;
-      list.appendChild(li);
-    });
-  }
-
-  function rollDice() {
-    const betInput = document.getElementById("betAmount");
-    const resultMsg = document.getElementById("resultMsg");
-    const diceAnim = document.getElementById("diceAnim");
-
-    let bet = parseFloat(betInput.value);
-    let chance = parseInt(chanceSlider.value);
-    let payout = 99 / chance;
-
-    if (isNaN(bet) || bet <= 0) {
-      alert("Enter a valid bet amount.");
-      return;
-    }
-
-    if (bet > wallet) {
-      alert("Insufficient balance.");
-      return;
-    }
-
-    diceAnim.textContent = "🎲";
-    resultMsg.textContent = "Rolling...";
-
-    setTimeout(() => {
-      const roll = Math.random() * 100;
-      if (roll < chance) {
-        let win = bet * payout;
-        wallet += (win - bet);
-        resultMsg.textContent = `🎉 You rolled ${roll.toFixed(2)} — WIN $${win.toFixed(2)}!`;
-        updateHistory(`✅ Win $${win.toFixed(2)} on roll ${roll.toFixed(2)}`);
-        updateLeaderboard(win);
-      } else {
-        wallet -= bet;
-        resultMsg.textContent = `😢 You rolled ${roll.toFixed(2)} — Lost $${bet.toFixed(2)}`;
-        updateHistory(`❌ Loss $${bet.toFixed(2)} on roll ${roll.toFixed(2)}`);
-      }
-
-      updateWalletDisplay();
-    }, 800);
-  }
-
-  // Daily Streak Logic
-  const streakKey = "dailyStreak";
-  const lastClaimKey = "lastClaim";
-
-  function claimDaily() {
-    const today = new Date().toDateString();
-    const lastClaim = localStorage.getItem(lastClaimKey);
-
-    if (lastClaim === today) {
-      alert("You already claimed today's reward!");
-      return;
-    }
-
-    let streak = parseInt(localStorage.getItem(streakKey)) || 0;
-    const yesterday = new Date(Date.now() - 86400000).toDateString();
-
-    streak = (lastClaim === yesterday) ? streak + 1 : 1;
-
-    wallet += 1;
-    localStorage.setItem(streakKey, streak);
-    localStorage.setItem(lastClaimKey, today);
-    updateWalletDisplay();
-    document.getElementById("streakDays").textContent = streak;
-    alert("🔥 Daily reward claimed!");
-  }
-
-  function initStreak() {
-    const streak = parseInt(localStorage.getItem(streakKey)) || 0;
-    document.getElementById("streakDays").textContent = streak;
-  }
-
-  // Init everything
-  displayHistory();
-  displayLeaderboard();
-  initStreak();
-</script>
-
+  <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.3.4/tsparticles.bundle.min.js"></script>
+  <script src="js/particles-config.js"></script>
+  <script src="js/dice.js"></script>
 </body>
 </html>
