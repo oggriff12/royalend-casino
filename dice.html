@@ -3,51 +3,52 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>🎲 Dice - RoyalEnd Casino</title>
+  <title>Dice - RoyalEnd Casino</title>
+  <link rel="stylesheet" href="dice.css" />
   <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/dice.css">
 </head>
 <body>
   <div id="particles-js"></div>
 
-  <div class="wallet">
-    💰 Wallet Balance: <span id="walletAmount">$100</span>
+  <div class="container">
+    <div class="nav">
+      <p class="wallet">💰 Wallet Balance: $<span id="wallet">100</span></p>
+      <div class="nav-links">
+        <a href="index.html">🏠 Home</a>
+        <a href="blackjack.html">🃏 Blackjack</a>
+        <a href="mines.html">⛏️ Mines</a>
+        <a href="roulette.html">🎯 Roulette</a>
+        <a href="crash.html">📉 Crash</a>
+        <a href="dice.html">🎲 Dice</a>
+      </div>
+    </div>
+
+    <h1 class="title">🎲 Dice Game</h1>
+
+    <div class="game">
+      <label for="betAmount">Bet Amount: $</label>
+      <input type="number" id="betAmount" value="10" min="1" max="1000" />
+      
+      <p>🎯 Choose Your Target (Roll Under): <span id="targetValue">50</span></p>
+      <input type="range" id="targetSlider" min="2" max="98" value="50" />
+      <p>📈 Multiplier: <span id="multiplier">1.98x</span></p>
+
+      <button id="rollButton">🎲 Roll</button>
+      <div id="rollResult"></div>
+    </div>
+
+    <div class="history">
+      <h3>📜 Roll History</h3>
+      <ul id="historyList"></ul>
+    </div>
+
+    <div class="leaderboard">
+      <h3>🏆 Top Streaks</h3>
+      <ul id="streakList"></ul>
+    </div>
   </div>
 
-  <nav class="nav">
-    <a href="index.html">🏠 Home</a>
-    <a href="blackjack.html">🂡 Blackjack</a>
-    <a href="mines.html">💣 Mines</a>
-    <a href="roulette.html">🎡 Roulette</a>
-    <a href="crash.html">📉 Crash</a>
-    <a href="dice.html">🎲 Dice</a>
-  </nav>
-
-  <h1>🎲 Dice Game</h1>
-
-  <div>
-    <label>Bet Amount: $<input type="number" id="betAmount" value="10" min="1" /></label>
-    <p class="slider-label">🎯 Choose Your Target (Roll Under): <span id="targetDisplay">50</span></p>
-    <input type="range" id="targetSlider" min="1" max="98" value="50" />
-    <p>Multiplier: <span id="multiplier">1.98x</span></p>
-    <button onclick="rollDice()">🎲 Roll</button>
-  </div>
-
-  <div class="result" id="resultText"></div>
-  <div class="dice-animation" id="diceNumber"></div>
-
-  <div class="history">
-    <h3>📜 Roll History</h3>
-    <ul id="rollHistory"></ul>
-  </div>
-
-  <div class="leaderboard">
-    <h3>🏆 Top Streaks</h3>
-    <ul id="leaderboard"></ul>
-  </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.3.4/tsparticles.bundle.min.js"></script>
-  <script src="js/particles-config.js"></script>
-  <script src="js/dice.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.11.1/tsparticles.bundle.min.js"></script>
+  <script src="dice.js"></script>
 </body>
 </html>
