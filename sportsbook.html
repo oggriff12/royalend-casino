@@ -135,5 +135,16 @@
 
     loadOdds();
     setInterval(() => loadOdds(), 30000);
+    <script>
+  function showStream(sport) {
+    document.getElementById("nbaStream").style.display = sport === "nba" ? "block" : "none";
+    document.getElementById("nflStream").style.display = sport === "nfl" ? "block" : "none";
+    document.getElementById("mlbStream").style.display = sport === "mlb" ? "block" : "none";
+  }
+
+  document.querySelector('button[onclick*="basketball_nba"]').addEventListener("click", () => showStream("nba"));
+  document.querySelector('button[onclick*="americanfootball_nfl"]').addEventListener("click", () => showStream("nfl"));
+  document.querySelector('button[onclick*="baseball_mlb"]').addEventListener("click", () => showStream("mlb"));
+</script>
   </script></body>
 </html>
