@@ -94,8 +94,15 @@ function cashOut() {
   endGame(true);
 }
 
+let crashHistory = [];
+
 function addToHistory(multiplier) {
-  console.log(`Game ended at multiplier: ${multiplier.toFixed(2)}x`);
+  crashHistory.unshift(multiplier.toFixed(2));
+  if (crashHistory.length > 10) {
+    crashHistory.pop(); // Keep max 10 entries
+  }
+  renderCrashHistory();
+}
 }
 
 startButton.addEventListener("click", startCrashGame);
