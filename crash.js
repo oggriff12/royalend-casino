@@ -10,6 +10,17 @@ const startButton = document.getElementById("startButton");
 const cashOutButton = document.getElementById("cashOutButton");
 const multiplierDisplay = document.getElementById("multiplier");
 const historyDisplay = document.getElementById("history");
+function triggerExplosion(x, y) {
+  const explosion = document.createElement("div");
+  explosion.className = "explosion";
+  explosion.style.left = `${x}px`;
+  explosion.style.top = `${y}px`;
+  document.body.appendChild(explosion);
+
+  setTimeout(() => {
+    explosion.remove();
+  }, 500);
+}
 
 function updateBalanceDisplay() {
   balanceDisplay.textContent = `$${balance.toFixed(2)}`;
