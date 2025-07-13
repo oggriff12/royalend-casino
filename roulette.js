@@ -1,26 +1,26 @@
-// roulette.js let balance = parseFloat(localStorage.getItem("wallet")) || 10; let betAmount = 0; let betNumber = null; let spinning = false;
+// roulette.js let balance = parseFloat(localStorage.getItem("wallet")) || 10; let spinning = false;
 
-const balanceDisplay = document.getElementById("balance"); const betInput = document.getElementById("betAmount"); const numberInput = document.getElementById("betNumber"); const spinButton = document.getElementById("spinButton"); const wheel = document.getElementById("wheel"); const ball = document.getElementById("ball"); const statusDisplay = document.getElementById("status");
-
-const numbers = Array.from({ length: 37 }, (_, i) => i); // 0 - 36
+const balanceDisplay = document.getElementById("balance"); const betAmountInput = document.getElementById("betAmount"); const betNumberInput = document.getElementById("betNumber"); const spinButton = document.getElementById("spinButton"); const wheel = document.getElementById("wheel"); const ball = document.getElementById("ball"); const statusDisplay = document.getElementById("status");
 
 function updateBalanceDisplay() { balanceDisplay.textContent = $${balance.toFixed(2)}; localStorage.setItem("wallet", balance); }
 
 function spinWheel() { if (spinning) return;
 
-betAmount = parseFloat(betInput.value); betNumber = parseInt(numberInput.value);
+const bet = parseFloat(betAmountInput.value); const betNumber = parseInt(betNumberInput.value);
 
-if (isNaN(betAmount) || isNaN(betNumber) || betAmount <= 0 || betAmount > balance || betNumber < 0 || betNumber > 36) { alert("Enter a valid bet and number (0-36)"); return; }
+if (isNaN(bet) || bet <= 0 || bet > balance) { alert("Invalid bet amount"); return; }
 
-spinning = true; balance -= betAmount; updateBalanceDisplay(); statusDisplay.textContent = "Spinning...";
+if (isNaN(betNumber) || betNumber < 0 || betNumber > 36) { alert("Choose a valid number between 0 and 36"); return; }
 
-const landedNumber = numbers[Math.floor(Math.random() * numbers.length)]; const angle = 360 * 10 + (360 / 37) * landedNumber;
+spinning = true; balance -= bet; updateBalanceDisplay(); statusDisplay.textContent = "Spinning...";
 
-wheel.style.transition = "transform 4s cubic-bezier(.17,.67,.83,.67)"; ball.style.transition = "transform 4s ease-in-out";
+const winningNumber = Math.floor(Math.random() * 37); const degrees = 360 * 10 + (360 / 37) * winningNumber; const ballOffset = 360 * 4 + (360 / 37) * winningNumber;
 
-wheel.style.transform = rotate(${angle}deg); ball.style.transform = rotate(-${angle + 720}deg);
+wheel.style.transition = 'transform 4s ease-out'; ball.style.transition = 'transform 4s ease-out';
 
-setTimeout(() => { spinning = false; if (landedNumber === betNumber) { const winnings = betAmount * 35; balance += winnings; statusDisplay.textContent = 🎉 You won! Number ${landedNumber}. Winnings: $${winnings}; } else { statusDisplay.textContent = 💸 Lost. Number was ${landedNumber}; } updateBalanceDisplay(); }, 4100); }
+wheel.style.transform = rotate(${degrees}deg); ball.style.transform = rotate(${ballOffset}deg);
+
+setTimeout(() => { spinning = false; if (betNumber === winningNumber) { const payout = bet * 36; balance += payout; statusDisplay.textContent = 🎉 You won! Number: ${winningNumber}. Payout: $${payout.toFixed(2)}; } else { statusDisplay.textContent = ❌ You lost. Number was ${winningNumber}.; } updateBalanceDisplay(); }, 4500); }
 
 spinButton.addEventListener("click", spinWheel); updateBalanceDisplay();
 
