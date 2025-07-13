@@ -2,14 +2,13 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Blackjack</title>
   <link rel="stylesheet" href="blackjack.css" />
   <script src="https://cdn.jsdelivr.net/npm/particles.js"></script>
 </head>
 <body>
   <div id="particles-js"></div>
-
   <nav class="navbar">
     <a href="/">Home</a>
     <a href="/blackjack">Blackjack</a>
@@ -21,7 +20,7 @@
 
   <div class="game-container">
     <h1 class="glow">Blackjack</h1>
-    <div class="wallet">Wallet: $<span id="wallet">1000.00</span></div>
+    <div class="wallet">Wallet: $<span id="wallet">10.00</span></div>
 
     <div class="bet-area">
       <input type="number" id="betInput" min="0.01" step="0.01" value="1.00" />
@@ -46,7 +45,7 @@
       <button id="stand-btn" onclick="stand()" disabled>Stand</button>
     </div>
 
-    <div id="status" class="status"></div>
+    <div id="status"></div>
   </div>
 
   <script src="blackjack.js"></script>
