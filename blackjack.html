@@ -15,9 +15,8 @@
     <a href="/roulette">Roulette</a>
     <a href="/sportsbook">Sportsbook</a>
   </nav>  <div class="game-container">
-    <h1 class="glow">Blackjack</h1><div class="wallet">Wallet: <span id="wallet">$10.00</span></div>
-
-<div class="bet-area">
+    <h1 class="glow">Blackjack</h1>
+    <div class="wallet">Wallet: <span id="wallet">$10.00</span></div><div class="bet-area">
   <input type="number" id="betInput" min="0.01" step="0.01" value="1.00" />
   <button onclick="placeBet()">Place Bet</button>
 </div>
@@ -35,14 +34,12 @@
 <div id="player-cards" class="cards"></div>
 
 <div class="controls">
-  <button id="deal-btn" onclick="deal()">Deal</button>
-  <button id="hit-btn" onclick="hit()" disabled>Hit</button>
-  <button id="stand-btn" onclick="stand()" disabled>Stand</button>
+  <button id="deal-btn" class="action-btn" onclick="deal()">Deal</button>
+  <button id="hit-btn" class="action-btn" onclick="hit()" disabled>Hit</button>
+  <button id="stand-btn" class="action-btn" onclick="stand()" disabled>Stand</button>
 </div>
 
 <div id="status"></div>
 
-  </div>  <script src="blackjack.js"></script>  <script>
-    tsParticles.load("particles-js", "particles.json");
-  </script></body>
+  </div>  <script src="blackjack.js"></script></body>
 </html>
