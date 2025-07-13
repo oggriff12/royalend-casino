@@ -1,93 +1,125 @@
+/* dice.css */
+
 body {
   margin: 0;
   font-family: 'Orbitron', sans-serif;
   background-color: #0f0f1b;
-  color: #fff;
+  color: #ffffff;
   text-align: center;
-  padding-top: 60px;
+  padding: 60px 20px;
 }
 
-#particles-js {
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  z-index: -1;
-}
-
-.wallet {
+#walletBalance {
   font-size: 18px;
   margin-bottom: 20px;
+  display: inline-block;
   color: #00ffff;
 }
 
-.dice-container {
-  background: #1f1f2f;
-  padding: 30px;
-  border-radius: 15px;
-  width: 340px;
-  margin: 0 auto;
-  box-shadow: 0 0 10px #00ffff66;
-}
-
-input, button {
-  margin-top: 10px;
-  padding: 10px;
-  width: 90%;
-  border-radius: 10px;
-  border: none;
-  font-size: 16px;
-  font-family: 'Orbitron', sans-serif;
-}
-
 .nav {
-  margin: 20px 0;
+  margin-bottom: 20px;
 }
-
 .nav a {
   margin: 0 10px;
   text-decoration: none;
   color: #00ffff;
+  font-weight: bold;
 }
 
-.result {
-  font-size: 20px;
+h1 {
+  font-size: 32px;
+  margin-bottom: 20px;
+}
+
+input[type="number"] {
+  padding: 6px;
+  border-radius: 4px;
+  border: 1px solid #444;
+  width: 120px;
+}
+
+input[type="range"] {
+  width: 200px;
+  margin: 10px auto;
+  display: block;
+}
+
+#multiplier {
+  margin: 10px 0;
+  font-size: 18px;
+  color: #ffcc00;
+}
+
+button {
+  background-color: #00ffff;
+  color: #000;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 20px;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
   margin-top: 15px;
+  transition: background 0.3s ease;
+}
+button:hover {
+  background-color: #00cccc;
+}
+
+#result {
+  font-size: 20px;
+  margin-top: 20px;
+  min-height: 30px;
 }
 
 .dice-animation {
-  font-size: 40px;
-  margin-top: 10px;
+  font-size: 36px;
+  animation: bounce 0.5s infinite alternate;
 }
 
-.slider-label {
-  margin-top: 15px;
-  font-size: 14px;
-  color: #ccc;
+@keyframes bounce {
+  from {
+    transform: translateY(0px);
+  }
+  to {
+    transform: translateY(-10px);
+  }
 }
 
-.history, .leaderboard {
-  margin-top: 20px;
-  text-align: left;
-  background: #161626;
-  padding: 15px;
-  border-radius: 10px;
-}
-
-.history h3, .leaderboard h3 {
+.section-header {
+  font-size: 24px;
+  margin-top: 30px;
   margin-bottom: 10px;
+  color: #ffcc00;
 }
 
-.daily {
-  margin-top: 15px;
-  font-size: 15px;
-  color: #ff0;
+ul {
+  list-style-type: none;
+  padding: 0;
+  max-width: 400px;
+  margin: 10px auto;
+  text-align: left;
 }
 
-.daily button {
-  background: #222;
-  color: #ff0;
+li {
+  padding: 8px;
+  background-color: #1c1c2e;
+  margin-bottom: 6px;
+  border-radius: 4px;
   font-size: 14px;
-  margin-top: 8px;
+}
+
+@media (max-width: 600px) {
+  h1 {
+    font-size: 24px;
+  }
+
+  button {
+    padding: 8px 16px;
+    font-size: 14px;
+  }
+
+  .dice-animation {
+    font-size: 28px;
+  }
 }
