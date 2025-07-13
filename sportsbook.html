@@ -1,9 +1,9 @@
 <!DOCTYPE html><html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>RoyalEnd Sportsbook</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
   <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <style>
     body {
@@ -26,54 +26,41 @@
       color: gold;
       margin-bottom: 20px;
     }
-    #odds {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 20px;
-      justify-content: center;
-    }
-    .game {
-      background: rgba(255, 215, 0, 0.1);
-      border: 1px solid gold;
-      padding: 20px;
-      border-radius: 10px;
-      width: 300px;
-    }
-    .game h4 {
-      margin-top: 0;
-      color: gold;
-    }
-    iframe {
-      width: 100%;
-      height: 300px;
-      border: none;
-      margin-top: 30px;
-    }
-    .chat {
-      margin-top: 30px;
-      background-color: rgba(255,255,255,0.05);
-      padding: 20px;
-      border-radius: 10px;
-    }
-    .filter-buttons {
+    .buttons {
       text-align: center;
-      margin-bottom: 20px;
+      margin-bottom: 30px;
     }
-    .filter-buttons button {
-      background-color: gold;
+    .buttons button {
+      background: gold;
       color: black;
+      padding: 10px 20px;
       margin: 0 10px;
       border: none;
-      padding: 10px 20px;
+      border-radius: 5px;
+      font-size: 16px;
       cursor: pointer;
-      border-radius: 8px;
+    }
+    .odds, .stream, .chat {
+      background: #111;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 10px;
+    }
+    .stream iframe {
+      width: 100%;
+      height: 400px;
+      border: none;
+    }
+    .chat {
+      text-align: center;
+      color: #aaa;
     }
     #particles-js {
       position: fixed;
+      width: 100%;
+      height: 100%;
       top: 0;
       left: 0;
-      height: 100%;
-      width: 100%;
       z-index: 0;
     }
   </style>
@@ -81,53 +68,56 @@
 <body>
   <div id="particles-js"></div>
   <div class="container">
-    <div class="header">🏟️ Live Sportsbook</div><div class="filter-buttons">
-  <button onclick="loadOdds('basketball_nba')">NBA</button>
-  <button onclick="loadOdds('americanfootball_nfl')">NFL</button>
-  <button onclick="loadOdds('baseball_mlb')">MLB</button>
+    <div class="header">
+      <img src="https://cdn-icons-png.flaticon.com/512/1047/1047711.png" alt="stadium" width="40" style="vertical-align: middle;"> Live Sportsbook
+    </div>
+    <div class="buttons">
+      <button onclick="loadOdds('basketball_nba')">NBA</button>
+      <button onclick="loadOdds('americanfootball_nfl')">NFL</button>
+      <button onclick="loadOdds('baseball_mlb')">MLB</button>
+    </div><div class="odds" id="odds">Loading odds...</div>
+
+<div class="stream">
+  <h3>🏟️ Live Stream</h3>
+  <iframe src="https://www.youtube.com/embed/live_stream?channel=UC1DCedRgGHBdm81E1llLhOQ" allowfullscreen></iframe>
 </div>
 
-<div id="odds">Loading odds...</div>
-
-<iframe src="https://www.youtube.com/embed/live_stream?channel=UC14UlmYlSNiQCBe9Eookf_A" allowfullscreen></iframe>
-
 <div class="chat">
-  <h3>🏀💬 Live Chat (coming soon)</h3>
+  <h3>💬 Live Chat (coming soon)</h3>
   <p>Chat functionality will be integrated soon using Discord or WebSockets.</p>
 </div>
 
   </div>  <script>
-    const fetchOdds = async (sport) => {
+    particlesJS.load('particles-js', 'particles.json', function () {
+      console.log('Particles.js config loaded');
+    });
+
+    async function loadOdds(sport = 'basketball_nba') {
+      document.getElementById('odds').textContent = 'Loading odds...';
       try {
         const res = await fetch(`/.netlify/functions/get-odds?sport=${sport}`);
         const data = await res.json();
-        const games = data.slice(0, 10);
-        const oddsEl = document.getElementById('odds');
-        oddsEl.innerHTML = '';
 
-        games.forEach(game => {
-          const bookmakers = game.bookmakers?.[0]?.markets?.[0]?.outcomes || [];
-          oddsEl.innerHTML += `
-            <div class="game">
-              <h4>${game.teams.join(' vs ')}</h4>
-              <p><strong>Commence:</strong> ${new Date(game.commence_time).toLocaleString()}</p>
-              ${bookmakers.map(o => `<p>${o.name}: ${o.price}</p>`).join('')}
-            </div>
-          `;
-        });
+        if (!Array.isArray(data)) {
+          document.getElementById('odds').innerHTML = '<p>⚠️ Failed to load odds.</p>';
+          return;
+        }
+
+        const oddsHtml = data.map(game => {
+          const teams = game.teams.join(' vs ');
+          const site = game.sites?.[0];
+          const odds = site?.odds?.h2h?.join(' / ');
+          return `<p><strong>${teams}</strong> — ${odds || 'No odds available'} (${site?.site_nice || 'N/A'})</p>`;
+        }).join('');
+
+        document.getElementById('odds').innerHTML = oddsHtml || '<p>No games available.</p>';
       } catch (err) {
-        document.getElementById('odds').innerHTML = '⚠️ Failed to load odds.';
+        console.error(err);
+        document.getElementById('odds').innerHTML = '<p>⚠️ Failed to load odds.</p>';
       }
     }
 
-    const loadOdds = (sport) => {
-      fetchOdds(sport);
-      clearInterval(window.oddsInterval);
-      window.oddsInterval = setInterval(() => fetchOdds(sport), 60000);
-    };
-
-    window.onload = () => loadOdds('basketball_nba');
-  </script>  <script>
-    particlesJS.load('particles-js', 'particles.json');
+    loadOdds();
+    setInterval(() => loadOdds(), 30000);
   </script></body>
 </html>
