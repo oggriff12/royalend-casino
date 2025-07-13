@@ -64,6 +64,9 @@ function startCrashGame() {
 
     if (multiplier >= crashPoint) {
       endGame(false);
+      const x = window.innerWidth / 2;
+const y = window.innerHeight / 2;
+triggerExplosion(x, y);
     }
   }, 50);
 }
