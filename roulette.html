@@ -1,52 +1,33 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Royalend Roulette</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Roulette Game</title>
   <link rel="stylesheet" href="roulette.css" />
 </head>
 <body>
-  <!-- Particle background -->
   <div id="particles-js"></div>
-
-  <!-- Game Container -->
   <div class="container">
-    <h1 class="glow">🎡 Royalend Roulette</h1>
-
-    <div class="wallet">Balance: <span id="balance">$10.00</span></div>
-
+    <h1 class="glow">🎡 Roulette</h1>
+    <div class="wallet">Balance: <span id="balance">$0.00</span></div>
     <div class="controls">
-      <input type="number" id="betAmount" placeholder="Bet $" min="1" />
-      <input type="number" id="betNumber" placeholder="Number (0-36)" min="0" max="36"/>
-      <button id="spinButton">Spin the Wheel</button>
+      <input type="number" id="betAmount" placeholder="Bet Amount" />
+      <input type="number" id="betNumber" placeholder="Number (0-36)" />
+      <button id="spinButton">Spin</button>
     </div>
-
     <div class="roulette-wrapper">
-      <div class="wheel" id="wheel">
-        <div class="numbers"></div>
-        <div class="ball" id="ball"></div>
-      </div>
+      <div class="wheel" id="wheel"></div>
+      <div class="ball" id="ball"></div>
     </div>
+    <div class="status" id="status">Waiting for your bet...</div><div class="navigation">
+  <a href="index.html">🏠 Home</a>
+  <a href="blackjack.html">🃏 Blackjack</a>
+  <a href="crash.html">🚀 Crash</a>
+  <a href="mines.html">💣 Mines</a>
+  <a href="sports.html">🏈 Sportsbook</a>
+</div>
 
-    <div id="status" class="status">Place your bet and spin!</div>
-
-    <div class="navigation">
-      <a href="index.html">🏠 Home</a>
-      <a href="blackjack.html">🃏 Blackjack</a>
-      <a href="crash.html">🚀 Crash</a>
-      <a href="mines.html">💣 Mines</a>
-      <a href="sports.html">📺 Sportsbook</a>
-    </div>
-  </div>
-
-  <!-- Scripts -->
-  <script src="https://cdn.jsdelivr.net/npm/particles.js"></script>
-  <script src="roulette.js"></script>
-  <script>
-    particlesJS.load('particles-js', 'particles.json', function() {
-      console.log('Particles loaded');
-    });
-  </script>
-</body>
+  </div>  <script src="particles.min.js"></script>  <script>
+    particlesJS.load('particles-js', 'particles.json');
+  </script>  <script src="roulette.js"></script></body>
 </html>
