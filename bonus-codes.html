@@ -34,8 +34,21 @@
     }
     p {
       text-align: center;
-      margin-bottom: 30px;
       color: #cccccc;
+    }
+    .filters {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin: 15px;
+    }
+    .filters button {
+      background: #00ffff;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
     }
     .code-box {
       background: #1f1f1f;
@@ -73,48 +86,84 @@
   <a href="bonus-codes.html">🎁 Bonus Codes</a>
 </nav>
 
-<h1>🎁 Daily Bonus Codes</h1>
-<p>Claim free bonus codes from RainBet, Stake.com, Stake.us every day!</p>
+<h1>🎁 Bonus Codes</h1>
+<p>Claim free bonus codes from RainBet, Stake.com, Stake.us daily!</p>
+
+<div class="filters">
+  <button onclick="filterCodes('all')">All</button>
+  <button onclick="filterCodes('rainbet')">Rainbet</button>
+  <button onclick="filterCodes('stake.com')">Stake.com</button>
+  <button onclick="filterCodes('stake.us')">Stake.us</button>
+</div>
 
 <div id="codes-container">
   <p style="text-align: center;">Loading bonus codes...</p>
 </div>
 
 <footer>
-  &copy; 2025 RoyalEnd Casino - Play Smart, Play Fun.
+  &copy; 2025 RoyalEnd Casino — All rights reserved.
 </footer>
 
 <script>
+  let codes = [];
+  let currentFilter = 'all';
+
   async function loadCodes() {
     const container = document.getElementById('codes-container');
     try {
-      const response = await fetch('https://your-replit-name.repl.co/bonus-codes'); // Replace this
-      const codes = await response.json();
-
-      if (codes.length === 0) {
-        container.innerHTML = '<p>No bonus codes yet. Check back later!</p>';
-        return;
-      }
-
-      container.innerHTML = '';
-      codes.forEach(code => {
-        const box = document.createElement('div');
-        box.className = 'code-box';
-        box.innerHTML = `
-          <h2>${code.code}</h2>
-          <p>Status: <span class="${code.claimed ? 'claimed' : 'unclaimed'}">${code.claimed ? 'Claimed ❌' : 'Not Claimed ✅'}</span></p>
-          <p>Dropped: ${new Date(code.time).toLocaleString()}</p>
-          <p>Wager Requirement: ${code.wager || 'N/A'}</p>
-        `;
-        container.appendChild(box);
-      });
+      const res = await fetch('https://your-replit-name.repl.co/bonus-codes');
+      codes = await res.json();
+      displayCodes();
     } catch (err) {
       container.innerHTML = '<p style="color:red;">Failed to load bonus codes.</p>';
     }
   }
 
+  function filterCodes(site) {
+    currentFilter = site;
+    displayCodes();
+  }
+
+  function displayCodes() {
+    const container = document.getElementById('codes-container');
+    container.innerHTML = '';
+    let filtered = codes;
+
+    if (currentFilter !== 'all') {
+      filtered = codes.filter(c => c.code.toLowerCase().includes(currentFilter));
+    }
+
+    filtered.sort((a, b) => new Date(b.time) - new Date(a.time));
+
+    if (filtered.length === 0) {
+      container.innerHTML = '<p>No bonus codes found.</p>';
+      return;
+    }
+
+    filtered.forEach(code => {
+      const box = document.createElement('div');
+      box.className = 'code-box';
+      box.innerHTML = `
+        <h2>${code.code}</h2>
+        <p>Status: <span class="${code.claimed ? 'claimed' : 'unclaimed'}">${code.claimed ? 'Claimed ❌' : 'Not Claimed ✅'}</span></p>
+        <p>Dropped: ${new Date(code.time).toLocaleString()}</p>
+        <button onclick="markClaimed('${code.code}')">Mark as Claimed</button>
+      `;
+      container.appendChild(box);
+    });
+  }
+
+  function markClaimed(codeText) {
+    const code = codes.find(c => c.code === codeText);
+    if (code) {
+      code.claimed = true;
+      displayCodes();
+      alert('✅ Marked as claimed (local only)');
+    }
+  }
+
   loadCodes();
-  setInterval(loadCodes, 10000); // Refresh every 10 seconds
+  setInterval(loadCodes, 10000);
 </script>
 
 </body>
