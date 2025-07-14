@@ -15,16 +15,16 @@ async function fetchBonusCodes() {
         }
 
         codes.forEach(code => {
-            const div = document.createElement('div');
-            div.className = 'code-entry ' + (code.claimed ? 'claimed' : '');
-            div.innerHTML = `
-                <p><b>${code.site.toUpperCase()}</b> - ${code.code}</p>
-                <p class="status">${code.claimed ? 'CLAIMED ❌' : 'UNCLAIMED ✅'}</p>
-                <p class="wager">Wager: ${code.wager}</p>
-                <p class="timestamp">${code.timestamp}</p>
-            `;
-            container.appendChild(div);
-        });
+    const div = document.createElement('div');
+    div.className = 'code-entry';
+    div.innerHTML = `
+        <p><b>${code.site.toUpperCase()}</b> — ${code.code}</p>
+        <p class="status">Status: ${code.status.includes('Unclaimed') ? '✅ UNCLAIMED' : '❌ CLAIMED'}</p>
+        <p class="wager">Wager: ${code.wager}</p>
+        <p class="timestamp">Posted: ${code.timestamp}</p>
+    `;
+    container.appendChild(div);
+});
 
     } catch (error) {
         console.error('Error fetching bonus codes:', error);
