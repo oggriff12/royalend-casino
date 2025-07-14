@@ -23,10 +23,17 @@ button { background: #00ffc3; color: #000; padding: 10px; border: none; border-r
 <header class="section">
 <h1>🏀 RoyalEnd Sportsbook</h1>
 <p>Play with fake coins, live sports streams, daily picks, and bonuses!</p>
-<div style="text-align:right; font-weight:bold; color:#00ffc3;">💰 Balance: $100.00</div>
+<div style="text-align:right; font-weight:bold; color:#00ffc3;">
+  💰 Balance: $<span id="balanceDisplay">0</span> |
+  <a href="login.html" id="loginLink" style="color:#00ffc3;">🔑 Login</a>
+  <button id="logoutBtn" style="display:none;">🚪 Logout</button>
+</div>
 </header>
 
-<div class="section"><h2>📣 Bonus Event</h2><p>🔥 Double Coins on NBA Finals bets all week!</p></div>
+<div class="section">
+<h2>🎫 Bet Slips</h2>
+<p>No active bets. Place your bets from the live games section!</p>
+</div>
 
 <div class="section"><h2>🏆 Featured Match</h2><p>Lakers vs Celtics - Tipoff 8PM EST <br><a href="#stream" style="color:lime">Watch Live ▶️</a></p></div>
 
@@ -83,6 +90,23 @@ button { background: #00ffc3; color: #000; padding: 10px; border: none; border-r
 </div>
 
 <script>
+let balance = parseFloat(localStorage.getItem('walletBalance')) || 100;
+document.getElementById('balanceDisplay').innerText = balance.toFixed(2);
+
+const loginLink = document.getElementById('loginLink');
+const logoutBtn = document.getElementById('logoutBtn');
+if(localStorage.getItem('loggedIn') === 'true') {
+    loginLink.style.display = 'none';
+    logoutBtn.style.display = 'inline-block';
+} else {
+    loginLink.style.display = 'inline-block';
+    logoutBtn.style.display = 'none';
+}
+logoutBtn.onclick = () => {
+    localStorage.setItem('loggedIn', 'false');
+    window.location.reload();
+};
+
 function updateCountdown() {
 const end = new Date("2025-07-15T20:00:00Z").getTime();
 setInterval(() => {
