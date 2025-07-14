@@ -251,5 +251,30 @@
 
     updateCountdown('countdown1', '2025-07-15T20:00:00');
     updateCountdown('countdown2', '2025-07-15T19:00:00');
+    <script>
+async function fetchUpcomingGames() {
+    const res = await fetch('https://www.thesportsdb.com/api/v1/json/123/eventsnextleague.php?id=4387');
+    const data = await res.json();
+    return data.events || [];
+}
+
+async function renderUpcomingGames() {
+    const grid = document.getElementById("liveGamesGrid");
+    const games = await fetchUpcomingGames();
+
+    if (!grid) return;
+
+    grid.innerHTML = games.map(game => `
+        <div class="game-card">
+            <h3>${game.strEvent}</h3>
+            <p>🏀 ${game.dateEvent} - ${game.strTime}</p>
+            <p>📍 ${game.strVenue}</p>
+        </div>
+    `).join('');
+}
+
+renderUpcomingGames();
+setInterval(renderUpcomingGames, 15000);
+</script>
   </script></body>
 </html>
