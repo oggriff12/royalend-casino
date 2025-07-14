@@ -30,48 +30,45 @@
     h1 {
       text-align: center;
       margin-top: 20px;
-      color: #00ffff;
     }
     p {
       text-align: center;
-      color: #cccccc;
+      margin-bottom: 20px;
     }
     .filters {
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-      margin: 15px;
+      text-align: center;
+      margin-bottom: 20px;
     }
     .filters button {
-      background: #00ffff;
-      border: none;
-      padding: 8px 12px;
+      margin: 5px;
+      padding: 10px;
+      background: #1a1a1a;
+      color: #00ffff;
+      border: 2px solid #00ffff;
       border-radius: 8px;
-      font-weight: bold;
       cursor: pointer;
+      font-weight: bold;
+    }
+    .filters button:hover {
+      background: #00ffff;
+      color: #0d0d0d;
     }
     .code-box {
-      background: #1f1f1f;
-      border: 2px solid #00ffff;
-      border-radius: 12px;
-      width: 90%;
-      max-width: 500px;
-      margin: 20px auto;
-      padding: 20px;
-      box-shadow: 0 0 15px #00ffff;
-      color: #ffffff;
-    }
-    .claimed {
-      color: #ff4444;
-    }
-    .unclaimed {
-      color: #00ff99;
+      background: #1a1a1a;
+      margin: 10px auto;
+      width: 80%;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #00ffff;
+      font-size: 1.1em;
     }
     footer {
       text-align: center;
-      color: #666;
-      font-size: 14px;
-      margin: 30px 0;
+      padding: 15px;
+      background: #1a1a1a;
+      color: #00ffff;
+      box-shadow: 0 -5px 15px #00ffff;
+      margin-top: 30px;
     }
   </style>
 </head>
@@ -79,9 +76,9 @@
 
 <nav>
   <a href="index.html">🏠 Home</a>
-  <a href="sportbook.html">🏀 Sportsbook</a>
+  <a href="sportsbook.html">🏀 Sportsbook</a>
   <a href="leaderboard.html">🏆 Leaderboard</a>
-  <a href="blackjack.html">🃏 Blackjack</a>
+  <a href="blackjack.html">🂡 Blackjack</a>
   <a href="crash.html">💥 Crash</a>
   <a href="bonus-codes.html">🎁 Bonus Codes</a>
 </nav>
@@ -97,7 +94,7 @@
 </div>
 
 <div id="codes-container">
-  <p style="text-align: center;">Loading bonus codes...</p>
+  <p style="text-align:center;">Loading bonus codes...</p>
 </div>
 
 <footer>
@@ -105,65 +102,56 @@
 </footer>
 
 <script>
-  let codes = [];
-  let currentFilter = 'all';
+let codes = [];
+let currentFilter = 'all';
 
-  async function loadCodes() {
-    const container = document.getElementById('codes-container');
-    try {
-      const res = await fetch('https://your-replit-name.repl.co/bonus-codes');
-      codes = await res.json();
-      displayCodes();
-    } catch (err) {
-      container.innerHTML = '<p style="color:red;">Failed to load bonus codes.</p>';
-    }
-  }
-
-  function filterCodes(site) {
-    currentFilter = site;
+async function loadCodes() {
+  const container = document.getElementById('codes-container');
+  try {
+    const res = await fetch('https://bonus-code-telegram-bot.blacknyeem.repl.co/bonus-codes');
+    codes = await res.json();
     displayCodes();
+  } catch (err) {
+    container.innerHTML = '<p style="color:red;">Failed to load bonus codes.</p>';
+  }
+}
+
+function filterCodes(site) {
+  currentFilter = site;
+  displayCodes();
+}
+
+function displayCodes() {
+  const container = document.getElementById('codes-container');
+  container.innerHTML = '';
+  let filtered = codes;
+
+  if (currentFilter !== 'all') {
+    filtered = codes.filter(c => c.site.toLowerCase().includes(currentFilter));
   }
 
-  function displayCodes() {
-    const container = document.getElementById('codes-container');
-    container.innerHTML = '';
-    let filtered = codes;
+  filtered.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
 
-    if (currentFilter !== 'all') {
-      filtered = codes.filter(c => c.code.toLowerCase().includes(currentFilter));
-    }
-
-    filtered.sort((a, b) => new Date(b.time) - new Date(a.time));
-
-    if (filtered.length === 0) {
-      container.innerHTML = '<p>No bonus codes found.</p>';
-      return;
-    }
-
-    filtered.forEach(code => {
-      const box = document.createElement('div');
-      box.className = 'code-box';
-      box.innerHTML = `
-        <h2>${code.code}</h2>
-        <p>Status: <span class="${code.claimed ? 'claimed' : 'unclaimed'}">${code.claimed ? 'Claimed ❌' : 'Not Claimed ✅'}</span></p>
-        <p>Dropped: ${new Date(code.time).toLocaleString()}</p>
-        <button onclick="markClaimed('${code.code}')">Mark as Claimed</button>
-      `;
-      container.appendChild(box);
-    });
+  if (filtered.length === 0) {
+    container.innerHTML = '<p>No bonus codes found.</p>';
+    return;
   }
 
-  function markClaimed(codeText) {
-    const code = codes.find(c => c.code === codeText);
-    if (code) {
-      code.claimed = true;
-      displayCodes();
-      alert('✅ Marked as claimed (local only)');
-    }
-  }
+  filtered.forEach(code => {
+    const box = document.createElement('div');
+    box.className = 'code-box';
+    box.innerHTML = `
+      <strong>Site:</strong> ${code.site}<br>
+      <strong>Code:</strong> ${code.code}<br>
+      <strong>Wager:</strong> ${code.wager}<br>
+      <strong>Status:</strong> ${code.status}<br>
+      <strong>Posted:</strong> ${new Date(code.timestamp).toLocaleString()}
+    `;
+    container.appendChild(box);
+  });
+}
 
-  loadCodes();
-  setInterval(loadCodes, 10000);
+loadCodes();
 </script>
 
 </body>
