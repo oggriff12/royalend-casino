@@ -32,7 +32,7 @@
     }
 
     .section {
-      max-width: 800px;
+      max-width: 900px;
       margin: 40px auto;
       text-align: center;
     }
@@ -42,13 +42,51 @@
       text-shadow: 0 0 8px cyan;
     }
 
+    .games-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .game-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 20px;
+      border-radius: 12px;
+      width: 220px;
+      text-align: center;
+      box-shadow: 0 0 8px rgba(0, 255, 255, 0.2);
+    }
+
+    .game-card h3 {
+      margin-bottom: 10px;
+    }
+
+    .game-card p {
+      font-size: 14px;
+      margin-bottom: 15px;
+    }
+
+    .game-card a {
+      display: inline-block;
+      background: #00ffc3;
+      color: #000;
+      text-decoration: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-weight: bold;
+      transition: background 0.3s ease;
+    }
+
+    .game-card a:hover {
+      background: #00c2a8;
+    }
+
     a {
       color: #aa88ff;
       text-decoration: none;
-    }
-
-    a:hover {
-      text-decoration: underline;
     }
 
     #authSection {
@@ -56,6 +94,10 @@
       width: 100%;
       max-width: 1100px;
       margin-bottom: 20px;
+    }
+
+    button {
+      font-family: 'Orbitron', sans-serif;
     }
   </style>
 </head>
@@ -74,53 +116,59 @@
 
     <header class="section">
       <h1>🎰 RoyalEnd Casino</h1>
-      <p>Experience a fun and interactive casino filled with games, rewards, and no real risk. Log in to start earning fake coins, play exciting games, and climb the leaderboard!</p>
+      <p>Experience fun casino games with no real risk. Earn fake coins, unlock bonuses, and climb the leaderboard!</p>
     </header>
 
     <section class="section">
-      <h2>🏛️ About RoyalEnd Casino</h2>
-      <p>
-        RoyalEnd Casino is a fun, interactive web-based gaming experience where all games run on <strong>fake currency</strong>.
-        Your balance is purely for entertainment — there’s no real gambling or financial risk involved!
-      </p>
-      <p>
-        We designed RoyalEnd to bring excitement and casino vibes to your screen without involving real money or gambling.
-        You can earn bonus coins, explore new games, and challenge your luck every day!
-      </p>
-      <p>
-        Want to support us? ❤️ By purchasing casino coins, you’re helping us grow, add more exciting features,
-        and keep the site online. Every contribution goes directly toward development, hosting, and expanding the RoyalEnd experience.
-      </p>
-      <p><strong>Play. Support. Enjoy. 🎉</strong></p>
-    </section>
-
-    <section class="section">
       <h2>🎮 Games Overview</h2>
-      <p>
-        Play <a href="blackjack.html">Blackjack</a>, <a href="roulette.html">Roulette</a>, <a href="crash.html">Crash</a>, 
-        <a href="mines.html">Mines</a>, and <a href="dice.html">Dice</a> — all using free casino coins. 
-        Enjoy smooth animations and fast-paced gameplay!
-      </p>
+      <p>Choose a game below to start playing:</p>
+      <div class="games-grid">
+        <div class="game-card">
+          <h3>🃏 Blackjack</h3>
+          <p>Classic 21 game vs the dealer. Double down, split & win big!</p>
+          <a href="blackjack.html">Play Now</a>
+        </div>
+        <div class="game-card">
+          <h3>🎯 Roulette</h3>
+          <p>Place your bets on red, black, or numbers. Spin the wheel!</p>
+          <a href="roulette.html">Play Now</a>
+        </div>
+        <div class="game-card">
+          <h3>📉 Crash</h3>
+          <p>Watch the multiplier rise… Cash out before it crashes!</p>
+          <a href="crash.html">Play Now</a>
+        </div>
+        <div class="game-card">
+          <h3>💣 Mines</h3>
+          <p>Pick safe tiles and avoid bombs. Risk and reward!</p>
+          <a href="mines.html">Play Now</a>
+        </div>
+        <div class="game-card">
+          <h3>🎲 Dice</h3>
+          <p>Roll under your target to win. Set your odds & roll!</p>
+          <a href="dice.html">Play Now</a>
+        </div>
+      </div>
     </section>
 
     <section class="section">
       <h2>💸 Bonuses & Rewards</h2>
-      <p>Log in daily to claim bonuses, earn top player spots, and climb the leaderboard. The more you play, the more you earn!</p>
+      <p>Log in daily to claim bonuses, earn top player spots, and climb the leaderboard.</p>
     </section>
 
     <section class="section">
       <h2>🛒 Coin Store</h2>
-      <p>Out of coins? No worries. Visit our store to top up your casino coins and keep the fun rolling!</p>
+      <p>Need coins? Top up in the store to keep the fun rolling!</p>
     </section>
 
     <section class="section">
       <h2>🧠 How It Works</h2>
-      <p>This casino runs on fake money — there’s no real gambling or risk. Everything is purely for fun, skill, and entertainment.</p>
+      <p>This is a fake-currency casino. All games are free to play for fun and entertainment only.</p>
     </section>
 
     <section class="section">
       <h2>❤️ Support Us</h2>
-      <p>Buying coins helps us fund hosting, new features, and game development. Thank you for helping us grow!</p>
+      <p>Buying coins helps fund our hosting, new features, and game development. Thank you!</p>
     </section>
   </div>
 
@@ -131,7 +179,6 @@
       console.log('Particles loaded.');
     });
   </script>
-
   <script type="module" src="auth.js"></script>
 </body>
 </html>
