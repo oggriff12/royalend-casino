@@ -1,150 +1,77 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>🏀 RoyalEnd Sportsbook</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RoyalEnd Sportsbook</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
   <style>
-    body {
-      margin: 0;
-      font-family: 'Orbitron', sans-serif;
-      background-color: #0f0f1b;
-      color: #fff;
+    body { margin: 0; font-family: 'Orbitron', sans-serif; background: #0f0f1b; color: #fff; overflow-x: hidden; }
+    header { text-align: center; margin: 20px; }
+    h1 { color: cyan; text-shadow: 0 0 8px cyan; }
+    .balance { float: right; margin: 20px; color: #00ffc3; }
+    .notifications, .featured-match, .games-section, .stream-section, .chat-section, .countdowns, .overview, .newsletter {
+      max-width: 1000px; margin: 20px auto; padding: 20px; border-radius: 12px; background: #1a1a2e; box-shadow: 0 0 10px #00ffc3;
     }
-    header {
-      text-align: center;
-      padding: 30px;
-      color: cyan;
-      text-shadow: 0 0 10px cyan;
-    }
-    .balance, .notifications {
-      text-align: center;
-      margin-bottom: 10px;
-      font-size: 16px;
-      color: #00ffc3;
-    }
-    .section-wrapper {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 20px;
-      padding: 20px;
-    }
-    .games, .stream {
-      flex: 1 1 450px;
-      min-height: 450px;
-      background: #1a1a2f;
-      border: 2px solid #00ffc3;
-      border-radius: 12px;
-      padding: 15px;
-      box-shadow: 0 0 15px #00ffc3;
-    }
-    .games h2, .stream h2 {
-      color: cyan;
-      text-shadow: 0 0 8px cyan;
-    }
-    .game-card {
-      background: #222;
-      margin: 10px 0;
-      padding: 10px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px #00ffc3;
-    }
-    .fallback {
-      text-align: center;
-      margin-top: 20px;
-      color: #ccc;
-      font-size: 18px;
-    }
-    iframe {
-      width: 100%;
-      height: 350px;
-      border: none;
-      border-radius: 10px;
-    }
-    .nav-footer {
-      display: flex;
-      justify-content: center;
-      gap: 30px;
-      margin: 30px 0;
-    }
-    .nav-footer a {
-      color: #00ffc3;
-      text-decoration: none;
-      font-weight: bold;
-      font-size: 18px;
-    }
+    .live-games, .stream-box { display: inline-block; width: 48%; vertical-align: top; }
+    .stream-box iframe { width: 100%; height: 300px; border-radius: 10px; }
+    .filters button { margin: 5px; background: #00ffc3; color: #000; border: none; padding: 10px; border-radius: 6px; font-weight: bold; cursor: pointer; }
+    .footer-nav { text-align: center; margin: 20px; }
+    .footer-nav a { margin: 0 15px; color: #00ffc3; text-decoration: none; }
+    .newsletter input { width: 70%; padding: 10px; margin-right: 10px; border-radius: 5px; border: none; }
+    .newsletter button { padding: 10px; border-radius: 5px; border: none; background: #00ffc3; font-weight: bold; cursor: pointer; }
   </style>
 </head>
 <body>
-
-<header>
-  <h1>🏀 RoyalEnd Sportsbook</h1>
-  <p>Live worldwide games, odds, streams, and chats — bet virtual coins!</p>
-</header>
-
-<div class="balance">💰 Balance: <span id="walletBalance">$100.00</span></div>
-
-<div class="notifications">📢 Upcoming Event: Bonus on NBA Finals bets this week!</div>
-
-<div class="section-wrapper">
-  <div class="games">
+  <header>
+    <h1>🏀 RoyalEnd Sportsbook</h1>
+    <p>Live worldwide games, odds, streams, and chats — bet virtual coins!</p>
+    <p class="balance">💰 Balance: $100.00</p>
+  </header>  <div class="notifications">📢 Upcoming Event: Bonus on NBA Finals bets this week!</div>  <div class="featured-match">🔥 <b>Featured Match</b>: Lakers vs Celtics – Tipoff at 8:00 PM EST
+    <br><a href="#stream" style="color:#00ffc3">Watch Live</a>
+  </div>  <div class="filters">
+    <button onclick="filterGames('all')">All</button>
+    <button onclick="filterGames('nba')">NBA</button>
+    <button onclick="filterGames('nfl')">NFL</button>
+    <button onclick="filterGames('mlb')">MLB</button>
+  </div>  <div class="live-games games-section" id="liveGames">
     <h2>📺 Live Basketball Games</h2>
-    <div id="liveGamesGrid"></div>
-    <div id="fallbackMessage" class="fallback" style="display:none;">No live games available. Check back soon!</div>
-  </div>
-  <div class="stream">
+    <div id="gamesGrid">Loading live games...</div>
+  </div>  <div class="stream-section stream-box" id="stream">
     <h2>🎥 Live Stream</h2>
-    <iframe src="https://www.youtube.com/embed/2zYztZoPh-s?autoplay=1&mute=1&loop=1" allowfullscreen></iframe>
-  </div>
-</div>
-
-<div class="nav-footer">
-  <a href="index.html">🏠 Home</a>
-  <a href="sportsbook.html">🏀 Sportsbook</a>
-  <a href="leaderboard.html">🏆 Leaderboard</a>
-</div>
-
-<script>
-  async function fetchLiveGames() {
-    try {
-      const res = await fetch('https://www.thesportsdb.com/api/v1/json/1/livescore.php?s=Basketball');
-      const data = await res.json();
-      return data.events || [];
-    } catch (err) {
-      console.error('Error fetching live games:', err);
-      return [];
+    <iframe src="https://www.youtube.com/embed/nyd-xznCpJc?autoplay=1&mute=1" allowfullscreen></iframe>
+  </div>  <div class="chat-section">
+    <h2>💬 Chat</h2>
+    <textarea placeholder="Chat here..." style="width:100%; height:100px;"></textarea>
+  </div>  <div class="countdowns">
+    <h2>⏱️ Countdown to Featured Match</h2>
+    <p id="countdown"></p>
+  </div>  <div class="overview">
+    <h2>🎰 Casino Overview</h2>
+    <p>Play fun casino games using fake coins: Blackjack, Roulette, Dice, Mines, and Crash. Enjoy bonuses, leaderboards, and daily rewards!</p>
+  </div>  <div class="newsletter">
+    <h2>📧 Free Newsletter Picks</h2>
+    <p>Get daily sports picks straight to your inbox — free forever!</p>
+    <input type="email" placeholder="Enter your email">
+    <button>Subscribe</button>
+  </div>  <div class="footer-nav">
+    <a href="index.html">🏠 Home</a>
+    <a href="sportsbook.html">🏀 Sportsbook</a>
+    <a href="leaderboard.html">🏆 Leaderboard</a>
+  </div>  <script>
+    function filterGames(type) {
+      alert('Filter by: ' + type + ' (Demo)');
     }
-  }
-
-  async function renderLiveGames() {
-    const grid = document.getElementById('liveGamesGrid');
-    const fallback = document.getElementById('fallbackMessage');
-    const games = await fetchLiveGames();
-
-    if (!grid) return;
-
-    if (games.length === 0) {
-      grid.innerHTML = '';
-      fallback.style.display = 'block';
-      return;
-    } else {
-      fallback.style.display = 'none';
+    function countdownTimer() {
+      const matchDate = new Date('2025-07-15T20:00:00').getTime();
+      setInterval(() => {
+        const now = new Date().getTime();
+        const distance = matchDate - now;
+        if (distance < 0) return document.getElementById('countdown').innerText = 'Game Started!';
+        const mins = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const secs = Math.floor((distance % (1000 * 60)) / 1000);
+        document.getElementById('countdown').innerText = mins + 'm ' + secs + 's';
+      }, 1000);
     }
-
-    grid.innerHTML = games.map(game => `
-      <div class="game-card">
-        <h3>${game.strEvent}</h3>
-        <p>🏆 League: ${game.strLeague}</p>
-        <p>🕒 Time: ${game.strTime}</p>
-        <p>📍 Venue: ${game.strVenue}</p>
-      </div>
-    `).join('');
-  }
-
-  renderLiveGames();
-  setInterval(renderLiveGames, 20000);
-</script>
-
-</body>
+    countdownTimer();
+  </script></body>
 </html>
