@@ -11,6 +11,7 @@
       font-family: 'Orbitron', sans-serif;
       background-color: #0f0f1b;
       color: #fff;
+      overflow-x: hidden;
     }
 
     #particles-js {
@@ -32,7 +33,7 @@
     }
 
     .section {
-      max-width: 900px;
+      max-width: 1000px;
       margin: 40px auto;
       text-align: center;
     }
@@ -99,6 +100,13 @@
     button {
       font-family: 'Orbitron', sans-serif;
     }
+
+    footer {
+      text-align: center;
+      margin: 50px 0 20px;
+      font-size: 13px;
+      opacity: 0.5;
+    }
   </style>
 </head>
 <body>
@@ -114,71 +122,91 @@
       <button onclick="logoutUser()" id="logoutBtn" style="display: none;">🚪 Logout</button>
     </div>
 
+    <!-- Header -->
     <header class="section">
       <h1>🎰 RoyalEnd Casino</h1>
-      <p>Experience fun casino games with no real risk. Earn fake coins, unlock bonuses, and climb the leaderboard!</p>
+      <p>Experience thrilling casino games with no real risk! Use free coins, earn rewards, and climb the leaderboard.</p>
     </header>
 
+    <!-- Game Section -->
     <section class="section">
       <h2>🎮 Games Overview</h2>
-      <p>Choose a game below to start playing:</p>
+      <p>Choose a game to begin playing instantly:</p>
       <div class="games-grid">
         <div class="game-card">
           <h3>🃏 Blackjack</h3>
-          <p>Classic 21 game vs the dealer. Double down, split & win big!</p>
+          <p>Classic 21 vs the dealer. Split, double down & win big.</p>
           <a href="blackjack.html">Play Now</a>
         </div>
         <div class="game-card">
           <h3>🎯 Roulette</h3>
-          <p>Place your bets on red, black, or numbers. Spin the wheel!</p>
+          <p>Spin and win! Bet on numbers, red/black or green.</p>
           <a href="roulette.html">Play Now</a>
         </div>
         <div class="game-card">
           <h3>📉 Crash</h3>
-          <p>Watch the multiplier rise… Cash out before it crashes!</p>
+          <p>Watch the multiplier rise. Cash out before it explodes!</p>
           <a href="crash.html">Play Now</a>
         </div>
         <div class="game-card">
           <h3>💣 Mines</h3>
-          <p>Pick safe tiles and avoid bombs. Risk and reward!</p>
+          <p>Click tiles to uncover rewards. Avoid the mines!</p>
           <a href="mines.html">Play Now</a>
         </div>
         <div class="game-card">
           <h3>🎲 Dice</h3>
-          <p>Roll under your target to win. Set your odds & roll!</p>
+          <p>Set your odds. Roll under to win coins!</p>
           <a href="dice.html">Play Now</a>
         </div>
       </div>
     </section>
 
+    <!-- Sportsbook Section -->
+    <section class="section">
+      <h2>🏈 Sportsbook</h2>
+      <p>Bet on live sports, check odds, and follow games in real time. Football, basketball, MMA and more!</p>
+      <a href="sportsbook.html" style="background:#00ffc3; color:#000; padding:10px 20px; border-radius:8px; text-decoration:none; font-weight:bold;">Enter Sportsbook</a>
+    </section>
+
+    <!-- Bonuses -->
     <section class="section">
       <h2>💸 Bonuses & Rewards</h2>
-      <p>Log in daily to claim bonuses, earn top player spots, and climb the leaderboard.</p>
+      <p>Log in daily to claim bonuses, rise on the leaderboard, and unlock VIP rewards.</p>
     </section>
 
+    <!-- Coin Store -->
     <section class="section">
       <h2>🛒 Coin Store</h2>
-      <p>Need coins? Top up in the store to keep the fun rolling!</p>
+      <p>Out of coins? Top up using the free coin faucet or support our project in the store.</p>
     </section>
 
+    <!-- How it works -->
     <section class="section">
       <h2>🧠 How It Works</h2>
-      <p>This is a fake-currency casino. All games are free to play for fun and entertainment only.</p>
+      <p>This casino runs on fake coins. No real money involved — 100% fun & entertainment!</p>
     </section>
 
+    <!-- Support -->
     <section class="section">
       <h2>❤️ Support Us</h2>
-      <p>Buying coins helps fund our hosting, new features, and game development. Thank you!</p>
+      <p>Buy coins to fund hosting, updates, and game development. Help us grow!</p>
     </section>
+
+    <!-- Footer -->
+    <footer>
+      &copy; 2025 RoyalEnd Casino — All rights reserved
+    </footer>
   </div>
 
-  <!-- Scripts -->
+  <!-- Particles Script -->
   <script src="https://cdn.jsdelivr.net/npm/particles.js"></script>
   <script>
     particlesJS.load('particles-js', 'particles-config.json', function () {
-      console.log('Particles loaded.');
+      console.log('particles.js config loaded');
     });
   </script>
+
+  <!-- Firebase Auth Script -->
   <script type="module" src="auth.js"></script>
 </body>
 </html>
