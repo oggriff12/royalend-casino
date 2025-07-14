@@ -1,5 +1,5 @@
 async function fetchBonusCodes() {
-    const response = await fetch('https://YOUR_REPLIT_URL/api/bonus-codes');
+    const response = await fetch('https://bonus-code-telegram-bot--blacknyeem.repl.co/bonus-codes')
     const codes = await response.json();
     const container = document.getElementById('codes-container');
     container.innerHTML = '';
