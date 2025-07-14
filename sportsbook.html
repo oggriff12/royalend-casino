@@ -45,6 +45,14 @@
       margin: 0 auto;
       padding: 20px;
     }
+    .match-section {
+      margin-bottom: 40px;
+    }
+    .match-section h2 {
+      border-bottom: 1px solid #00ffc3;
+      padding-bottom: 5px;
+      margin-bottom: 15px;
+    }
     .match-card {
       background: rgba(255,255,255,0.05);
       padding: 15px;
@@ -111,116 +119,85 @@
       resize: none;
       font-family: inherit;
     }
-  </style>
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getFirestore, collection, addDoc, query, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";const firebaseConfig = {
-  apiKey: "YOUR_FIREBASE_API_KEY",
-  authDomain: "YOUR_FIREBASE_AUTH_DOMAIN",
-  projectId: "YOUR_FIREBASE_PROJECT_ID",
-  storageBucket: "YOUR_FIREBASE_BUCKET",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-document.addEventListener('DOMContentLoaded', () => {
-  const chatBox = document.querySelector(".chat-box textarea");
-  chatBox.addEventListener("keydown", async (e) => {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault();
-      const msg = chatBox.value.trim();
-      if (msg.length > 0) {
-        await addDoc(collection(db, "sportsbook-chat"), {
-          text: msg,
-          timestamp: new Date()
-        });
-        chatBox.value = "";
-      }
+    .bet-history {
+      max-width: 900px;
+      margin: 0 auto 30px;
+      padding: 10px;
+      background: rgba(255,255,255,0.03);
+      border-radius: 10px;
+      font-size: 13px;
     }
-  });
-});
-
-  </script>
+    .featured-match {
+      max-width: 900px;
+      margin: 20px auto;
+      background: rgba(0,255,255,0.05);
+      border: 1px solid #00ffc3;
+      border-radius: 10px;
+      padding: 15px;
+    }
+    .featured-match h2 {
+      color: #00ffc3;
+      margin-bottom: 10px;
+    }
+  </style>
 </head>
 <body>
   <header>
     <h1>🏈 RoyalEnd Sportsbook</h1>
-    <p>Live odds, streams, bets & chat — bet with virtual coins!</p>
+    <p>Live odds, streams, bets, featured matches & chat — bet with virtual coins!</p>
   </header>  <div class="wallet-display">
-    💰 Balance: <span id="walletBalance">Loading...</span>
+    💰 Balance: <span id="walletBalance">$100.00</span>
+  </div>  <div class="featured-match">
+    <h2>🔥 Featured Match</h2>
+    <p>Lakers vs Celtics — Tipoff at 8:00 PM EST</p>
+    <p><strong>Watch Live</strong>: <a href="#stream">Scroll to Stream</a></p>
   </div>  <div class="filter-bar">
     <button class="filter-btn" onclick="filterBy('all')">All</button>
     <button class="filter-btn" onclick="filterBy('basketball')">NBA</button>
     <button class="filter-btn" onclick="filterBy('football')">NFL</button>
     <button class="filter-btn" onclick="filterBy('baseball')">MLB</button>
   </div>  <div class="odds-container" id="oddsContainer">
-    <p>Loading live odds...</p>
+    <div class="match-section">
+      <h2>🏀 NBA Games</h2>
+      <div class="match-card">
+        <h3>Lakers vs Warriors <span style="color:lime">🟢 Live</span></h3>
+        <p class="match-info">NBA • Tipoff: 8:00 PM EST</p>
+        <p>Odds: Lakers: +2.5 | Warriors: -2.5</p>
+        <div class="bet-section">
+          <input type="number" placeholder="Bet $" />
+          <button>Place Bet</button>
+        </div>
+      </div>
+    </div>
+    <div class="match-section">
+      <h2>🏈 NFL Games</h2>
+      <div class="match-card">
+        <h3>Patriots vs Jets</h3>
+        <p class="match-info">NFL • 7:00 PM EST</p>
+        <p>Odds: Patriots: -3.5 | Jets: +3.5</p>
+        <div class="bet-section">
+          <input type="number" placeholder="Bet $" />
+          <button>Place Bet</button>
+        </div>
+      </div>
+    </div>
   </div>  <iframe
+    id="stream"
     class="stream"
     src="https://player.twitch.tv/?channel=espnesports&parent=yourdomain.com"
     allowfullscreen>
-  </iframe>  <div class="chat-box">
+  </iframe>  <div class="bet-history">
+    <strong>Recent Bets:</strong>
+    <ul>
+      <li>🧑 Griffin bet $50 on Lakers to win</li>
+      <li>🧑 User123 bet $25 on Patriots spread</li>
+    </ul>
+  </div>  <div class="chat-box">
     <h3>💬 Chat</h3>
     <textarea placeholder="Type your message and press Enter..."></textarea>
   </div>  <script>
-    let allOdds = [];
-
-    function loadWallet() {
-      let balance = parseFloat(localStorage.getItem("walletBalance")) || 100;
-      document.getElementById("walletBalance").textContent = `$${balance.toFixed(2)}`;
-    }
-
-    async function fetchOdds() {
-      try {
-        const res = await fetch(
-          'https://api.the-odds-api.com/v4/sports/upcoming/odds/?regions=us&markets=spreads,totals,h2h&apiKey=YOUR_API_KEY'
-        );
-        const data = await res.json();
-        allOdds = data;
-        renderOdds('all');
-      } catch (err) {
-        document.getElementById('oddsContainer').innerHTML = '<p style="color:red">Failed to load odds. Check your API key.</p>';
-      }
-    }
-
-    function renderOdds(sport) {
-      const container = document.getElementById('oddsContainer');
-      container.innerHTML = '';
-      const filtered = sport === 'all' ? allOdds : allOdds.filter(g => g.sport_title.toLowerCase().includes(sport));
-
-      if (filtered.length === 0) {
-        container.innerHTML = '<p>No matches found for this sport.</p>';
-        return;
-      }
-
-      filtered.forEach(game => {
-        const teams = game.teams.join(' vs ');
-        const time = new Date(game.commence_time).toLocaleString();
-        const odds = game.bookmakers[0]?.markets[0]?.outcomes.map(o => `${o.name}: ${o.price}`).join(' | ') || 'N/A';
-
-        container.innerHTML += `
-          <div class="match-card">
-            <h3>${teams}</h3>
-            <p class="match-info">${game.sport_title} • ${time}</p>
-            <p>Odds: ${odds}</p>
-            <div class="bet-section">
-              <input type="number" min="1" placeholder="Bet Amount" />
-              <button onclick="alert('Bet placed! (simulate wallet deduction)')">Place Bet</button>
-            </div>
-          </div>
-        `;
-      });
-    }
-
-    function filterBy(sport) {
-      renderOdds(sport);
-    }
-
-    loadWallet();
-    fetchOdds();
-    setInterval(fetchOdds, 60000);
+    // Wallet setup (placeholder)
+    let balance = 100;
+    document.getElementById("walletBalance").textContent = `$${balance.toFixed(2)}`;
   </script></body>
 </html>
