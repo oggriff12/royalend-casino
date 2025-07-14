@@ -2,86 +2,77 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <title>🏀 RoyalEnd Sportsbook</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>RoyalEnd Sportsbook</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet">
   <style>
     body {
       margin: 0;
       font-family: 'Orbitron', sans-serif;
-      background: #0f0f1b;
-      color: #ffffff;
+      background-color: #0f0f1b;
+      color: #fff;
     }
     header {
       text-align: center;
-      margin-top: 20px;
+      padding: 30px;
+      color: cyan;
+      text-shadow: 0 0 10px cyan;
     }
-    header h1 {
-      font-size: 40px;
-      color: #00ffc3;
-      text-shadow: 0 0 15px #00ffc3;
-    }
-    .wallet {
-      text-align: right;
-      padding: 15px;
-      font-size: 18px;
-      color: #00ffc3;
-    }
-    .notifications {
-      margin: 10px;
-      background: #1a1a2e;
-      padding: 10px;
-      border-left: 4px solid #ffcc00;
+    .balance, .notifications {
+      text-align: center;
+      margin-bottom: 10px;
       font-size: 16px;
-    }
-    .live-section, .odds-section {
-      display: flex;
-      gap: 20px;
-      margin: 20px;
-    }
-    .games-list {
-      flex: 2;
-      background: #191924;
-      padding: 15px;
-      border-radius: 12px;
-      box-shadow: 0 0 10px #00ffc3;
-    }
-    .games-list h2 {
       color: #00ffc3;
+    }
+    .section-wrapper {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      padding: 20px;
+    }
+    .games, .stream {
+      flex: 1 1 450px;
+      min-height: 450px;
+      background: #1a1a2f;
+      border: 2px solid #00ffc3;
+      border-radius: 12px;
+      padding: 15px;
+      box-shadow: 0 0 15px #00ffc3;
+    }
+    .games h2, .stream h2 {
+      color: cyan;
+      text-shadow: 0 0 8px cyan;
     }
     .game-card {
-      background: #29293d;
-      padding: 15px;
+      background: #222;
       margin: 10px 0;
-      border-radius: 10px;
-      color: #fff;
-      box-shadow: 0 0 5px #00ffc3;
-    }
-    .game-card span {
-      color: lime;
-    }
-    .live-stream {
-      flex: 1;
-      background: #191924;
-      border-radius: 12px;
       padding: 10px;
+      border-radius: 10px;
       box-shadow: 0 0 10px #00ffc3;
     }
-    .live-stream iframe {
-      width: 100%;
-      height: 300px;
-      border: none;
-      border-radius: 8px;
-    }
-    .footer-nav {
+    .fallback {
       text-align: center;
-      margin: 20px;
+      margin-top: 20px;
+      color: #ccc;
+      font-size: 18px;
     }
-    .footer-nav a {
+    iframe {
+      width: 100%;
+      height: 350px;
+      border: none;
+      border-radius: 10px;
+    }
+    .nav-footer {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin: 30px 0;
+    }
+    .nav-footer a {
       color: #00ffc3;
-      margin: 0 10px;
       text-decoration: none;
       font-weight: bold;
+      font-size: 18px;
     }
   </style>
 </head>
@@ -92,59 +83,67 @@
   <p>Live worldwide games, odds, streams, and chats — bet virtual coins!</p>
 </header>
 
-<div class="wallet">
-  💰 Balance: $<span id="walletBalance">100.00</span>
-</div>
+<div class="balance">💰 Balance: <span id="walletBalance">$100.00</span></div>
 
-<div class="notifications">
-  📢 Upcoming Event: Bonus on NBA Finals bets this week!
-</div>
+<div class="notifications">📢 Upcoming Event: Bonus on NBA Finals bets this week!</div>
 
-<div class="live-section">
-  <div class="games-list">
+<div class="section-wrapper">
+  <div class="games">
     <h2>📺 Live Basketball Games</h2>
-    <div id="liveGames"></div>
+    <div id="liveGamesGrid"></div>
+    <div id="fallbackMessage" class="fallback" style="display:none;">No live games available. Check back soon!</div>
   </div>
-  <div class="live-stream">
+  <div class="stream">
     <h2>🎥 Live Stream</h2>
-    <iframe src="https://www.youtube.com/embed/aV27FJIdk?autoplay=1&loop=1" allowfullscreen></iframe>
+    <iframe src="https://www.youtube.com/embed/2zYztZoPh-s?autoplay=1&mute=1&loop=1" allowfullscreen></iframe>
   </div>
 </div>
 
-<div class="footer-nav">
+<div class="nav-footer">
   <a href="index.html">🏠 Home</a>
   <a href="sportsbook.html">🏀 Sportsbook</a>
   <a href="leaderboard.html">🏆 Leaderboard</a>
 </div>
 
 <script>
-let balance = 100;
-document.getElementById("walletBalance").textContent = balance.toFixed(2);
-
-async function fetchLiveGames() {
-  try {
-    const res = await fetch('https://www.thesportsdb.com/api/v1/json/123/eventsnextleague.php?id=4387');
-    const data = await res.json();
-    return data.events || [];
-  } catch {
-    return [{ strEvent: "No Live Data", dateEvent: "", strTime: "", strVenue: "Check back later" }];
+  async function fetchLiveGames() {
+    try {
+      const res = await fetch('https://www.thesportsdb.com/api/v1/json/1/livescore.php?s=Basketball');
+      const data = await res.json();
+      return data.events || [];
+    } catch (err) {
+      console.error('Error fetching live games:', err);
+      return [];
+    }
   }
-}
 
-async function renderLiveGames() {
-  const games = await fetchLiveGames();
-  const liveGames = document.getElementById("liveGames");
-  liveGames.innerHTML = games.map(game => `
-    <div class="game-card">
-      <h3>${game.strEvent}</h3>
-      <p>🗓️ ${game.dateEvent} | 🕑 ${game.strTime}</p>
-      <p>📍 ${game.strVenue}</p>
-    </div>
-  `).join('');
-}
+  async function renderLiveGames() {
+    const grid = document.getElementById('liveGamesGrid');
+    const fallback = document.getElementById('fallbackMessage');
+    const games = await fetchLiveGames();
 
-renderLiveGames();
-setInterval(renderLiveGames, 30000);
+    if (!grid) return;
+
+    if (games.length === 0) {
+      grid.innerHTML = '';
+      fallback.style.display = 'block';
+      return;
+    } else {
+      fallback.style.display = 'none';
+    }
+
+    grid.innerHTML = games.map(game => `
+      <div class="game-card">
+        <h3>${game.strEvent}</h3>
+        <p>🏆 League: ${game.strLeague}</p>
+        <p>🕒 Time: ${game.strTime}</p>
+        <p>📍 Venue: ${game.strVenue}</p>
+      </div>
+    `).join('');
+  }
+
+  renderLiveGames();
+  setInterval(renderLiveGames, 20000);
 </script>
 
 </body>
