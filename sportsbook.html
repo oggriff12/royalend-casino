@@ -31,7 +31,7 @@
     .filter-btn {
       background: #00ffc3;
       color: #000;
-      padding: 8px 16px;
+      padding: 6px 14px;
       border: none;
       border-radius: 6px;
       cursor: pointer;
@@ -43,29 +43,33 @@
     .odds-container {
       max-width: 900px;
       margin: 0 auto;
-      padding: 20px;
+      padding: 10px;
     }
     .match-section {
-      margin-bottom: 40px;
+      margin-bottom: 20px;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeInUp 0.8s ease-out forwards;
     }
     .match-section h2 {
       border-bottom: 1px solid #00ffc3;
       padding-bottom: 5px;
-      margin-bottom: 15px;
+      margin-bottom: 10px;
+      font-size: 18px;
     }
     .match-card {
       background: rgba(255,255,255,0.05);
-      padding: 15px;
+      padding: 10px;
       border-radius: 10px;
-      margin-bottom: 15px;
+      margin-bottom: 10px;
       border: 1px solid rgba(255,255,255,0.1);
     }
     .match-card h3 {
       margin: 0;
-      font-size: 18px;
+      font-size: 16px;
     }
     .match-info {
-      font-size: 14px;
+      font-size: 12px;
       opacity: 0.8;
     }
     .wallet-display {
@@ -75,17 +79,17 @@
       color: #00ffc3;
     }
     .bet-section {
-      margin-top: 10px;
+      margin-top: 6px;
     }
     .bet-section input[type='number'] {
-      padding: 6px;
+      padding: 5px;
       border-radius: 6px;
       border: none;
-      width: 100px;
-      margin-right: 10px;
+      width: 80px;
+      margin-right: 6px;
     }
     .bet-section button {
-      padding: 6px 12px;
+      padding: 5px 10px;
       border: none;
       background: #00ffc3;
       color: #000;
@@ -95,25 +99,26 @@
     }
     iframe.stream {
       width: 100%;
-      height: 315px;
+      height: 240px;
       border: none;
       border-radius: 12px;
       margin: 20px 0;
     }
     .chat-box {
       background: #111827;
-      padding: 15px;
+      padding: 10px;
       border-radius: 10px;
       max-width: 900px;
-      margin: 0 auto 50px;
+      margin: 0 auto 30px;
     }
     .chat-box h3 {
-      margin-bottom: 10px;
+      margin-bottom: 8px;
+      font-size: 16px;
     }
     .chat-box textarea {
       width: 100%;
-      height: 100px;
-      padding: 10px;
+      height: 80px;
+      padding: 8px;
       border-radius: 8px;
       border: none;
       resize: none;
@@ -121,7 +126,7 @@
     }
     .bet-history {
       max-width: 900px;
-      margin: 0 auto 30px;
+      margin: 0 auto 20px;
       padding: 10px;
       background: rgba(255,255,255,0.03);
       border-radius: 10px;
@@ -133,11 +138,18 @@
       background: rgba(0,255,255,0.05);
       border: 1px solid #00ffc3;
       border-radius: 10px;
-      padding: 15px;
+      padding: 12px;
     }
     .featured-match h2 {
       color: #00ffc3;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
+      font-size: 18px;
+    }
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
   </style>
 </head>
@@ -184,7 +196,7 @@
   </div>  <iframe
     id="stream"
     class="stream"
-    src="https://player.twitch.tv/?channel=espnesports&parent=yourdomain.com"
+    src="https://www.youtube.com/embed/videoseries?list=PLz47dF2X9HEC97fydUlo5iUkmcN7fpG6a&autoplay=1&loop=1"
     allowfullscreen>
   </iframe>  <div class="bet-history">
     <strong>Recent Bets:</strong>
