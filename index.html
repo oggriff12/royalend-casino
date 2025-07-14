@@ -1,111 +1,137 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>RoyalEnd Casino</title>
-  <link rel="stylesheet" href="styles.css" />
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/tsparticles@2/tsparticles.bundle.min.js"></script>
-  <script type="module" src="auth.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet" />
   <style>
     body {
       margin: 0;
       font-family: 'Orbitron', sans-serif;
       background-color: #0f0f1b;
       color: #fff;
+    }
+
+    #particles-js {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      top: 0;
+      left: 0;
+    }
+
+    #mainContent {
+      position: relative;
+      z-index: 1;
       display: flex;
       flex-direction: column;
       align-items: center;
-      min-height: 100vh;
-      justify-content: center;
-      overflow-x: hidden;
+      padding: 20px;
     }
+
     .section {
       max-width: 800px;
-      padding: 40px 20px;
+      margin: 40px auto;
       text-align: center;
     }
+
     .section h2 {
-      color: #00f0ff;
-      font-size: 2rem;
-      margin-bottom: 10px;
+      color: cyan;
+      text-shadow: 0 0 8px cyan;
     }
-    .section p {
-      font-size: 1rem;
-      line-height: 1.6;
-    }
-    .game-links a {
-      color: #a978ff;
-      margin: 0 6px;
+
+    a {
+      color: #aa88ff;
       text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    #authSection {
+      text-align: right;
+      width: 100%;
+      max-width: 1100px;
+      margin-bottom: 20px;
     }
   </style>
 </head>
 <body>
-  <div id="tsparticles"></div>
-  <div id="authSection" style="margin-top: 10px;">
-    <div id="userInfo" style="font-size: 14px; margin-bottom: 10px;"></div>
-    <a href="login.html" id="loginBtn">🔐 Login</a>
-    <button onclick="logoutUser()" id="logoutBtn" style="display:none;">🚪 Logout</button>
-  </div>  <header class="section">
-    <h1>🎰 RoyalEnd Casino</h1>
-    <p>Play live games like Blackjack, Roulette, Crash, Mines, and Dice. Earn rewards, claim bonuses, and win big — all in one place.</p>
-  </header>  <section class="section">
-    <h2>🏛️ About RoyalEnd Casino</h2>
-    <p>RoyalEnd Casino is a fun, interactive web-based gaming experience where all games run on <strong>fake currency</strong>. Your balance is purely for entertainment — there’s no real gambling or financial risk involved!</p>
-    <p>We designed RoyalEnd to bring excitement and casino vibes to your screen without involving real money or gambling. You can earn bonus coins, explore new games, and challenge your luck every day!</p>
-    <p>Want to support us? ❤️ By purchasing casino coins, you’re helping us grow, add more exciting features, and keep the site online. Every contribution goes directly toward development, hosting, and expanding the RoyalEnd experience.</p>
-    <p>Play. Support. Enjoy. 🎉</p>
-  </section>  <section class="section">
-    <h2>🎮 Games Overview</h2>
-    <p class="game-links">
-      Play <a href="blackjack.html">Blackjack</a>,
-      <a href="roulette.html">Roulette</a>,
-      <a href="crash.html">Crash</a>,
-      <a href="mines.html">Mines</a>, and
-      <a href="dice.html">Dice</a> – all using free casino coins. Enjoy smooth animations and fast-paced gameplay!
-    </p>
-  </section>  <section class="section">
-    <h2>💰 Bonuses & Rewards</h2>
-    <p>Log in daily to claim bonuses, earn top player spots, and climb the leaderboard. The more you play, the more you earn!</p>
-  </section>  <section class="section">
-    <h2>🛒 Coin Store</h2>
-    <p>Out of coins? No worries. Visit our store to top up your casino coins and keep the fun rolling!</p>
-  </section>  <section class="section">
-    <h2>🧠 How It Works</h2>
-    <p>This casino runs on fake money — there’s no real gambling or risk. Everything is purely for fun, skill, and entertainment.</p>
-  </section>  <section class="section">
-    <h2>❤️ Support Us</h2>
-    <p>Buying coins helps us fund hosting, new features, and game development. Thank you for helping us grow!</p>
-  </section>  <script>
-    tsParticles.load("tsparticles", {
-      background: {
-        color: { value: "#0f0f1b" }
-      },
-      fpsLimit: 60,
-      interactivity: {
-        events: {
-          onClick: { enable: true, mode: "push" },
-          onHover: { enable: true, mode: "repulse" },
-          resize: true
-        },
-        modes: {
-          push: { quantity: 4 },
-          repulse: { distance: 100, duration: 0.4 }
-        }
-      },
-      particles: {
-        color: { value: "#ffffff" },
-        links: { color: "#ffffff", distance: 150, enable: true, opacity: 0.5, width: 1 },
-        collisions: { enable: false },
-        move: { direction: "none", enable: true, outModes: { default: "bounce" }, random: false, speed: 2, straight: false },
-        number: { density: { enable: true, area: 800 }, value: 80 },
-        opacity: { value: 0.5 },
-        shape: { type: "circle" },
-        size: { value: { min: 1, max: 5 } }
-      },
-      detectRetina: true
+  <!-- Particles Background -->
+  <div id="particles-js"></div>
+
+  <!-- Main Content -->
+  <div id="mainContent">
+    <!-- Firebase Auth UI -->
+    <div id="authSection">
+      <div id="userInfo" style="font-size: 14px;"></div>
+      <a href="login.html" id="loginBtn">🔑 Login</a>
+      <button onclick="logoutUser()" id="logoutBtn" style="display: none;">🚪 Logout</button>
+    </div>
+
+    <header class="section">
+      <h1>🎰 RoyalEnd Casino</h1>
+      <p>Experience a fun and interactive casino filled with games, rewards, and no real risk. Log in to start earning fake coins, play exciting games, and climb the leaderboard!</p>
+    </header>
+
+    <section class="section">
+      <h2>🏛️ About RoyalEnd Casino</h2>
+      <p>
+        RoyalEnd Casino is a fun, interactive web-based gaming experience where all games run on <strong>fake currency</strong>.
+        Your balance is purely for entertainment — there’s no real gambling or financial risk involved!
+      </p>
+      <p>
+        We designed RoyalEnd to bring excitement and casino vibes to your screen without involving real money or gambling.
+        You can earn bonus coins, explore new games, and challenge your luck every day!
+      </p>
+      <p>
+        Want to support us? ❤️ By purchasing casino coins, you’re helping us grow, add more exciting features,
+        and keep the site online. Every contribution goes directly toward development, hosting, and expanding the RoyalEnd experience.
+      </p>
+      <p><strong>Play. Support. Enjoy. 🎉</strong></p>
+    </section>
+
+    <section class="section">
+      <h2>🎮 Games Overview</h2>
+      <p>
+        Play <a href="blackjack.html">Blackjack</a>, <a href="roulette.html">Roulette</a>, <a href="crash.html">Crash</a>, 
+        <a href="mines.html">Mines</a>, and <a href="dice.html">Dice</a> — all using free casino coins. 
+        Enjoy smooth animations and fast-paced gameplay!
+      </p>
+    </section>
+
+    <section class="section">
+      <h2>💸 Bonuses & Rewards</h2>
+      <p>Log in daily to claim bonuses, earn top player spots, and climb the leaderboard. The more you play, the more you earn!</p>
+    </section>
+
+    <section class="section">
+      <h2>🛒 Coin Store</h2>
+      <p>Out of coins? No worries. Visit our store to top up your casino coins and keep the fun rolling!</p>
+    </section>
+
+    <section class="section">
+      <h2>🧠 How It Works</h2>
+      <p>This casino runs on fake money — there’s no real gambling or risk. Everything is purely for fun, skill, and entertainment.</p>
+    </section>
+
+    <section class="section">
+      <h2>❤️ Support Us</h2>
+      <p>Buying coins helps us fund hosting, new features, and game development. Thank you for helping us grow!</p>
+    </section>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/particles.js"></script>
+  <script>
+    particlesJS.load('particles-js', 'particles-config.json', function () {
+      console.log('Particles loaded.');
     });
-  </script></body>
+  </script>
+
+  <script type="module" src="auth.js"></script>
+</body>
 </html>
