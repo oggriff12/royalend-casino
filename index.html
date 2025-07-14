@@ -17,6 +17,7 @@
       min-height: 100vh;
       justify-content: flex-start;
       position: relative;
+      overflow-x: hidden;
     }
 
     canvas#particles-js {
@@ -31,6 +32,7 @@
     h1 {
       margin-top: 60px;
       font-size: 2.5rem;
+      text-align: center;
     }
 
     .section-title {
@@ -38,6 +40,7 @@
       color: #00fdfd;
       margin-top: 40px;
       text-shadow: 0 0 5px #00fdfd;
+      text-align: center;
     }
 
     .games-grid {
@@ -78,11 +81,12 @@
     }
 
     .description {
-      max-width: 800px;
+      max-width: 900px;
       text-align: center;
-      margin-top: 40px;
+      margin-top: 20px;
       line-height: 1.6;
       font-size: 1rem;
+      padding: 0 16px;
     }
 
     .store-section {
@@ -104,9 +108,21 @@
   <h1>🎰 RoyalEnd Casino</h1>
   <p class="description">
     Play for fun, earn fake coins, and climb the leaderboard. No real money, just real excitement!
+    <br /><br />
+    RoyalEnd Casino is a fun, interactive web-based gaming experience where all games run on <strong>fake currency</strong>. 
+    Your balance is purely for entertainment — there’s no real gambling or financial risk involved! <br /><br />
+    We designed RoyalEnd to bring excitement and casino vibes to your screen without involving real money. 
+    You can earn bonus coins, explore new games, and challenge your luck every day! <br /><br />
+    ❤️ Want to support us? By purchasing fake casino coins, you’re helping us grow, fund hosting costs, add more exciting features, 
+    and keep the site online. Every contribution goes directly toward improving the RoyalEnd experience. <br /><br />
+    🎉 Play. Support. Enjoy.
   </p>
 
   <h2 class="section-title">🎮 Games Overview</h2>
+  <p class="description">
+    Play <a href="blackjack.html">Blackjack</a>, <a href="roulette.html">Roulette</a>, <a href="crash.html">Crash</a>, 
+    <a href="mines.html">Mines</a>, and <a href="dice.html">Dice</a> — all using free casino coins. Enjoy smooth animations and fast-paced gameplay!
+  </p>
   <div class="games-grid">
     <div class="game-card">
       <h3>🃏 Blackjack</h3>
@@ -136,17 +152,17 @@
   </div>
 
   <h2 class="section-title">📺 Sportsbook</h2>
-  <div class="description">
+  <p class="description">
     Bet on live games with real-time odds and watch streams. Chat with others and follow your favorite teams!
     <br /><br />
     <a href="sportsbook.html" style="background: #00fdfd; color: #000; padding: 10px 18px; border-radius: 6px;">Enter Sportsbook</a>
-  </div>
+  </p>
 
   <div class="store-section">
     <h2 class="section-title">🛍️ Coin Store</h2>
-    <p>
-      Out of coins? Visit our store to buy more fake casino coins and support the project. Every coin helps us grow,
-      add new games, and improve your experience!
+    <p class="description">
+      Out of coins? Visit our store to top up your casino coins and keep the fun rolling. <br />
+      Buying coins helps fund hosting, new features, and game development. Thank you for helping us grow!
     </p>
     <a href="store.html" style="background: #00fdfd; color: #000; padding: 10px 18px; border-radius: 6px;">Visit Store</a>
   </div>
