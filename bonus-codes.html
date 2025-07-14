@@ -1,192 +1,133 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>🎁 Bonus Codes | RoyalEnd Casino</title>
-<style>
+  <meta charset="UTF-8">
+  <title>Bonus Codes | RoyalEnd Casino</title>
+  <style>
     body {
-        margin: 0;
-        background: linear-gradient(135deg, #0d0d0d, #1a1a1a);
-        font-family: 'Arial', sans-serif;
-        color: #00ffff;
+      margin: 0;
+      background: #0d0d0d;
+      font-family: Arial, sans-serif;
+      color: #00ffff;
     }
-
     nav {
-        background: #1a1a1a;
-        display: flex;
-        justify-content: center;
-        padding: 20px;
-        box-shadow: 0 5px 15px #00ffff;
-        gap: 25px;
+      background: #1a1a1a;
+      padding: 15px;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      box-shadow: 0 0 15px #00ffff;
     }
-
     nav a {
-        color: #00ffff;
-        text-decoration: none;
-        font-size: 18px;
-        font-weight: bold;
-        transition: all 0.3s ease;
-        padding: 10px 15px;
-        border: 2px solid #00ffff;
-        border-radius: 8px;
+      color: #00ffff;
+      text-decoration: none;
+      font-weight: bold;
+      transition: color 0.3s;
     }
-
-    nav a:hover {
-        background: #00ffff;
-        color: #0d0d0d;
-        box-shadow: 0 0 15px #00ffff;
-        transform: scale(1.1);
-    }
-
-    h1 {
-        text-align: center;
-        margin: 30px 0;
-        font-size: 36px;
-        color: #00ffff;
-        text-shadow: 0 0 10px #00ffff;
-    }
-
+    nav a:hover { color: #ff00ff; }
+    h1 { text-align: center; margin-top: 20px; }
     .filters {
-        display: flex;
-        justify-content: center;
-        gap: 15px;
-        margin-bottom: 30px;
-        flex-wrap: wrap;
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin: 20px;
     }
-
     .filters button {
-        background: transparent;
-        color: #00ffff;
-        border: 2px solid #00ffff;
-        padding: 10px 20px;
-        font-size: 16px;
-        font-weight: bold;
-        border-radius: 10px;
-        cursor: pointer;
-        transition: all 0.3s;
+      background: #1f1f1f;
+      color: #00ffff;
+      border: 2px solid #00ffff;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s;
     }
-
     .filters button:hover {
-        background: #00ffff;
-        color: #0d0d0d;
-        box-shadow: 0 0 12px #00ffff;
+      background: #00ffff;
+      color: #0d0d0d;
     }
-
     #codes-container {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 20px;
-        padding: 20px;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
     }
-
     .code-box {
-        background: #1a1a1a;
-        border: 2px solid #00ffff;
-        border-radius: 15px;
-        padding: 20px;
-        width: 280px;
-        text-align: center;
-        color: #ffffff;
-        font-size: 16px;
-        box-shadow: 0 0 15px #00ffff33;
-        transition: transform 0.3s, box-shadow 0.3s;
+      background: #1a1a1a;
+      border: 2px solid #00ffff;
+      padding: 15px;
+      margin-bottom: 15px;
+      box-shadow: 0 0 10px #00ffff;
+      border-radius: 10px;
     }
-
-    .code-box:hover {
-        transform: scale(1.05);
-        box-shadow: 0 0 25px #00ffff;
-    }
-
-    footer {
-        text-align: center;
-        padding: 20px;
-        color: #555;
-        font-size: 14px;
-        border-top: 1px solid #333;
-        margin-top: 40px;
-    }
-</style>
+  </style>
 </head>
 <body>
-
 <nav>
-    <a href="index.html">🏠 Home</a>
-    <a href="sportsbook.html">🏀 Sportsbook</a>
-    <a href="leaderboard.html">🏆 Leaderboard</a>
-    <a href="blackjack.html">🂡 Blackjack</a>
-    <a href="crash.html">💥 Crash</a>
-    <a href="bonus-codes.html">🎁 Bonus Codes</a>
+  <a href="index.html">🏠 Home</a>
+  <a href="sportsbook.html">🏀 Sportsbook</a>
+  <a href="leaderboard.html">🏆 Leaderboard</a>
+  <a href="blackjack.html">🃏 Blackjack</a>
+  <a href="crash.html">💥 Crash</a>
+  <a href="bonus-codes.html">🎁 Bonus Codes</a>
 </nav>
 
-<h1>🎁 Live Bonus Codes</h1>
-<p style="text-align:center;">Claim free bonus codes from Rainbet, Stake, and Stake.us updated live!</p>
+<h1>🎁 Bonus Codes</h1>
+<p style="text-align: center;">Claim daily free codes from Stake.com, Stake.us, Rainbet!</p>
 
 <div class="filters">
-    <button onclick="filterCodes('all')">All</button>
-    <button onclick="filterCodes('rainbet')">Rainbet</button>
-    <button onclick="filterCodes('stake.com')">Stake.com</button>
-    <button onclick="filterCodes('stake.us')">Stake.us</button>
+  <button onclick="filterCodes('all')">All</button>
+  <button onclick="filterCodes('stake.com')">Stake.com</button>
+  <button onclick="filterCodes('stake.us')">Stake.us</button>
+  <button onclick="filterCodes('rainbet')">Rainbet</button>
 </div>
 
-<div id="codes-container">
-    <p style="text-align:center;">Loading bonus codes...</p>
-</div>
-
-<footer>&copy; 2025 RoyalEnd Casino. All rights reserved.</footer>
+<div id="codes-container"><p style="text-align: center;">Loading bonus codes...</p></div>
 
 <script>
 let codes = [];
 let currentFilter = 'all';
 
 async function loadCodes() {
-    const container = document.getElementById('codes-container');
-    try {
-        const res = await fetch('https://bonus-code-telegram-bot.blacknyeem.repl.co/bonus-codes');
-        codes = await res.json();
-        displayCodes();
-    } catch (err) {
-        container.innerHTML = '<p style="color:red;">Failed to load bonus codes.</p>';
-    }
+  const container = document.getElementById('codes-container');
+  try {
+    const res = await fetch('https://bonus-code-telegram-bot.[your-replit-username].repl.co/bonus-codes');
+    codes = await res.json();
+    displayCodes();
+  } catch {
+    container.innerHTML = '<p style="color:red;">Failed to load bonus codes.</p>';
+  }
 }
 
 function filterCodes(site) {
-    currentFilter = site;
-    displayCodes();
+  currentFilter = site;
+  displayCodes();
 }
 
 function displayCodes() {
-    const container = document.getElementById('codes-container');
-    container.innerHTML = '';
+  const container = document.getElementById('codes-container');
+  container.innerHTML = '';
+  let filtered = codes;
+  if (currentFilter !== 'all') filtered = codes.filter(c => c.site.toLowerCase().includes(currentFilter));
 
-    let filtered = codes;
-    if (currentFilter !== 'all') {
-        filtered = codes.filter(c => c.site.toLowerCase().includes(currentFilter));
-    }
+  filtered.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
 
-    if (filtered.length === 0) {
-        container.innerHTML = '<p>No bonus codes available.</p>';
-        return;
-    }
+  if (filtered.length === 0) {
+    container.innerHTML = '<p>No bonus codes found.</p>';
+    return;
+  }
 
-    filtered.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-
-    filtered.forEach(code => {
-        const box = document.createElement('div');
-        box.className = 'code-box';
-        box.innerHTML = `
-            <h3>🎲 ${code.site}</h3>
-            <p><strong>Code:</strong> ${code.code}</p>
-            <p><strong>Wager:</strong> ${code.wager}</p>
-            <p><strong>Status:</strong> ${code.status}</p>
-            <p><small>${new Date(code.timestamp).toLocaleString()}</small></p>
-        `;
-        container.appendChild(box);
-    });
+  filtered.forEach(code => {
+    const box = document.createElement('div');
+    box.className = 'code-box';
+    box.innerHTML = `<b>Site:</b> ${code.site}<br>
+                     <b>Code:</b> ${code.code}<br>
+                     <b>Wager:</b> ${code.wager}<br>
+                     <b>Status:</b> ${code.status}<br>
+                     <b>Time:</b> ${new Date(code.timestamp).toLocaleString()}`;
+    container.appendChild(box);
+  });
 }
 
 loadCodes();
 </script>
-
 </body>
 </html>
