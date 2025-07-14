@@ -72,6 +72,11 @@
       font-size: 12px;
       opacity: 0.8;
     }
+    .countdown {
+      font-size: 12px;
+      color: #00ffc3;
+      margin-top: 5px;
+    }
     .wallet-display {
       text-align: right;
       margin: 10px 30px;
@@ -124,7 +129,7 @@
       resize: none;
       font-family: inherit;
     }
-    .bet-history {
+    .bet-history, .notifications {
       max-width: 900px;
       margin: 0 auto 20px;
       padding: 10px;
@@ -145,6 +150,16 @@
       margin-bottom: 8px;
       font-size: 18px;
     }
+    .highlight-reel {
+      max-width: 900px;
+      margin: 30px auto;
+      padding: 10px;
+    }
+    .highlight-reel iframe {
+      width: 100%;
+      height: 200px;
+      border-radius: 10px;
+    }
     @keyframes fadeInUp {
       to {
         opacity: 1;
@@ -156,9 +171,11 @@
 <body>
   <header>
     <h1>🏈 RoyalEnd Sportsbook</h1>
-    <p>Live odds, streams, bets, featured matches & chat — bet with virtual coins!</p>
+    <p>Live odds, streams, chats & countdowns — bet with virtual coins!</p>
   </header>  <div class="wallet-display">
     💰 Balance: <span id="walletBalance">$100.00</span>
+  </div>  <div class="notifications">
+    📢 Upcoming Event: Super Bowl Bonus Weekend! Earn 2x coins on NFL bets!
   </div>  <div class="featured-match">
     <h2>🔥 Featured Match</h2>
     <p>Lakers vs Celtics — Tipoff at 8:00 PM EST</p>
@@ -174,6 +191,7 @@
       <div class="match-card">
         <h3>Lakers vs Warriors <span style="color:lime">🟢 Live</span></h3>
         <p class="match-info">NBA • Tipoff: 8:00 PM EST</p>
+        <p class="countdown">Starts in: <span id="countdown1"></span></p>
         <p>Odds: Lakers: +2.5 | Warriors: -2.5</p>
         <div class="bet-section">
           <input type="number" placeholder="Bet $" />
@@ -186,6 +204,7 @@
       <div class="match-card">
         <h3>Patriots vs Jets</h3>
         <p class="match-info">NFL • 7:00 PM EST</p>
+        <p class="countdown">Starts in: <span id="countdown2"></span></p>
         <p>Odds: Patriots: -3.5 | Jets: +3.5</p>
         <div class="bet-section">
           <input type="number" placeholder="Bet $" />
@@ -198,7 +217,10 @@
     class="stream"
     src="https://www.youtube.com/embed/videoseries?list=PLz47dF2X9HEC97fydUlo5iUkmcN7fpG6a&autoplay=1&loop=1"
     allowfullscreen>
-  </iframe>  <div class="bet-history">
+  </iframe>  <div class="highlight-reel">
+    <h3>🏆 Game Highlights</h3>
+    <iframe src="https://www.youtube.com/embed/nAvlZ7FjIdk?autoplay=0&loop=1" allowfullscreen></iframe>
+  </div>  <div class="bet-history">
     <strong>Recent Bets:</strong>
     <ul>
       <li>🧑 Griffin bet $50 on Lakers to win</li>
@@ -208,8 +230,22 @@
     <h3>💬 Chat</h3>
     <textarea placeholder="Type your message and press Enter..."></textarea>
   </div>  <script>
-    // Wallet setup (placeholder)
     let balance = 100;
     document.getElementById("walletBalance").textContent = `$${balance.toFixed(2)}`;
+
+    function updateCountdown(id, dateStr) {
+      const target = new Date(dateStr);
+      const el = document.getElementById(id);
+      setInterval(() => {
+        const now = new Date();
+        let diff = Math.max(0, target - now);
+        const mins = Math.floor(diff / 60000);
+        const secs = Math.floor((diff % 60000) / 1000);
+        el.textContent = `${mins}m ${secs}s`;
+      }, 1000);
+    }
+
+    updateCountdown('countdown1', '2025-07-15T20:00:00');
+    updateCountdown('countdown2', '2025-07-15T19:00:00');
   </script></body>
 </html>
