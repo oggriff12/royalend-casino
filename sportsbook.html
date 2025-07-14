@@ -1,50 +1,77 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>RoyalEnd Sportsbook</title>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
 <style>
-body { background: #0f0f1b; color: #fff; font-family: 'Orbitron', sans-serif; margin: 0; }
-h1, h2 { text-align: center; color: cyan; text-shadow: 0 0 8px cyan; }
-.section { max-width: 1000px; margin: 20px auto; background: #1a1a2e; padding: 20px; border-radius: 12px; box-shadow: 0 0 10px cyan; }
-iframe { width: 100%; height: 300px; border-radius: 10px; }
-button { background: #00ffc3; color: #000; padding: 10px; border: none; border-radius: 8px; margin-top: 10px; font-weight: bold; cursor: pointer; }
+body { margin: 0; font-family: 'Orbitron', sans-serif; background: #0f0f1b; color: #fff; overflow-x: hidden; }
+header { text-align: center; margin: 20px; }
+h1 { color: cyan; text-shadow: 0 0 8px cyan; }
+.balance { float: right; margin: 20px; color: #00ffc3; }
+.notifications, .featured-match, .games-section, .stream-section, .chat-section, .countdowns, .overview, .newsletter {
+max-width: 1000px; margin: 20px auto; padding: 20px; border-radius: 12px; background: #1a1a2e; box-shadow: 0 0 10px #00ffc3;
+}
+.live-games, .stream-box { display: inline-block; width: 48%; vertical-align: top; }
+.stream-box iframe { width: 100%; height: 300px; border-radius: 10px; }
+.filters button { margin: 5px; background: #00ffc3; color: #000; border: none; padding: 10px; border-radius: 6px; font-weight: bold; cursor: pointer; }
+.footer-nav { text-align: center; margin: 20px; }
+.footer-nav a { margin: 0 15px; color: #00ffc3; text-decoration: none; }
+.newsletter input { width: 70%; padding: 10px; margin-right: 10px; border-radius: 5px; border: none; }
+.newsletter button { padding: 10px; border-radius: 5px; border: none; background: #00ffc3; font-weight: bold; cursor: pointer; }
 </style>
 </head>
 <body>
-
-<header class="section">
-<h1>RoyalEnd Sportsbook</h1>
-<p>Play with fake coins, live sports streams, daily picks, and bonuses!</p>
-</header>
-
-<div class="section"><h2>🎯 Top Daily Picks</h2><ul><li>Lakers -2.5 vs Celtics</li><li>Manchester United to win</li><li>Yankees Over 8.5 Runs</li></ul></div>
-
-<div class="section"><h2>🔥 Live Betting Trends</h2><p>72% betting Lakers spread, 65% betting Celtics ML</p></div>
-
-<div class="section"><h2>🏆 Popular Bets Leaderboard</h2><ul><li>@JohnBetBig: +1500 coins</li><li>@CasinoQueen: +1300 coins</li><li>@LuckyLuke: +1200 coins</li></ul></div>
-
-<div class="section"><h2>📅 Upcoming Schedule</h2><ul><li>Lakers vs Celtics – 8 PM EST</li><li>Yankees vs Red Sox – 7 PM EST</li></ul></div>
-
-<div class="section"><h2>🏅 Leaderboard Preview</h2><p>1. JohnBetBig | 2. CasinoQueen | 3. LuckyLuke</p></div>
-
-<div class="section"><h2>⚡ Fast Stats</h2><p>Lakers: 5-0 ATS last 5 games; Yankees: 4-game home win streak.</p></div>
-
-<div class="section"><h2>🎥 Rotating Sports Clips</h2>
-<iframe src="https://www.youtube.com/embed/live_stream?channel=ESPN" allowfullscreen></iframe></div>
-
-<div class="section"><h2>💬 Chat Highlights</h2><p>@CoolUser: “Celtics gonna shock tonight!”</p></div>
-
-<div class="section"><h2>💎 VIP & Referral Rewards</h2><p>Refer friends and earn 500 fake coins bonus!</p></div>
-
-<div class="section"><h2>🎁 Daily Spin Bonus</h2><button>Spin Daily Wheel</button></div>
-
-<footer class="section" style="text-align:center;">
-<a href="index.html" style="color:#00ffc3">🏠 Home</a>
-<a href="leaderboard.html" style="color:#00ffc3">🏆 Leaderboard</a>
-</footer>
-
-</body>
+<header>
+<h1>🏀 RoyalEnd Sportsbook</h1>
+<p>Live worldwide games, odds, streams, and chats — bet virtual coins!</p>
+<p class="balance">💰 Balance: $100.00</p>
+</header> <div class="notifications">📢 Upcoming Event: Bonus on NBA Finals bets this week!</div> <div class="featured-match">🔥 <b>Featured Match</b>: Lakers vs Celtics – Tipoff at 8:00 PM EST
+<br><a href="#stream" style="color:#00ffc3">Watch Live</a>
+</div> <div class="filters">
+<button onclick="filterGames('all')">All</button>
+<button onclick="filterGames('nba')">NBA</button>
+<button onclick="filterGames('nfl')">NFL</button>
+<button onclick="filterGames('mlb')">MLB</button>
+</div> <div class="live-games games-section" id="liveGames">
+<h2>📺 Live Basketball Games</h2>
+<div id="gamesGrid">Loading live games...</div>
+</div> <div class="stream-section stream-box" id="stream">
+<h2>🎥 Live Stream</h2>
+<iframe src="https://www.youtube.com/embed/nyd-xznCpJc?autoplay=1&mute=1" allowfullscreen></iframe>
+</div> <div class="chat-section">
+<h2>💬 Chat</h2>
+<textarea placeholder="Chat here..." style="width:100%; height:100px;"></textarea>
+</div> <div class="countdowns">
+<h2>⏱️ Countdown to Featured Match</h2>
+<p id="countdown"></p>
+</div> <div class="overview">
+<h2>🎰 Casino Overview</h2>
+<p>Play fun casino games using fake coins: Blackjack, Roulette, Dice, Mines, and Crash. Enjoy bonuses, leaderboards, and daily rewards!</p>
+</div> <div class="newsletter">
+<h2>📧 Free Newsletter Picks</h2>
+<p>Get daily sports picks straight to your inbox — free forever!</p>
+<input type="email" placeholder="Enter your email">
+<button>Subscribe</button>
+</div> <div class="footer-nav">
+<a href="index.html">🏠 Home</a>
+<a href="sportsbook.html">🏀 Sportsbook</a>
+<a href="leaderboard.html">🏆 Leaderboard</a>
+</div> <script>
+function filterGames(type) {
+alert('Filter by: ' + type + ' (Demo)');
+}
+function countdownTimer() {
+const matchDate = new Date('2025-07-15T20:00:00').getTime();
+setInterval(() => {
+const now = new Date().getTime();
+const distance = matchDate - now;
+if (distance < 0) return document.getElementById('countdown').innerText = 'Game Started!';
+const mins = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+const secs = Math.floor((distance % (1000 * 60)) / 1000);
+document.getElementById('countdown').innerText = mins + 'm ' + secs + 's';
+}, 1000);
+}
+countdownTimer();
+</script></body>
 </html>
