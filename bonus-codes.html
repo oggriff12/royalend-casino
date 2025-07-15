@@ -2,55 +2,102 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>🎁 Bonus Codes - RoyalEnd Casino</title>
+  <title>🎁 Bonus Codes</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap">
   <style>
     body {
-      background: #0a0a0a;
+      margin: 0;
+      font-family: 'Orbitron', sans-serif;
+      background: linear-gradient(135deg, #0f0f0f, #1a1a1a);
       color: #00ffff;
-      font-family: Arial, sans-serif;
+      overflow-x: hidden;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #0d0d0d;
+      padding: 15px 30px;
+      box-shadow: 0 4px 8px rgba(0,255,255,0.2);
+    }
+    header h1 {
+      margin: 0;
+      font-size: 32px;
+    }
+    nav a {
+      color: #00ffff;
+      margin-left: 20px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: color 0.3s;
+    }
+    nav a:hover {
+      color: #ff00ff;
+    }
+    .filters {
+      margin: 20px;
       text-align: center;
     }
-    h1 {
-      color: #00ffff;
-      margin-top: 20px;
-    }
     .filters button {
-      background: transparent;
+      margin: 5px;
+      padding: 12px 20px;
+      font-size: 16px;
+      background: #111;
       border: 2px solid #00ffff;
       color: #00ffff;
-      margin: 5px;
-      padding: 10px 20px;
+      border-radius: 10px;
       cursor: pointer;
-      transition: 0.3s;
+      transition: all 0.3s;
     }
     .filters button:hover {
       background: #00ffff;
-      color: #0a0a0a;
+      color: #111;
+    }
+    #codes-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin: 20px;
     }
     .code-entry {
-      background: #111;
-      margin: 10px auto;
-      padding: 15px;
-      width: 80%;
-      border: 1px solid #00ffff;
-      border-radius: 10px;
-      text-align: left;
+      background: #1a1a1a;
+      border: 2px solid #00ffff;
+      border-radius: 15px;
+      margin: 15px;
+      padding: 20px;
+      width: 280px;
+      text-align: center;
+      box-shadow: 0 0 15px #00ffff80;
+      transform: scale(0.95);
+      transition: all 0.4s ease;
     }
-    .claimed {
-      background: #440000;
+    .code-entry:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 25px #00ffff;
     }
     .status {
-      font-weight: bold;
+      margin: 10px 0;
+      font-size: 18px;
     }
-    .wager, .timestamp {
-      font-size: 14px;
+    .claimed {
+      color: #ff4444;
+    }
+    .unclaimed {
+      color: #44ff44;
     }
   </style>
 </head>
 <body>
 
-<h1>🎁 Bonus Codes</h1>
-<p>Claim daily free codes from Stake.com, Stake.us, Rainbet!</p>
+<header>
+  <h1>🎁 Bonus Codes</h1>
+  <nav>
+    <a href="index.html">🏠 Home</a>
+    <a href="blackjack.html">🃏 Blackjack</a>
+    <a href="crash.html">💥 Crash</a>
+    <a href="sportsbook.html">🏀 Sportsbook</a>
+  </nav>
+</header>
 
 <div class="filters">
   <button onclick="filterCodes('all')">All</button>
@@ -59,11 +106,8 @@
   <button onclick="filterCodes('rainbet')">Rainbet</button>
 </div>
 
-<div id="codes-container">
-  <p>Loading bonus codes...</p>
-</div>
+<div id="codes-container">Loading codes...</div>
 
 <script src="bonus-codes.js"></script>
-
 </body>
 </html>
