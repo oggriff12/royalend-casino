@@ -1,58 +1,64 @@
 const API_KEY = '273237';
-const API_BASE = 'https://www.thesportsdb.com/api/v1/json/' + API_KEY;
-const gamesList = document.getElementById('games-list');
+const leagues = {
+    NBA: '4387',
+    NFL: '4391',
+    MLB: '4424'
+};
 
 async function fetchLiveGames() {
-  gamesList.innerHTML = '<p>Loading live sports games...</p>';
+    const gamesContainer = document.getElementById('games-container');
+    gamesContainer.innerHTML = '<p>Loading live games…</p>';
 
-  const leagues = [
-    { league: 'NBA', endpoint: 'livescore.php?s=Basketball' },
-    { league: 'NFL', endpoint: 'livescore.php?s=American%20Football' },
-    { league: 'MLB', endpoint: 'livescore.php?s=Baseball' }
-  ];
-
-  let allGames = [];
-
-  for (const {league, endpoint} of leagues) {
     try {
-      const res = await fetch(`${API_BASE}/${endpoint}`);
-      const data = await res.json();
-      if (data.events) {
-        const games = data.events.map(event => ({
-          league,
-          teams: `${event.strHomeTeam} vs ${event.strAwayTeam}`,
-          score: `${event.intHomeScore} - ${event.intAwayScore}`,
-          status: event.strStatus
-        }));
-        allGames = allGames.concat(games);
-      }
-    } catch (error) {
-      console.error(`Error fetching ${league}:`, error);
+        let html = '';
+        for (const [league, id] of Object.entries(leagues)) {
+            const res = await fetch(`https://www.thesportsdb.com/api/v1/json/${API_KEY}/eventsnextleague.php?id=${id}`);
+            const data = await res.json();
+            if (data.events) {
+                html += `<h3>${league} Upcoming Games:</h3>`;
+                data.events.slice(0, 3).forEach(event => {
+                    html += `
+                        <div class="game-card">
+                            <p><strong>${event.strEvent}</strong></p>
+                            <p>Date: ${event.dateEvent} | Time: ${event.strTime}</p>
+                        </div>`;
+                });
+            }
+        }
+        gamesContainer.innerHTML = html || '<p>No live games.</p>';
+    } catch (err) {
+        gamesContainer.innerHTML = '<p>Error loading games.</p>';
     }
-  }
-
-  renderGames(allGames);
 }
 
-function renderGames(games) {
-  if (games.length === 0) {
-    gamesList.innerHTML = '<p>No live games available.</p>';
-    return;
-  }
+async function fetchLiveOdds() {
+    const oddsContainer = document.getElementById('odds-container');
+    oddsContainer.innerHTML = '<p>Loading live odds…</p>';
 
-  gamesList.innerHTML = '';
-  games.forEach(game => {
-    const div = document.createElement('div');
-    div.className = 'game-card';
-    div.innerHTML = `
-      <h3>${game.league}</h3>
-      <p>${game.teams}</p>
-      <p>Score: ${game.score}</p>
-      <p>Status: ${game.status}</p>
-    `;
-    gamesList.appendChild(div);
-  });
+    try {
+        let html = '';
+        for (const [league, id] of Object.entries(leagues)) {
+            const res = await fetch(`https://www.thesportsdb.com/api/v1/json/${API_KEY}/livescore.php?l=${id}`);
+            const data = await res.json();
+            if (data.events) {
+                html += `<h3>${league} Odds:</h3>`;
+                data.events.slice(0, 3).forEach(event => {
+                    html += `
+                        <div class="odds-card">
+                            <p><strong>${event.strEvent}</strong></p>
+                            <p>Status: ${event.strStatus}</p>
+                            <p>Score: ${event.intHomeScore || '-'} - ${event.intAwayScore || '-'}</p>
+                        </div>`;
+                });
+            }
+        }
+        oddsContainer.innerHTML = html || '<p>No live odds.</p>';
+    } catch (err) {
+        oddsContainer.innerHTML = '<p>Error loading odds.</p>';
+    }
 }
 
 fetchLiveGames();
-setInterval(fetchLiveGames, 60000); // refresh every 60 seconds
+fetchLiveOdds();
+setInterval(fetchLiveGames, 60000);
+setInterval(fetchLiveOdds, 60000);
