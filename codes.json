@@ -1,9 +1,37 @@
-1[
+[
   {
     "site": "stake.com",
-    "code": "ABC123",
+    "code": "STAKE50FREE",
     "wager": "$50",
     "status": "Unclaimed",
     "timestamp": "2025-07-15 12:00"
+  },
+  {
+    "site": "stake.us",
+    "code": "STAKEUS25",
+    "wager": "$25",
+    "status": "Unclaimed",
+    "timestamp": "2025-07-15 13:00"
+  },
+  {
+    "site": "rainbet.com",
+    "code": "RAINBET30",
+    "wager": "$30",
+    "status": "Unclaimed",
+    "timestamp": "2025-07-15 14:00"
+  },
+  {
+    "site": "stake.com",
+    "code": "EXTRABOOST10",
+    "wager": "$10",
+    "status": "Unclaimed",
+    "timestamp": "2025-07-16 09:00"
+  },
+  {
+    "site": "rainbet.com",
+    "code": "RAINCODE5",
+    "wager": "$5",
+    "status": "Unclaimed",
+    "timestamp": "2025-07-16 10:30"
   }
 ]
