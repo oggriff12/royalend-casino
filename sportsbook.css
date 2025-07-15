@@ -1,72 +1,59 @@
 body {
-  margin: 0;
-  font-family: 'Orbitron', sans-serif;
-  background: #0f0f0f;
-  color: cyan;
-  overflow-x: hidden;
+    margin: 0;
+    background: #0f0f1b;
+    color: cyan;
+    font-family: 'Orbitron', sans-serif;
 }
 
 nav {
-  display: flex;
-  justify-content: center;
-  background: linear-gradient(90deg, #00f0ff, #a100ff);
-  padding: 10px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 15px;
+    background: linear-gradient(90deg, #00f0ff, #a100ff);
+    box-shadow: 0 4px 10px #00f0ff;
 }
 
 nav a {
-  color: white;
-  margin: 0 15px;
-  text-decoration: none;
-  font-size: 20px;
-  transition: transform 0.2s;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 18px;
+    transition: transform 0.2s;
 }
 
 nav a:hover {
-  transform: scale(1.1);
+    transform: scale(1.1);
 }
 
-.active {
-  font-weight: bold;
-  border-bottom: 2px solid white;
+main {
+    max-width: 900px;
+    margin: 100px auto 50px;
+    padding: 0 20px;
 }
 
-h1, h2 {
-  text-align: center;
-  color: cyan;
+h1, h2, h3 {
+    text-align: center;
+    color: cyan;
 }
 
-.games-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 20px;
-  padding: 20px;
+.section {
+    background: #1c1c27;
+    border-radius: 15px;
+    margin: 20px 0;
+    padding: 20px;
+    box-shadow: 0 0 15px #00f0ff;
 }
 
-.game-card {
-  background: #1c1c1c;
-  border: 2px solid cyan;
-  border-radius: 15px;
-  padding: 15px;
-  transition: transform 0.3s;
+.game-card, .odds-card {
+    background: #121221;
+    margin: 10px 0;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 0 8px cyan;
+    transition: transform 0.2s;
 }
 
-.game-card:hover {
-  transform: scale(1.05);
-}
-
-#stream-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin: 30px;
-}
-
-.overview {
-  background: #161616;
-  padding: 20px;
-  margin: 30px;
-  border-radius: 15px;
-  border: 2px solid cyan;
-  text-align: center;
-  color: white;
+.game-card:hover, .odds-card:hover {
+    transform: scale(1.02);
 }
