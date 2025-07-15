@@ -1,0 +1,90 @@
+body {
+    margin: 0;
+    font-family: 'Orbitron', sans-serif;
+    background: linear-gradient(135deg, #020024 0%, #090979 35%, #00d4ff 100%);
+    color: #00ffff;
+    overflow-x: hidden;
+    animation: backgroundShift 20s infinite alternate;
+}
+
+@keyframes backgroundShift {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 100% 50%; }
+}
+
+nav {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+    background: linear-gradient(90deg, #00c3ff, #ff00c8);
+    font-size: 20px;
+    border-bottom: 3px solid cyan;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    transition: transform 0.3s, color 0.3s;
+}
+
+nav a:hover {
+    transform: scale(1.2);
+    color: #ffd700;
+}
+
+h1, h2 {
+    text-align: center;
+    color: #00ffff;
+    text-shadow: 0 0 15px #00ffff;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { text-shadow: 0 0 15px #00ffff; }
+    50% { text-shadow: 0 0 30px #00ffff; }
+}
+
+div {
+    margin: 20px auto;
+    max-width: 800px;
+    padding: 20px;
+    background: rgba(0,0,0,0.7);
+    border: 2px solid #00ffff;
+    border-radius: 15px;
+    box-shadow: 0 0 20px #00ffff;
+    animation: fadeIn 1s;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+iframe {
+    display: block;
+    margin: 20px auto;
+    border-radius: 15px;
+    box-shadow: 0 0 15px cyan;
+    border: none;
+}
+
+.overview-box {
+    font-size: 16px;
+    color: #00ffff;
+    line-height: 1.5;
+    text-align: center;
+}
+
+.game-card {
+    margin-bottom: 15px;
+    padding: 15px;
+    background: rgba(0,0,0,0.6);
+    border-left: 5px solid #ff00c8;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.game-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 25px #ff00c8;
+}
