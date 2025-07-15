@@ -1,5 +1,4 @@
-const CODES_URL = 'https://raw.githubusercontent.com/yourgithubusername/yourrepo/main/codes.json';
-
+const CODES_URL = 'https://raw.githubusercontent.com/oggriff12/royalend-casino/main/codes.json';
 let allCodes = [];
 
 async function fetchBonusCodes() {
