@@ -2,41 +2,42 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>🏀 Sportsbook - RoyalEnd Casino</title>
   <link rel="stylesheet" href="./style.css">
 </head>
 <body>
 
-  <nav>
-    <a href="../index.html">🏠 Home</a>
-    <a href="./index.html" class="active">🏀 Sportsbook</a>
-    <a href="../leaderboard.html">🏆 Leaderboard</a>
-    <a href="../blackjack.html">🃏 Blackjack</a>
-    <a href="../crash.html">💥 Crash</a>
-    <a href="../bonus-codes.html">🎁 Bonus Codes</a>
-  </nav>
+<nav>
+  <a href="../index.html">🏠 Home</a>
+  <a href="./index.html" class="active">🏀 Sportsbook</a>
+  <a href="../leaderboard.html">🏆 Leaderboard</a>
+  <a href="../blackjack.html">🃏 Blackjack</a>
+  <a href="../crash.html">💥 Crash</a>
+  <a href="../bonus-codes.html">🎁 Bonus Codes</a>
+</nav>
 
-  <h1>🏀 Live Sports Betting</h1>
-  <div id="live-games">Loading live games...</div>
+<div class="filters">
+  <button onclick="fetchLiveGames('Basketball')">NBA</button>
+  <button onclick="fetchLiveGames('American Football')">NFL</button>
+  <button onclick="fetchLiveGames('Baseball')">MLB</button>
+</div>
 
-  <h2>📊 Real-Time Odds</h2>
-  <div id="odds">Loading odds...</div>
+<h1>🏀 Live Sports Betting</h1>
+<div id="live-games">Loading live games...</div>
 
-  <h2>📺 Live Stream Highlights</h2>
-  <iframe width="100%" height="350" id="live-stream"
-    src="https://www.youtube.com/embed/5XQ0K0v_YRE?autoplay=1"
-    title="Live Basketball"
-    frameborder="0"
-    allowfullscreen>
-  </iframe>
+<h2>📊 Real-Time Odds</h2>
+<div id="odds">Loading odds...</div>
 
-  <h2>🎁 Sportsbook Overview</h2>
-  <div class="overview-box">
-    RoyalEnd Casino Sportsbook offers a premium betting experience using fake coins.
-    Track live games, real-time odds, and seamless transitions back to the casino games.
-  </div>
+<h2>📺 Live Stream Highlights</h2>
+<iframe width="100%" height="350" src="https://www.youtube.com/embed/5XQ0K0v_YRE?autoplay=1"
+  title="Live Basketball" frameborder="0" allowfullscreen></iframe>
 
-  <script src="./sportbook.js"></script>
+<h2>🎁 Sportsbook Overview</h2>
+<div class="overview-box">
+  RoyalEnd Casino Sportsbook offers a premium betting experience with live games, real-time odds, fake casino coins, and fast navigation.
+</div>
+
+<script src="./sportbook.js"></script>
 </body>
 </html>
