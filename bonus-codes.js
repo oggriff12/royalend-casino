@@ -1,14 +1,38 @@
-// index.js import express from "express"; import fs from "fs"; import path from "path"; import { fileURLToPath } from "url"; import cors from "cors";
+async function fetchBonusCodes() {
+    const container = document.getElementById('codes-container');
+    container.innerHTML = '<p>Loading bonus codes...</p>';
 
-const app = express(); const PORT = process.env.PORT || 3000;
+    try {
+        const response = await fetch('https://your-replit-url.repl.co/bonus-codes'); // replace with your actual Replit link
+        if (!response.ok) throw new Error('Failed to fetch codes');
 
-const __filename = fileURLToPath(import.meta.url); const __dirname = path.dirname(__filename);
+        const codes = await response.json();
+        container.innerHTML = '';
 
-app.use(cors());
+        if (!Array.isArray(codes) || codes.length === 0) {
+            container.innerHTML = '<p>No bonus codes available.</p>';
+            return;
+        }
 
-app.get("/bonus-codes", (req, res) => { const codesPath = path.join(__dirname, "codes.json"); fs.readFile(codesPath, "utf-8", (err, data) => { if (err) { return res.status(500).json({ error: "Failed to read bonus codes." }); } try { const codes = JSON.parse(data); res.json(codes); } catch (e) { res.status(500).json({ error: "Invalid JSON format." }); } }); });
+        codes.forEach(code => {
+            const div = document.createElement('div');
+            div.className = 'code-entry';
 
-app.get("/", (req, res) => { res.send("Manual Bonus Code Bot Live!"); });
+            div.innerHTML = `
+                <p><b>${code.site.toUpperCase()}</b> — ${code.code}</p>
+                <p class="status">Status: ${code.status.includes('Unclaimed') ? '✅ UNCLAIMED' : '❌ CLAIMED'}</p>
+                <p class="wager">Wager: ${code.wager}</p>
+                <p class="timestamp">Posted: ${code.timestamp}</p>
+            `;
 
-app.listen(PORT, () => console.log(Bonus Code API Live on ${PORT}));
+            container.appendChild(div);
+        });
+    } catch (error) {
+        console.error('Error loading codes:', error);
+        container.innerHTML = '<p>Failed to load bonus codes.</p>';
+    }
+}
 
+// Auto-refresh every 60 seconds
+setInterval(fetchBonusCodes, 60000);
+fetchBonusCodes();
