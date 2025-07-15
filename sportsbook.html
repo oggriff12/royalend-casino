@@ -2,40 +2,42 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>RoyalEnd Casino - Sportsbook</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RoyalEnd Casino | Sportsbook</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="sportsbook.css">
 </head>
 <body>
-  <header>
-    <nav>
-      <a href="index.html">🏠 Home</a>
-      <a href="sportsbook.html" class="active">🏀 Sportsbook</a>
-      <a href="leaderboard.html">🏆 Leaderboard</a>
-      <a href="blackjack.html">🃏 Blackjack</a>
-      <a href="crash.html">💥 Crash</a>
-      <a href="bonus-codes.html">🎁 Bonus Codes</a>
-    </nav>
-  </header>
 
+<nav class="navbar">
+  <a href="index.html">🏠 Home</a>
+  <a href="sportsbook.html" class="active">🏀 Sportsbook</a>
+  <a href="leaderboard.html">🏆 Leaderboard</a>
+  <a href="blackjack.html">🃏 Blackjack</a>
+  <a href="crash.html">💥 Crash</a>
+  <a href="bonus-codes.html">🎁 Bonus Codes</a>
+</nav>
+
+<main>
   <h1>🏀 Live Sports Betting</h1>
+  <p>Watch live sports and track real-time odds on NBA, NFL, and MLB games.</p>
 
-  <div id="live-games-container">
-    <h2>🟣 Live Games (NBA / NFL / MLB)</h2>
-    <div id="games-list" class="games-grid">Loading live games...</div>
-  </div>
+  <section id="live-games" class="section">
+    <h2>🔥 Live Games</h2>
+    <div id="games-container">Loading live games...</div>
+  </section>
 
-  <div id="stream-container">
-    <h2>📺 Live Stream Highlights</h2>
-    <iframe width="560" height="315" src="https://www.youtube.com/embed/live_stream?channel=UCqZQlzSHbVJrwrn5XvzrzcA" 
-    frameborder="0" allowfullscreen></iframe>
-  </div>
+  <section id="live-odds" class="section">
+    <h2>📊 Real-Time Odds</h2>
+    <div id="odds-container">Loading live odds...</div>
+  </section>
 
-  <div class="overview">
-    <h2>🏆 Casino Overview</h2>
-    <p>Welcome to RoyalEnd Casino! Play casino games, enjoy bonus codes, and bet on live sports with fake coins and leaderboard prizes.</p>
-  </div>
+  <section class="section" id="overview">
+    <h2>🎁 Sportsbook Overview</h2>
+    <p>RoyalEnd Casino Sportsbook offers a premium betting experience using fake casino coins. Track live games, follow odds, and enjoy seamless access to other casino games all under one platform.</p>
+  </section>
+</main>
 
-  <script src="sportsbook.js"></script>
+<script src="sportsbook.js"></script>
 </body>
 </html>
