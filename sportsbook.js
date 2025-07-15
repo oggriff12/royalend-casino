@@ -1,64 +1,54 @@
-const API_KEY = '273237';
-const leagues = {
-    NBA: '4387',
-    NFL: '4391',
-    MLB: '4424'
-};
+const thesportsdbKey = '273237';
+const oddsApiKey = '36bc44e440efd3c20111234dc4ca8980';
 
-async function fetchLiveGames() {
-    const gamesContainer = document.getElementById('games-container');
-    gamesContainer.innerHTML = '<p>Loading live games…</p>';
+// Live Games (NBA, NFL, MLB)
+async function loadLiveGames() {
+  const liveGamesDiv = document.getElementById('live-games');
+  liveGamesDiv.innerHTML = '<p>Loading...</p>';
 
-    try {
-        let html = '';
-        for (const [league, id] of Object.entries(leagues)) {
-            const res = await fetch(`https://www.thesportsdb.com/api/v1/json/${API_KEY}/eventsnextleague.php?id=${id}`);
-            const data = await res.json();
-            if (data.events) {
-                html += `<h3>${league} Upcoming Games:</h3>`;
-                data.events.slice(0, 3).forEach(event => {
-                    html += `
-                        <div class="game-card">
-                            <p><strong>${event.strEvent}</strong></p>
-                            <p>Date: ${event.dateEvent} | Time: ${event.strTime}</p>
-                        </div>`;
-                });
-            }
-        }
-        gamesContainer.innerHTML = html || '<p>No live games.</p>';
-    } catch (err) {
-        gamesContainer.innerHTML = '<p>Error loading games.</p>';
+  try {
+    const sports = ['nba', 'nfl', 'mlb'];
+    let html = '';
+
+    for (const sport of sports) {
+      const res = await fetch(`https://www.thesportsdb.com/api/v1/json/${thesportsdbKey}/livescore.php?s=${sport}`);
+      const data = await res.json();
+
+      if (data.events) {
+        data.events.forEach(event => {
+          html += `<div class="game">${event.strEvent} | Time: ${event.strTime}</div>`;
+        });
+      }
     }
+
+    liveGamesDiv.innerHTML = html || 'No live games available.';
+  } catch {
+    liveGamesDiv.innerHTML = 'Error loading live games.';
+  }
 }
 
-async function fetchLiveOdds() {
-    const oddsContainer = document.getElementById('odds-container');
-    oddsContainer.innerHTML = '<p>Loading live odds…</p>';
+// Live Odds (NBA example)
+async function loadOdds() {
+  const oddsDiv = document.getElementById('live-odds');
+  oddsDiv.innerHTML = '<p>Loading odds...</p>';
 
-    try {
-        let html = '';
-        for (const [league, id] of Object.entries(leagues)) {
-            const res = await fetch(`https://www.thesportsdb.com/api/v1/json/${API_KEY}/livescore.php?l=${id}`);
-            const data = await res.json();
-            if (data.events) {
-                html += `<h3>${league} Odds:</h3>`;
-                data.events.slice(0, 3).forEach(event => {
-                    html += `
-                        <div class="odds-card">
-                            <p><strong>${event.strEvent}</strong></p>
-                            <p>Status: ${event.strStatus}</p>
-                            <p>Score: ${event.intHomeScore || '-'} - ${event.intAwayScore || '-'}</p>
-                        </div>`;
-                });
-            }
-        }
-        oddsContainer.innerHTML = html || '<p>No live odds.</p>';
-    } catch (err) {
-        oddsContainer.innerHTML = '<p>Error loading odds.</p>';
+  try {
+    const res = await fetch(`https://api.the-odds-api.com/v4/sports/basketball_nba/odds/?regions=us&markets=h2h&apiKey=${oddsApiKey}`);
+    const odds = await res.json();
+
+    if (Array.isArray(odds)) {
+      let html = '';
+      odds.forEach(game => {
+        html += `<div class="odd">${game.home_team} vs ${game.away_team}<br><small>Bookmakers: ${game.bookmakers?.length || 0}</small></div>`;
+      });
+      oddsDiv.innerHTML = html || 'No odds available.';
+    } else {
+      oddsDiv.innerHTML = 'No odds found.';
     }
+  } catch {
+    oddsDiv.innerHTML = 'Error loading odds.';
+  }
 }
 
-fetchLiveGames();
-fetchLiveOdds();
-setInterval(fetchLiveGames, 60000);
-setInterval(fetchLiveOdds, 60000);
+loadLiveGames();
+loadOdds();
