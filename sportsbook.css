@@ -1,77 +1,142 @@
 body {
-margin: 0;
-background: #0f0f1b;
-color: #fff;
-font-family: 'Orbitron', sans-serif;
+  margin: 0;
+  background: #0f0f1b;
+  color: #fff;
+  font-family: 'Orbitron', sans-serif;
 }
 
 h1, h2 {
-text-align: center;
-color: cyan;
-text-shadow: 0 0 8px cyan;
+  text-align: center;
+  color: cyan;
+  text-shadow: 0 0 8px cyan;
+  margin-bottom: 10px;
 }
 
 .section {
-max-width: 1000px;
-margin: 20px auto;
-padding: 20px;
-background: #1a1a2e;
-border-radius: 12px;
-box-shadow: 0 0 10px cyan;
+  max-width: 900px;
+  margin: 20px auto;
+  padding: 20px;
+  background: #1a1a2e;
+  border-radius: 12px;
+  box-shadow: 0 0 10px cyan;
+  transition: transform 0.3s;
+}
+
+.section:hover {
+  transform: scale(1.01);
 }
 
 iframe {
-width: 100%;
-height: 250px;
-border-radius: 10px;
-margin-top: 10px;
+  width: 100%;
+  height: 250px;
+  border-radius: 10px;
+  margin-top: 10px;
+  box-shadow: 0 0 8px #00ffc3;
 }
 
+/* Bet Slips */
+#bet-slips ul {
+  list-style: none;
+  padding: 0;
+}
+
+#bet-slips li {
+  background: #29293d;
+  margin: 5px 0;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 0 6px #00ffc3;
+}
+
+/* Buttons */
 button {
-background: #00ffc3;
-color: #000;
-padding: 10px;
-border: none;
-border-radius: 8px;
-margin-top: 10px;
-font-weight: bold;
-cursor: pointer;
+  background: #00ffc3;
+  color: #000;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  margin-top: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 0 10px #00ffc3;
+  transition: all 0.3s ease;
 }
 
+button:hover {
+  background: cyan;
+  box-shadow: 0 0 20px cyan;
+  transform: scale(1.05);
+}
+
+/* Filter Buttons */
 .filters {
-display: flex;
-justify-content: center;
-gap: 10px;
-flex-wrap: wrap;
-margin-bottom: 10px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
 }
 
 .filters button {
-background: #00ffc3;
-color: #000;
-padding: 8px 12px;
-border: none;
-border-radius: 8px;
-font-weight: bold;
-cursor: pointer;
+  background: #00ffc3;
+  color: #000;
+  font-weight: bold;
+  border-radius: 8px;
+  padding: 8px 14px;
 }
 
+.filters button:hover {
+  background: cyan;
+  box-shadow: 0 0 20px cyan;
+}
+
+/* Game Cards */
 .game-card {
-background: #29293d;
-margin: 10px 0;
-padding: 10px;
-border-radius: 10px;
-box-shadow: 0 0 8px #00ffc3;
+  background: #29293d;
+  margin: 10px 0;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 0 8px #00ffc3;
+  transition: transform 0.2s;
 }
 
+.game-card:hover {
+  transform: scale(1.02);
+}
+
+/* Balance display */
+.balance {
+  margin-top: 10px;
+  text-align: center;
+  font-size: 1.1rem;
+  color: #00ffc3;
+}
+
+/* Footer */
 .footer {
-text-align: center;
-margin: 20px;
+  text-align: center;
+  margin: 20px auto;
+  color: #00ffc3;
 }
 
 .footer a {
-margin: 0 10px;
-color: #00ffc3;
-font-weight: bold;
-text-decoration: none;
+  margin: 0 10px;
+  color: #00ffc3;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.footer a:hover {
+  text-shadow: 0 0 8px cyan;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .section {
+    margin: 15px;
+    padding: 15px;
+  }
+  iframe {
+    height: 200px;
+  }
 }
