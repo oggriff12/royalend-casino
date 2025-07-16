@@ -1,32 +1,77 @@
-.navbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: #111;
-  padding: 1rem 2rem;
-  box-shadow: 0 0 10px var(--neon-cyan);
+body {
+margin: 0;
+background: #0f0f1b;
+color: #fff;
+font-family: 'Orbitron', sans-serif;
 }
 
-.navbar a {
-  color: #fff;
-  text-decoration: none;
-  margin-right: 1rem;
-  font-weight: bold;
-  transition: color 0.3s;
+h1, h2 {
+text-align: center;
+color: cyan;
+text-shadow: 0 0 8px cyan;
 }
 
-.navbar a:hover {
-  color: var(--neon-cyan);
-  text-shadow: 0 0 8px var(--neon-cyan);
+.section {
+max-width: 1000px;
+margin: 20px auto;
+padding: 20px;
+background: #1a1a2e;
+border-radius: 12px;
+box-shadow: 0 0 10px cyan;
 }
 
-/* Responsive nav: stack links on narrow screens */
-@media (max-width: 768px) {
-  .navbar {
-    flex-direction: column;
-    text-align: center;
-  }
-  .navbar a {
-    margin: 0.5rem 0;
-  }
+iframe {
+width: 100%;
+height: 250px;
+border-radius: 10px;
+margin-top: 10px;
+}
+
+button {
+background: #00ffc3;
+color: #000;
+padding: 10px;
+border: none;
+border-radius: 8px;
+margin-top: 10px;
+font-weight: bold;
+cursor: pointer;
+}
+
+.filters {
+display: flex;
+justify-content: center;
+gap: 10px;
+flex-wrap: wrap;
+margin-bottom: 10px;
+}
+
+.filters button {
+background: #00ffc3;
+color: #000;
+padding: 8px 12px;
+border: none;
+border-radius: 8px;
+font-weight: bold;
+cursor: pointer;
+}
+
+.game-card {
+background: #29293d;
+margin: 10px 0;
+padding: 10px;
+border-radius: 10px;
+box-shadow: 0 0 8px #00ffc3;
+}
+
+.footer {
+text-align: center;
+margin: 20px;
+}
+
+.footer a {
+margin: 0 10px;
+color: #00ffc3;
+font-weight: bold;
+text-decoration: none;
 }
