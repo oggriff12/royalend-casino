@@ -1,100 +1,178 @@
-const oddsApiKey = '36bc44e440efd3c20111234dc4ca8980';
-const sportsDBApiKey = '273237';
+// API keys (replace with actual keys if needed)
+const ODDS_API_KEY = 'YOUR_ODDS_API_KEY';
+const SPORTSDB_API_KEY = '123';
 
-// 🏀 LIVE NBA GAMES
-async function fetchLiveGames() {
-  const container = document.getElementById('live-games');
-  container.innerHTML = 'Loading live NBA games...';
-  try {
-    const res = await fetch(`https://www.thesportsdb.com/api/v1/json/${sportsDBApiKey}/livescore.php?s=Basketball`);
-    const data = await res.json();
-    container.innerHTML = '';
-    if (!data.events) {
-      container.innerHTML = 'No live NBA games now.';
-      return;
+// League and sport configuration
+const sports = [
+  { name: 'NBA', leagueId: 4387, oddsKey: 'basketball_nba' },
+  { name: 'NFL', leagueId: 4391, oddsKey: 'americanfootball_nfl' },
+  { name: 'MLB', leagueId: 4424, oddsKey: 'baseball_mlb' }
+];
+
+let allGames = {};  // store events by sport
+let allOdds = {};   // store odds by sport
+let bets = [];      // user bets array
+
+// Fetch upcoming games from TheSportsDB for each sport
+async function fetchGames() {
+  for (let sport of sports) {
+    const url = `https://www.thesportsdb.com/api/v1/json/${SPORTSDB_API_KEY}/eventsnextleague.php?id=${sport.leagueId}`;
+    try {
+      let resp = await fetch(url);
+      let data = await resp.json();
+      allGames[sport.name] = data.events || [];
+    } catch(err) {
+      console.error(`Error fetching games for ${sport.name}:`, err);
+      allGames[sport.name] = [];
     }
-    data.events.forEach(event => {
-      const div = document.createElement('div');
-      div.className = 'game-card';
-      div.innerHTML = `
-        <h3>${event.strEvent}</h3>
-        <p>Status: ${event.strStatus}</p>
-        <p>Score: ${event.intHomeScore} - ${event.intAwayScore}</p>
-        <button onclick="addBetSlip('${event.strEvent}')">Place Bet</button>
-      `;
-      container.appendChild(div);
-    });
-  } catch (error) {
-    container.innerHTML = 'Error loading live games.';
   }
 }
 
-// 📈 LIVE NBA ODDS
+// Fetch odds from TheOdds API for each sport
 async function fetchOdds() {
-  const oddsContainer = document.getElementById('odds');
-  oddsContainer.innerHTML = 'Loading odds...';
-  try {
-    const response = await fetch(`https://api.the-odds-api.com/v4/sports/basketball_nba/odds/?regions=us&markets=h2h&apiKey=${oddsApiKey}`);
-    const odds = await response.json();
-    oddsContainer.innerHTML = '';
-    odds.forEach(match => {
-      const div = document.createElement('div');
-      div.className = 'odds-card';
-      div.innerHTML = `
-        <h4>${match.home_team} vs ${match.away_team}</h4>
-        <p>Bookmaker: ${match.bookmakers[0]?.title || 'N/A'}</p>
-      `;
-      oddsContainer.appendChild(div);
-    });
-  } catch {
-    oddsContainer.innerHTML = 'Error loading odds.';
+  for (let sport of sports) {
+    const url = `https://api.the-odds-api.com/v4/sports/${sport.oddsKey}/odds?regions=us&markets=h2h,spreads,totals&oddsFormat=american&apiKey=${ODDS_API_KEY}`;
+    try {
+      let resp = await fetch(url);
+      let data = await resp.json();
+      allOdds[sport.name] = data;
+    } catch(err) {
+      console.error(`Error fetching odds for ${sport.name}:`, err);
+      allOdds[sport.name] = [];
+    }
   }
 }
 
-// 📅 UPCOMING NBA SCHEDULE
-async function fetchSchedule() {
-  const scheduleBox = document.getElementById('schedule');
-  scheduleBox.innerHTML = 'Loading schedule...';
-  try {
-    const response = await fetch(`https://www.thesportsdb.com/api/v1/json/${sportsDBApiKey}/eventsnextleague.php?id=4387`);
-    const data = await response.json();
-    scheduleBox.innerHTML = '';
-    data.events.forEach(event => {
-      const div = document.createElement('div');
-      div.className = 'game-card';
-      div.innerHTML = `<h4>${event.strEvent}</h4><p>${event.dateEvent} | ${event.strTime}</p>`;
-      scheduleBox.appendChild(div);
-    });
-  } catch {
-    scheduleBox.innerHTML = 'Error loading schedule.';
+// Render game cards for a given sport
+function renderGamesForSport(sportName) {
+  const list = document.getElementById('gamesList');
+  list.innerHTML = '';
+  const games = allGames[sportName] || [];
+  const oddsList = allOdds[sportName] || [];
+  games.forEach(event => {
+    // Basic event info
+    let home = event.strHomeTeam || event.strEvent.split(' vs ')[0];
+    let away = event.strAwayTeam || event.strEvent.split(' vs ')[1];
+    let date = event.dateEvent || '';
+    let time = event.strTime || '';
+    let venue = event.strVenue || '';
+    // Find matching odds entry
+    let matchOdds = oddsList.find(o => 
+      (o.home_team === home && o.away_team === away) ||
+      (o.home_team === away && o.away_team === home)
+    );
+    // Default odds
+    let homeOdds = 'N/A', awayOdds = 'N/A';
+    if (matchOdds) {
+      // Assuming first bookmaker and moneyline market
+      try {
+        const market = matchOdds.bookmakers[0].markets.find(m => m.key === 'h2h');
+        const outcomes = market.outcomes;
+        const outcomeHome = outcomes.find(o => o.name === matchOdds.home_team);
+        const outcomeAway = outcomes.find(o => o.name === matchOdds.away_team);
+        homeOdds = outcomeHome ? outcomeHome.price : 'N/A';
+        awayOdds = outcomeAway ? outcomeAway.price : 'N/A';
+      } catch(e) {
+        console.warn('Odds data missing for event', event, e);
+      }
+    }
+    // Create card
+    const card = document.createElement('div');
+    card.className = 'game-card ' + sportName.toLowerCase();
+    card.innerHTML = `
+      <strong>${home}</strong> (${homeOdds}) vs <strong>${away}</strong> (${awayOdds}) 
+      <br>📅 ${date} 🕒 ${time} 📍 ${venue}
+    `;
+    // Bet buttons
+    const btnHome = document.createElement('button');
+    btnHome.textContent = `Bet ${home}`;
+    btnHome.onclick = () => addBet(sportName, home, away, homeOdds);
+    const btnAway = document.createElement('button');
+    btnAway.textContent = `Bet ${away}`;
+    btnAway.onclick = () => addBet(sportName, home, away, awayOdds);
+    card.appendChild(document.createElement('br'));
+    card.appendChild(btnHome);
+    card.appendChild(btnAway);
+    list.appendChild(card);
+  });
+}
+
+// Render all games (or filtered)
+function renderAllGames(filter = 'All') {
+  const container = document.getElementById('gamesList');
+  container.innerHTML = ''; // Clear, but renderGamesForSport appends
+  if (filter === 'All') {
+    sports.forEach(s => renderGamesForSport(s.name));
+  } else {
+    renderGamesForSport(filter);
   }
 }
 
-// 🎫 BET SLIP TRACKER
-function addBetSlip(eventName) {
-  let bets = JSON.parse(localStorage.getItem('betSlip')) || [];
-  bets.push(eventName);
+// Load bets from localStorage and display
+function loadBets() {
+  const saved = JSON.parse(localStorage.getItem('betSlip'));
+  bets = saved || [];
+  displayBets();
+}
+function saveBets() {
   localStorage.setItem('betSlip', JSON.stringify(bets));
-  updateBetSlip();
+  displayBets();
+}
+function addBet(sport, home, away, odds) {
+  if (odds === 'N/A') {
+    alert('Odds not available for this game.');
+    return;
+  }
+  const bet = { sport, game: `${home} vs ${away}`, odds };
+  bets.push(bet);
+  saveBets();
+  alert(`Added bet: ${bet.game} at odds ${odds}`);
+}
+function displayBets() {
+  const list = document.getElementById('betsList');
+  list.innerHTML = '';
+  bets.forEach((bet, idx) => {
+    const li = document.createElement('li');
+    li.textContent = `${bet.sport}: ${bet.game} @ Odds ${bet.odds}`;
+    // Optional remove button
+    const rm = document.createElement('button');
+    rm.textContent = '✕';
+    rm.onclick = () => {
+      bets.splice(idx, 1);
+      saveBets();
+    };
+    rm.style.marginLeft = '10px';
+    li.appendChild(rm);
+    list.appendChild(li);
+  });
 }
 
-function updateBetSlip() {
-  const slipBox = document.getElementById('bet-slip');
-  let bets = JSON.parse(localStorage.getItem('betSlip')) || [];
-  slipBox.innerHTML = bets.length ? bets.map(b => `<p>${b}</p>`).join('') : 'No bets yet.';
+// Scroll reveal animations
+function initReveal() {
+  const reveals = document.querySelectorAll('.reveal');
+  window.addEventListener('scroll', () => {
+    reveals.forEach(el => {
+      const rect = el.getBoundingClientRect();
+      if (rect.top < window.innerHeight - 50) {
+        el.classList.add('visible');
+      }
+    });
+  });
+  // Initial check
+  window.dispatchEvent(new Event('scroll'));
 }
 
-// 🎮 FILTER GAMES BY SPORT
-function filterSport(sport) {
-  document.getElementById('live-games').innerHTML = `Loading ${sport} games...`;
-  document.getElementById('schedule').innerHTML = `Loading ${sport} schedule...`;
-  // Optional: you can expand later to NFL/MLB APIs
-  fetchLiveGames();
-  fetchSchedule();
-}
+// Filter button handlers
+document.getElementById('filterAll').onclick = () => renderAllGames('All');
+document.getElementById('filterNBA').onclick = () => renderAllGames('NBA');
+document.getElementById('filterNFL').onclick = () => renderAllGames('NFL');
+document.getElementById('filterMLB').onclick = () => renderAllGames('MLB');
 
-// ✅ INITIAL LOAD
-fetchLiveGames();
-fetchOdds();
-fetchSchedule();
-updateBetSlip();
+// Initial load
+(async function init() {
+  await fetchGames();
+  await fetchOdds();
+  renderAllGames('All');
+  loadBets();
+  initReveal();
+})();
