@@ -1,59 +1,32 @@
-body {
-    margin: 0;
-    background: #0f0f1b;
-    color: cyan;
-    font-family: 'Orbitron', sans-serif;
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #111;
+  padding: 1rem 2rem;
+  box-shadow: 0 0 10px var(--neon-cyan);
 }
 
-nav {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    padding: 15px;
-    background: linear-gradient(90deg, #00f0ff, #a100ff);
-    box-shadow: 0 4px 10px #00f0ff;
+.navbar a {
+  color: #fff;
+  text-decoration: none;
+  margin-right: 1rem;
+  font-weight: bold;
+  transition: color 0.3s;
 }
 
-nav a {
-    color: white;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 18px;
-    transition: transform 0.2s;
+.navbar a:hover {
+  color: var(--neon-cyan);
+  text-shadow: 0 0 8px var(--neon-cyan);
 }
 
-nav a:hover {
-    transform: scale(1.1);
-}
-
-main {
-    max-width: 900px;
-    margin: 100px auto 50px;
-    padding: 0 20px;
-}
-
-h1, h2, h3 {
+/* Responsive nav: stack links on narrow screens */
+@media (max-width: 768px) {
+  .navbar {
+    flex-direction: column;
     text-align: center;
-    color: cyan;
-}
-
-.section {
-    background: #1c1c27;
-    border-radius: 15px;
-    margin: 20px 0;
-    padding: 20px;
-    box-shadow: 0 0 15px #00f0ff;
-}
-
-.game-card, .odds-card {
-    background: #121221;
-    margin: 10px 0;
-    padding: 15px;
-    border-radius: 10px;
-    box-shadow: 0 0 8px cyan;
-    transition: transform 0.2s;
-}
-
-.game-card:hover, .odds-card:hover {
-    transform: scale(1.02);
+  }
+  .navbar a {
+    margin: 0.5rem 0;
+  }
 }
