@@ -1,60 +1,57 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>RoyalEnd Sportsbook</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="sportsbook.css">
 </head>
 <body>
+  <div class="main-container">
+    <header class="section header">
+      <h1>🏀 RoyalEnd Sportsbook</h1>
+      <p>Play with fake coins, live sports streams, daily picks, and bonuses!</p>
+      <div class="balance">
+        💰 Balance: $<span id="balanceDisplay">0</span>
+        <a href="../login.html" id="loginLink">🔑 Login</a>
+        <button id="logoutBtn">🚪 Logout</button>
+      </div>
+    </header><section class="section" id="bet-slips">
+  <h2>🎫 Bet Slips</h2>
+  <ul id="slipsList">
+    <li>No active bets. Place your bets from the live games below!</li>
+  </ul>
+</section>
 
-  <header class="section header">
-    <h1>🏀 RoyalEnd Sportsbook</h1>
-    <p>Play with fake coins, live sports streams, daily picks, and bonuses!</p>
-    <div class="balance">
-      💰 Balance: $<span id="balanceDisplay">0</span>
-      <a href="login.html" id="loginLink">🔑 Login</a>
-      <button id="logoutBtn">🚪 Logout</button>
-    </div>
-  </header>
+<section class="section filters">
+  <button data-sport="all">All</button>
+  <button data-sport="NBA">NBA</button>
+  <button data-sport="NFL">NFL</button>
+  <button data-sport="MLB">MLB</button>
+</section>
 
-  <section class="section" id="bet-slips">
-    <h2>🎫 Bet Slips</h2>
-    <ul id="slipsList">
-      <li>No active bets. Place your bets from the live games below!</li>
-    </ul>
-  </section>
+<section class="section" id="live-games">
+  <h2>📺 Live Games</h2>
+  <div class="games-placeholder">Loading live games…</div>
+</section>
 
-  <section class="section filters">
-    <button data-sport="all">All</button>
-    <button data-sport="NBA">NBA</button>
-    <button data-sport="NFL">NFL</button>
-    <button data-sport="MLB">MLB</button>
-  </section>
+<section class="section" id="stream">
+  <h2>🎥 Virtual Live Stream</h2>
+  <iframe src="https://www.youtube.com/embed/nyd-xznCpJc?autoplay=1&mute=1" allowfullscreen></iframe>
+</section>
 
-  <section class="section" id="live-games">
-    <h2>📺 Live Games</h2>
-    <div class="games-placeholder">Loading live games…</div>
-  </section>
+<section class="section" id="countdown">
+  <h2>⏱️ Countdown</h2>
+  <p>Loading countdown…</p>
+</section>
 
-  <section class="section" id="stream">
-    <h2>🎥 Virtual Live Stream</h2>
-    <iframe src="https://www.youtube.com/embed/nyd-xznCpJc?autoplay=1&mute=1"
-            allowfullscreen></iframe>
-  </section>
+<footer class="footer section">
+  <a href="../index.html">🏠 Home</a>
+  <a href="index.html" class="active">🏀 Sportsbook</a>
+  <a href="../leaderboard.html">🏆 Leaderboard</a>
+</footer>
 
-  <section class="section" id="countdown">
-    <h2>⏱️ Countdown</h2>
-    <p>Loading countdown…</p>
-  </section>
-
-  <footer class="footer section">
-    <a href="index.html">🏠 Home</a>
-    <a href="sportsbook/index.html" class="active">🏀 Sportsbook</a>
-    <a href="leaderboard.html">🏆 Leaderboard</a>
-  </footer>
-
+  </div>
   <script src="sportsbook.js"></script>
 </body>
 </html>
