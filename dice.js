@@ -65,17 +65,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  function checkDailyBonus() {
-    const last = localStorage.getItem("lastDailyBonus");
-    const today = new Date().toDateString();
-    if (last !== today) {
-      alert("🎁 Daily Bonus! +$25");
-      wallet += 25;
-      localStorage.setItem("lastDailyBonus", today);
-      updateWalletDisplay();
-    }
-  }
-
+  
   rollButton.addEventListener("click", () => {
     const bet = parseFloat(betInput.value);
     const target = parseInt(slider.value);
