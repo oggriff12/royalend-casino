@@ -1,88 +1,66 @@
-body {
-  margin: 0;
-  font-family: 'Orbitron', sans-serif;
-  background: linear-gradient(135deg, #020024 0%, #090979 35%, #00d4ff 100%);
-  color: #00ffff;
-  overflow-x: hidden;
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RoyalEnd Sportsbook</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>RoyalEnd Sportsbook</h1>
 
-nav {
-  display: flex;
-  justify-content: center;
-  gap: 15px;
-  background: linear-gradient(90deg, #00c3ff, #ff00c8);
-  padding: 15px;
-  font-size: 18px;
-  font-weight: bold;
-  border-bottom: 3px solid cyan;
-}
+  <!-- Sport Filter Buttons -->
+  <div class="filters">
+    <button id="filterAll">All</button>
+    <button id="filterNBA">NBA</button>
+    <button id="filterNFL">NFL</button>
+    <button id="filterMLB">MLB</button>
+  </div>
 
-nav a {
-  color: white;
-  text-decoration: none;
-  transition: transform 0.3s, color 0.3s;
-}
+  <!-- Live Games Section -->
+  <div class="section reveal" id="gamesSection">
+    <h2>📺 Live Games</h2>
+    <div id="gamesList"></div>
+    <p style="text-align:center; color:gray;">More live games updating periodically...</p>
+  </div>
 
-nav a:hover {
-  transform: scale(1.1);
-  color: #ffd700;
-}
+  <!-- Bet Slip Section -->
+  <div class="section reveal" id="betSlip">
+    <h2>💸 Your Bet Slip</h2>
+    <ul id="betsList">
+      <!-- Bet slip entries will be injected here -->
+    </ul>
+  </div>
 
-h1, h2 {
-  text-align: center;
-  text-shadow: 0 0 12px #00ffff;
-}
+  <!-- Virtual Live Stream Section -->
+  <div class="section reveal" id="stream">
+    <h2>🎥 Virtual Live Stream</h2>
+    <!-- Embedded YouTube Livestream (NBA Channel) -->
+    <iframe id="youtubeFrame" 
+            src="https://www.youtube.com/embed/live_stream?channel=UCWf2ZlNsCGDS89U5xAXi1Sw" 
+            frameborder="0" allowfullscreen>
+    </iframe>
+    <p id="streamFallback" style="text-align:center; color:gray;">No live stream available at the moment.</p>
+    <h2>Enter your email to join stream:</h2>
+    <input placeholder="Your email" style="width:70%; padding:10px; border-radius:6px;">
+    <button>Subscribe</button>
+  </div>
 
-.sports-buttons {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin: 20px;
-}
+  <!-- Fast Highlights Section -->
+  <div class="section reveal">
+    <h2>🏅 Fast Highlights</h2>
+    <p>⚡ Lakers on 5-0 streak ATS | Yankees won 4 straight at home</p>
+    <p>🎥 Live highlights stream above or watch ESPN YouTube</p>
+  </div>
 
-.sports-buttons button {
-  padding: 12px 18px;
-  background: #00ffff;
-  color: #000;
-  border: none;
-  font-weight: bold;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: transform 0.3s, background 0.3s;
-}
+  <!-- Footer Navigation -->
+  <div class="footer">
+    <a href="index.html">🏠 Home</a>
+    <a href="sportsbook.html">🏀 Sportsbook</a>
+    <a href="leaderboard.html">🏆 Leaderboard</a>
+  </div>
 
-.sports-buttons button:hover {
-  background: #ff00c8;
-  transform: scale(1.1);
-  color: #fff;
-}
-
-#live-games, #odds, #bet-slip, #schedule, .overview-box {
-  margin: 15px;
-  padding: 20px;
-  background: rgba(0,0,0,0.7);
-  border: 3px solid #00ffff;
-  border-radius: 12px;
-  box-shadow: 0 0 15px #00ffff;
-}
-
-.game-card, .odds-card {
-  margin: 10px 0;
-  padding: 15px;
-  border-radius: 10px;
-  background: #090979;
-  transition: background 0.3s, transform 0.3s;
-}
-
-.game-card:hover, .odds-card:hover {
-  background: #00d4ff;
-  color: #000;
-  transform: scale(1.05);
-}
-
-iframe {
-  display: block;
-  margin: 0 auto;
-  border-radius: 12px;
-  box-shadow: 0 0 12px cyan;
-}
+  <script src="sportbook.js"></script>
+</body>
+</html>
